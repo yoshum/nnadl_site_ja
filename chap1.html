@@ -63,7 +63,9 @@ $('#toc_using_neural_nets_to_recognize_handwritten_digits_reveal').click(functio
      $("#toc_img_using_neural_nets_to_recognize_handwritten_digits").attr('src', 'images/arrow.png');
    };
    $('#toc_using_neural_nets_to_recognize_handwritten_digits').toggle('fast', function() {});
-});</script><p class='toc_mainchapter'><a id="toc_how_the_backpropagation_algorithm_works_reveal" class="toc_reveal" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';"><img id="toc_img_how_the_backpropagation_algorithm_works" src="images/arrow.png" width="15px"></a><a href="chap2.html">逆伝播の仕組み</a><div id="toc_how_the_backpropagation_algorithm_works" style="display: none;"><p class="toc_section"><ul><a href="chap2.html#warm_up_a_fast_matrix-based_approach_to_computing_the_output_from_a_neural_network"><li>Warm up: a fast matrix-based approach to computing the output  from a neural network</li></a><a href="chap2.html#the_two_assumptions_we_need_about_the_cost_function"><li>The two assumptions we need about the cost function</li></a><a href="chap2.html#the_hadamard_product_$s_\odot_t$"><li>The Hadamard product, $s \odot t$</li></a><a href="chap2.html#the_four_fundamental_equations_behind_backpropagation"><li>The four fundamental equations behind backpropagation</li></a><a href="chap2.html#proof_of_the_four_fundamental_equations_(optional)"><li>Proof of the four fundamental equations (optional)</li></a><a href="chap2.html#the_backpropagation_algorithm"><li>The backpropagation algorithm</li></a><a href="chap2.html#the_code_for_backpropagation"><li>The code for backpropagation</li></a><a href="chap2.html#in_what_sense_is_backpropagation_a_fast_algorithm"><li>In what sense is backpropagation a fast algorithm?</li></a><a href="chap2.html#backpropagation_the_big_picture"><li>Backpropagation: the big picture</li></a></ul></p></div>
+});</script><p class='toc_mainchapter'><a id="toc_how_the_backpropagation_algorithm_works_reveal" class="toc_reveal" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';"><img id="toc_img_how_the_backpropagation_algorithm_works" src="images/arrow.png" width="15px"></a><a href="chap2.html">逆伝播の仕組み</a><div id="toc_how_the_backpropagation_algorithm_works" style="display: none;"><p class="toc_section"><ul><a href="chap2.html#warm_up_a_fast_matrix-based_approach_to_computing_the_output
+_from_a_neural_network"><li>Warm up: a fast matrix-based approach to computing the output
+  from a neural network</li></a><a href="chap2.html#the_two_assumptions_we_need_about_the_cost_function"><li>The two assumptions we need about the cost function</li></a><a href="chap2.html#the_hadamard_product_$s_\odot_t$"><li>The Hadamard product, $s \odot t$</li></a><a href="chap2.html#the_four_fundamental_equations_behind_backpropagation"><li>The four fundamental equations behind backpropagation</li></a><a href="chap2.html#proof_of_the_four_fundamental_equations_(optional)"><li>Proof of the four fundamental equations (optional)</li></a><a href="chap2.html#the_backpropagation_algorithm"><li>The backpropagation algorithm</li></a><a href="chap2.html#the_code_for_backpropagation"><li>The code for backpropagation</li></a><a href="chap2.html#in_what_sense_is_backpropagation_a_fast_algorithm"><li>In what sense is backpropagation a fast algorithm?</li></a><a href="chap2.html#backpropagation_the_big_picture"><li>Backpropagation: the big picture</li></a></ul></p></div>
 <script>
 $('#toc_how_the_backpropagation_algorithm_works_reveal').click(function() {
    var src = $('#toc_img_how_the_backpropagation_algorithm_works').attr('src');
@@ -103,7 +105,8 @@ $('#toc_why_are_deep_neural_networks_hard_to_train_reveal').click(function() {
      $("#toc_img_why_are_deep_neural_networks_hard_to_train").attr('src', 'images/arrow.png');
    };
    $('#toc_why_are_deep_neural_networks_hard_to_train').toggle('fast', function() {});
-});</script><p class='toc_mainchapter'><a id="toc_deep_learning_reveal" class="toc_reveal" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';"><img id="toc_img_deep_learning" src="images/arrow.png" width="15px"></a>Deep learning<div id="toc_deep_learning" style="display: none;"><p class="toc_section"><ul><li>Convolutional neural networks</li><li>Pretraining</li><li>Recurrent neural networks, Boltzmann machines, and other  models</li><li>Is there a universal thinking algorithm?</li><li>On the future of neural networks</li></ul></p></div>
+});</script><p class='toc_mainchapter'><a id="toc_deep_learning_reveal" class="toc_reveal" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';"><img id="toc_img_deep_learning" src="images/arrow.png" width="15px"></a>Deep learning<div id="toc_deep_learning" style="display: none;"><p class="toc_section"><ul><li>Convolutional neural networks</li><li>Pretraining</li><li>Recurrent neural networks, Boltzmann machines, and other
+  models</li><li>Is there a universal thinking algorithm?</li><li>On the future of neural networks</li></ul></p></div>
 <script>
 $('#toc_deep_learning_reveal').click(function() {
    var src = $('#toc_img_deep_learning').attr('src');
@@ -1558,7 +1561,7 @@ we define a <em>cost function</em>*<span class="marginnote">
 
 -->
 
-ここで $w$ はネットワーク中の全ての重み、 $b$ は全バイアス、 $n$ は訓練入力の総数、 $a$ は入力が $x$ の時にネットワークから出力されるベクトル、和は全ての訓練入力 $x$ です。もちろん出力 $a$ は $w$ と $b$ そして $x$ に依存しますが表記をシンプルにするためここでは敢えて明示しません。$\| v \|$はベクトル $v$ の距離関数を示す記号です。 $C$ は<em>2次</em>コスト関数と呼びましょう。これはしばしば<em>平均二乗誤差</em>あるいは単に<em>MSE</em>(mean squared error)としても知られるものです。2次コスト関数の式を見てみると総和の中の全項目が非負であるため $C (w,b)$ は非負になることが分かります。また、 $C(w,b)$ が小さくなる時、すなわち $C(w,b)≈0$ の時は全訓練入力において $y(x)$ と出力がほぼ等しくなると分かります。つまり、$C(w,b)≈0$ となるような重みとバイアスを見つけられれば、私たちの訓練アルゴリズムは上手く機能した、と言えます。対照的に $C(w,b)$ が大きいとき-大多数の入力において $y(x)$ と出力が近似しない場合は上手く機能ているとは言えません。したがって、訓練アルゴリズムの狙いは重みとバイアスの関数 $C(w,b)$ の最小化だと言えます。言い換えれば可能な限りコストを小さくできる重みとバイアスの組を見つけたいのです。それを私たちは<em>勾配降下法</em>というアルゴリズムを使って行います。
+ここで $w$ はネットワーク中の全ての重み、 $b$ は全バイアス、 $n$ は訓練入力の総数、 $a$ は入力が $x$ の時にネットワークから出力されるベクトル、和は全ての訓練入力 $x$ です。もちろん出力 $a$ は $w$ と $b$ そして $x$ に依存しますが表記をシンプルにするためここでは敢えて明示しません。$\| v \|$はベクトル $v$ の距離関数を示す記号です。 $C$ は<em>2次</em>コスト関数と呼びましょう。これはしばしば<em>平均二乗誤差</em>あるいは単に<em>MSE</em>(mean squared error)としても知られるものです。2次コスト関数の式を見てみると総和の中の全項目が非負であるため $C (w,b)$ は非負になることが分かります。また、 $C(w,b)$ が小さくなる時、すなわち $C(w,b)?0$ の時は全訓練入力において $y(x)$ と出力がほぼ等しくなると分かります。つまり、$C(w,b)?0$ となるような重みとバイアスを見つけられれば、私たちの訓練アルゴリズムは上手く機能した、と言えます。対照的に $C(w,b)$ が大きいとき-大多数の入力において $y(x)$ と出力が近似しない場合は上手く機能ているとは言えません。したがって、訓練アルゴリズムの狙いは重みとバイアスの関数 $C(w,b)$ の最小化だと言えます。言い換えれば可能な限りコストを小さくできる重みとバイアスの組を見つけたいのです。それを私たちは<em>勾配降下法</em>というアルゴリズムを使って行います。
 
 <!--
 Here, $w$ denotes the collection of all weights in the network, $b$
@@ -2321,6 +2324,7 @@ accessible, and could be mastered by anyone.
 -->
 
 </p><p></p><p>
+
   <h3><a name="implementing_our_network_to_classify_digits"></a><a href="#implementing_our_network_to_classify_digits">数字を分類するニューラルネットワークの実装</a></h3></p><p>
   <!--
   <h3><a name="implementing_our_network_to_classify_digits"></a><a href="#implementing_our_network_to_classify_digits">Implementing our network to classify digits</a></h3></p><p>
@@ -2336,36 +2340,16 @@ code repository for this book,</p><p><div class="highlight"><pre>git clone https
 </p><p>If you don't use <tt>git</tt> then you can download the data and code
   <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/archive/master.zip">here</a>.</p><p>
 -->
-  それでは、
-  確率的勾配降下法によって、MNIST訓練データから
-  手描き数字の認識を学習するプログラムを書いてみましょう。まずは、MNIST訓練データを手に入れましょう。
-  もしあなたが<tt>git</tt>ユーザーなら、本書のコードレポジトリをクローンしてください。。
+
+<h3><a name="implementing_our_network_to_classify_digits"></a><a href="#implementing_our_network_to_classify_digits">数字分類のニューラルネットワーク実装</a></h3></p><p>
+それでは、手書き数字を認識する方法を学ぶプログラムを作成していきましょう。その際、確率的勾配降下法とMNISTの訓練データを使用します。
+最初に私たちはMNISTデータを手に入れる必要があります。もしあなたが<tt>git</tt>のユーザーならば、下記のリポジトリからクローンすることでデータを取得できます。
 </p><p><div class="highlight"><pre>git clone https://github.com/mnielsen/neural-networks-and-deep-learning.git
 </pre></div>
-</p><p><tt>git</tt>を使わない人場合は、データを
-<a href="https://github.com/mnielsen/neural-networks-and-deep-learning/archive/master.zip">ここ</a>からダウンロードできます。</p><p>
+</p><p>もし<tt>git</tt> のユーザーではない場合は、あなたは<a href="https://github.com/mnielsen/neural-networks-and-deep-learning/archive/master.zip">ここ</a>からデータとコードをダウンロードすることができます。
+</p><p>
 
-
-
-  Incidentally, when I described the MNIST data earlier, I said it was
-split into 60,000 training images, and 10,000 test images.  That's the
-official MNIST description.  Actually, we're going to split the data a
-little differently.  We'll leave the test images as is, but split the
-60,000-image MNIST training set into two parts: a set of 50,000
-images, which we'll use to train our neural network, and a separate
-10,000 image <em>validation set</em>.  We won't
-use the validation data in this chapter, but later in the book we'll
-find it useful in figuring out how to set certain
-<em>hyper-parameters</em> of the neural network - things like the
-learning rate, and so on, which aren't directly selected by our
-learning algorithm.  Although the validation data isn't part of the
-original MNIST specification, many people use MNIST in this fashion,
-and the use of validation data is common in neural networks.  When I
-refer to the "MNIST training data" from now on, I'll be referring to
-our 50,000 image data set, not the original 60,000 image data
-set*
-
-そういえば、以前MNISTデータを説明したとき、MNISTデータは60,000枚の訓練用画像と
+  そういえば、以前MNISTデータを説明したとき、MNISTデータは60,000枚の訓練用画像と
 10,000枚の試験用画像に分かれているって言いましたよね。じつは、データの分け方を少々変えようと思います。
 試験用画像はそのままにして、60,000枚の訓練用画像のうち、50,000枚を訓練のために使い、10,000枚は
 <em>検証データセット</em>としてとっておきます。検証データはこの章では使いませんが、本書の後の方で
@@ -2376,38 +2360,24 @@ set*
 オリジナルの６0,000枚の画像セットではなく、今作った
 50,000枚の画像からなるデータセットのことを指すこととします。
 
-<span class="marginnote">
-*As noted earlier, the MNIST data set is based on two data
-  sets collected by NIST, the United States' National Institute of
-  Standards and Technology.  To construct MNIST the NIST data sets
-  were stripped down and put into a more convenient format by Yann
-  LeCun, Corinna Cortes, and Christopher J. C. Burges.  See
-  <a href="http://yann.lecun.com/exdb/mnist/">this link</a> for more
-  details.  The data set in my repository is in a form that makes it
-  easy to load and manipulate the MNIST data in Python.  I obtained
-  this particular form of the data from the LISA machine learning
-  laboratory at the University of Montreal
-(<a href="http://www.deeplearning.net/tutorial/gettingstarted.html">link</a>).</span>.</p><p></p><p>
 
-以前言及したように、MNISTデータセットは米国National Institute of
-Standards and Technology(NIST)が集めた２種類のデータセットからなります。
-MNISTデータセットは、
-Yann LeCun, Corinna Cortes, Christopher J. C. Burges  らによって、
-NISTデータセットをstrip down?? し、より便利なフォーマットに変換することで作られました。
-詳細は  <a href="http://yann.lecun.com/exdb/mnist/">このリンク</a>を参照してください。
-筆者のレポジトリに用意したのは、Pythonで読んだり編集したりしやすいような形式にしたMNISTです。
-筆者は、このデータ形式のMNISTをモントリオール大学のLISA機械学習実験室
+*<span class="marginnote">
+
+*前述したように、MNISTデータセットは、アメリカ国立標準技術研究所(NIST)によって定義されているものです。
+MNISTを構築するために、NISTデータはYann LeCun, Corinna Cortes, Christopher J. C. Burgesによって整理・より便利なフォーマットを追加されました。
+詳しいことには、<a href="http://yann.lecun.com/exdb/mnist/">こちらのリンク</a>を見てください。私のレポジトリの中のこのデータセットは、Pythonによって読み込みしやすく、操作しやすいフォーマットになっています。
+このデータのフォーマットは、モントリオール大学のLISA machine learning laboratory (<a href="http://www.deeplearning.net/tutorial/gettingstarted.html">link</a>)から取得しました。</span></p><p></p><p>
+
+
+MNISTデータとは別に、高速に線形代数を解くことができる<a href="http://numpy.org">Numpy</a>と呼ばれるPythonライブラリーが必要です。
+もしあなたがNumpyをインストールしていないならば、<a href="http://www.scipy.org/install.html">ここ</a>から手に入れてください。</p><p>
+
+
+それでは、完全なプログラムリストを示す前に、ニューラルネットワークのコードのコア機能の説明を以下でしましょう。
+コードの中心部は<tt>Network</tt>クラスであり、ニューラルネットワークを表現するために使います。以下が、<tt>Network</tt>を初期化するためのコードです。</p><p>
 
 
 
-
-  Apart from the MNIST data we also need a Python library called
-<a href="http://numpy.org">Numpy</a>, for doing fast linear algebra.  If you
-don't already have Numpy installed, you can get it
-<a href="http://www.scipy.org/install.html">here</a>.</p><p>Let me explain the core features of the neural networks code, before
-giving a full listing, below.  The centrepiece is a <tt>Network</tt>
-class, which we use to represent a neural network.  Here's the code we
-use to initialize a <tt>Network</tt> object:</p><p>
 <div class="highlight"><pre><span class="k">class</span> <span class="nc">Network</span><span class="p">():</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sizes</span><span class="p">):</span>
@@ -2417,83 +2387,71 @@ use to initialize a <tt>Network</tt> object:</p><p>
         <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
                         <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">sizes</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">sizes</span><span class="p">[</span><span class="mi">1</span><span class="p">:])]</span>
 </pre></div>
-</p><p>In this code, the list <tt>sizes</tt> contains the number of neurons in
-the respective layers.  So, for example, if we want to create a
-<tt>Network</tt> object with 2 neurons in the first layer, 3 neurons in
-the second layer, and 1 neuron in the final layer, we'd do this with
-the code:
-<div class="highlight"><pre><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-</pre></div>
+</p><p>
+<tt>sizes</tt>は、それぞれの層におけるニューロンの数を表している。
+もし1層目に2つのニューロン、2層目に3つのニューロン、最終層に1つのニューロンを持つ<tt>Network</tt>を作りたいならば、以下のようにコードを定義します。
 
-<a name="weight_initialization"></a> The biases
-and weights in the <tt>Network</tt> object are all initialized randomly,
-using the Numpy <tt>np.random.randn</tt> function to generate Gaussian
-distributions with mean $0$ and standard deviation $1$.  This random
-initialization gives our stochastic gradient descent algorithm a place
-to start from.  In later chapters we'll find better ways of
-initializing the weights and biases, but this will do for now.  Note
-that the <tt>Network</tt> initialization code assumes that the first
-layer of neurons is an input layer, and omits to set any biases for
-those neurons, since biases are only ever used in computing the
-outputs from later layers.</p><p>Note also that the biases and weights are stored as lists of Numpy
-matrices.  So, for example <tt>net.weights[1]</tt> is a Numpy matrix
-storing the weights connecting the second and third layers of neurons.
-(It's not the first and second layers, since Python's list indexing
-starts at <tt>0</tt>.)  Since <tt>net.weights[1]</tt> is rather verbose,
-let's just denote that matrix $w$.  It's a matrix such that $w_{jk}$
-is the weight for the connection between the $k^{\rm th}$ neuron in the
-second layer, and the $j^{\rm th}$ neuron in the third layer.  This ordering
-of the $j$ and $k$ indices may seem strange - surely it'd make more
-sense to swap the $j$ and $k$ indices around?  The big advantage of
-using this ordering is that it means that the vector of activations of
-the third layer of neurons is:
+
+<div class="highlight"><pre><span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+</pre></div><a name="weight_initialization"></a>
+
+<tt>Network</tt>の中のバイアスと重みは、Numpyの<tt>np.random.randn</tt>によって生成された平均値0・標準偏差1のガウス分布の乱数に初期化される。
+この初期化のための乱数は、確率的勾配降下法の開始点として使用する。今回は乱数によって初期値を決めることにするが、後半の章では、重みとバイアスの初期化のより良い方法を解説する。
+<tt>Network</tt>の初期化のコードでは、ニューロンの1層目は入力層であり、バイアスは後半の層から出力を計算するときにだけ使われるので、入力層のニューロンのバイアスは省略する仮定をしていることについて注意してください。</p><p>
+
+Numpy内の行列のリストとしてバイアスと重みは保存されることについても注意してください。
+なので、<tt>net.weights[1]</tt>は、2層目と3層目をつなぐ重みを保存するNumpyの行列である。（Pythonのインデックスは <tt>0</tt>から開始されるので、1層目と2層目を繋ぐ重みではない。）
+<tt>net.weights[1]</tt>という記述は冗長なので、ここでは$w$という行列として示しましょう。
+それは、$w_{jk}$という行列で表現されていて、
+2層目の$k$番目のニューロンと3層目の$j$番目のニューロンを繋ぐ重みである。この$j$と$k$の順序は奇妙に見えるかもしれません。
+確かに$j$と$k$を交換するほうが理に適っていそうである。この順序の大きな利点は、ニューロン3層目の活性化のベクトルは以下を意味することである。
+
 <a class="displaced_anchor" name="eqtn22"></a>\begin{eqnarray}
   a' = \sigma(w a + b).
 \tag{22}\end{eqnarray}
-There's quite a bit going on in this equation, so let's unpack it
-piece by piece.  $a$ is the vector of activations of the second layer
-of neurons. To obtain $a'$ we multiply $a$ by the weight matrix $w$,
-and add the vector $b$ of biases.  We then apply the function $\sigma$
-elementwise to every entry in the vector $w a +b$.  (This is called
-<em>vectorizing</em> the function
-$\sigma$.) It's easy to verify that
-Equation <span id="margin_530827989636_reveal" class="equation_link">(22)</span><span id="margin_530827989636" class="marginequation" style="display: none;"><a href="chap1.html#eqtn22" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
-  a' = \sigma(w a + b) \nonumber\end{eqnarray}</a></span><script>$('#margin_530827989636_reveal').click(function() {$('#margin_530827989636').toggle('slow', function() {});});</script> gives the same result as our
-earlier rule, Equation <span id="margin_163635338916_reveal" class="equation_link">(4)</span><span id="margin_163635338916" class="marginequation" style="display: none;"><a href="chap1.html#eqtn4" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
-  \frac{1}{1+\exp(-\sum_j w_j x_j-b)} \nonumber\end{eqnarray}</a></span><script>$('#margin_163635338916_reveal').click(function() {$('#margin_163635338916').toggle('slow', function() {});});</script>, for
-computing the output of a sigmoid neuron.</p><p><h4><a name="exercise_695318"></a><a href="#exercise_695318">Exercise</a></h4><ul>
-<li> Write out Equation <span id="margin_177086642938_reveal" class="equation_link">(22)</span><span id="margin_177086642938" class="marginequation" style="display: none;"><a href="chap1.html#eqtn22" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
-  a' = \sigma(w a + b) \nonumber\end{eqnarray}</a></span><script>$('#margin_177086642938_reveal').click(function() {$('#margin_177086642938').toggle('slow', function() {});});</script> in component
-  form, and verify that it gives the same result as the
-  rule <span id="margin_215368916270_reveal" class="equation_link">(4)</span><span id="margin_215368916270" class="marginequation" style="display: none;"><a href="chap1.html#eqtn4" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
-  \frac{1}{1+\exp(-\sum_j w_j x_j-b)} \nonumber\end{eqnarray}</a></span><script>$('#margin_215368916270_reveal').click(function() {$('#margin_215368916270').toggle('slow', function() {});});</script> for computing the output
-  of a sigmoid neuron.
-</ul></p><p>With all this in mind, it's easy to write code computing the output
-from a <tt>Network</tt> instance.  We begin by defining the sigmoid
-function, and then using Numpy to define a vectorized form of that
-function:
+
+この式では、かなり多くの振る舞いがあるので一つ一つ紐解いてみましょう。$a$は2層目の活性化のベクトルです。$a'$を得るために、私たちは$a$と重み行列$w$を掛け算し、バイアスのベクトル$b$を足し算します。
+私たちは、ベクトル$w a +b$に要素$\sigma$を作用させます。（これは要素$\sigma$の<em>vectorizing</em>と呼ばれます。）
+これによっては、Equation <span id="margin_530827989636_reveal" class="equation_link">(22)</span><span id="margin_530827989636" class="marginequation" style="display: none;"><a href="chap1.html#eqtn22" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  a' = \sigma(w a + b) \nonumber\end{eqnarray}</a></span><script>$('#margin_530827989636_reveal').click(function() {$('#margin_530827989636').toggle('slow', function() {});});</script>
+とシグモイドニューロンの出力を計算するための
+Equation <span id="margin_163635338916_reveal" class="equation_link">(4)</span><span id="margin_163635338916" class="marginequation" style="display: none;"><a href="chap1.html#eqtn4" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  \frac{1}{1+\exp(-\sum_j w_j x_j-b)} \nonumber\end{eqnarray}</a></span><script>$('#margin_163635338916_reveal').click(function() {$('#margin_163635338916').toggle('slow', function() {});});</script>
+がと同じ結果を与えることを確認することが簡単になります。
+
+<h4><a name="exercise_695318"></a><a href="#exercise_695318">Exercise</a></h4><ul>
+
+<li>Equation <span id="margin_177086642938_reveal" class="equation_link">(22)</span><span id="margin_177086642938" class="marginequation" style="display: none;"><a href="chap1.html#eqtn22" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  a' = \sigma(w a + b) \nonumber\end{eqnarray}</a></span><script>$('#margin_177086642938_reveal').click(function() {$('#margin_177086642938').toggle('slow', function() {});});</script>
+をベクトルの要素を記述し、そしてシグモイドニューロンの出力を計算するための  Equation <span id="margin_215368916270_reveal" class="equation_link">(4)</span><span id="margin_215368916270" class="marginequation" style="display: none;"><a href="chap1.html#eqtn4" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  \frac{1}{1+\exp(-\sum_j w_j x_j-b)} \nonumber\end{eqnarray}</a></span><script>$('#margin_215368916270_reveal').click(function() {$('#margin_215368916270').toggle('slow', function() {});});</script>
+と同じ結果を与えることを確認せよ。
+
+</ul></p><p>こうした流れで、<tt>Network</tt> から出力を計算するコードを記述するのは簡単なことがわかります。
+シグモイド関数を定義することからはじめます。このとき、シグモイド関数はベクトル形式でNumpyを使って定義します。
+
 <div class="highlight"><pre><span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
     <span class="k">return</span> <span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">z</span><span class="p">))</span>
 
 <span class="n">sigmoid_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">sigmoid</span><span class="p">)</span>
 </pre></div>
 
-We then add a <tt>feedforward</tt> method to the <tt>Network</tt> class,
-which, given an input <tt>a</tt> for the network, returns the
-corresponding output.  All the method does is applies
-Equation <span id="margin_323063151061_reveal" class="equation_link">(22)</span><span id="margin_323063151061" class="marginequation" style="display: none;"><a href="chap1.html#eqtn22" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
-  a' = \sigma(w a + b) \nonumber\end{eqnarray}</a></span><script>$('#margin_323063151061_reveal').click(function() {$('#margin_323063151061').toggle('slow', function() {});});</script> for each layer:
+ネットワークの入力<tt>a</tt> が与えられたら、対応した出力を返す<tt>feedforward</tt>を<tt>Network</tt>クラスに追加します。全ての方法は、層ごとにEquation <span id="margin_323063151061_reveal" class="equation_link">(22)</span><span id="margin_323063151061" class="marginequation" style="display: none;"><a href="chap1.html#eqtn22" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  a' = \sigma(w a + b) \nonumber\end{eqnarray}</a></span><script>$('#margin_323063151061_reveal').click(function() {$('#margin_323063151061').toggle('slow', function() {});});</script>
+が適用されます。
+
 <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">feedforward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the output of the network if &quot;a&quot; is input.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">b</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">biases</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">):</span>
             <span class="n">a</span> <span class="o">=</span> <span class="n">sigmoid_vec</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span><span class="o">+</span><span class="n">b</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">a</span>
 </pre></div>
-</p><p>Of course, the main thing we want our <tt>Network</tt> objects to do is
-to learn.  To that end we'll give them an <tt>SGD</tt> method which
-implements stochastic gradient descent.  Here's the code.  It's a
-little mysterious in a few places, but I'll break it down below, after
-the listing.</p><p><div class="highlight"><pre>    <span class="k">def</span> <span class="nf">SGD</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">training_data</span><span class="p">,</span> <span class="n">epochs</span><span class="p">,</span> <span class="n">mini_batch_size</span><span class="p">,</span> <span class="n">eta</span><span class="p">,</span>
+</p><p>
+もちろん、<tt>Network</tt>にしてほしいことは学習することです。
+そのために確率的勾配降下法(<tt>SGD</tt>)を使用します。
+コードはここに記します。少しばかり不可解な場所がありますが、それについては下記で解説していきます。
+
+</p><p><div class="highlight"><pre>    <span class="k">def</span> <span class="nf">SGD</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">training_data</span><span class="p">,</span> <span class="n">epochs</span><span class="p">,</span> <span class="n">mini_batch_size</span><span class="p">,</span> <span class="n">eta</span><span class="p">,</span>
             <span class="n">test_data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Train the neural network using mini-batch stochastic</span>
 <span class="sd">        gradient descent.  The &quot;training_data&quot; is a list of tuples</span>
@@ -2518,23 +2476,18 @@ the listing.</p><p><div class="highlight"><pre>    <span class="k">def</span> <s
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">print</span> <span class="s">&quot;Epoch {0} complete&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
 </pre></div>
-</p><p>The <tt>training_data</tt> is a list of tuples <tt>(x, y)</tt>
-representing the training inputs and corresponding desired outputs.
-The variables <tt>epochs</tt> and <tt>mini_batch_size</tt> are what you'd
-expect - the number of epochs to train for, and the size of the
-mini-batches to use when sampling.  <tt>eta</tt> is the learning rate,
-$\eta$.  If the optional argument <tt>test_data</tt> is supplied, then
-the program will evaluate the network after each epoch of training,
-and print out partial progress.  This is useful for tracking progress,
-but slows things down substantially.</p><p>The code works as follows.  In each epoch, it starts by randomly
-shuffling the training data, and then partitions it into mini-batches
-of the appropriate size.  This is an easy way of sampling randomly
-from the training data.  Then for each <tt>mini_batch</tt> we apply a
-single step of gradient descent.  This is done by the code
-<tt>self.update_mini_batch(mini_batch, eta)</tt>, which updates the
-network weights and biases according to a single iteration of gradient
-descent, using just the training data in <tt>mini_batch</tt>.  Here's
-the code for the <tt>update_mini_batch</tt> method:
+</p><p>
+<tt>training_data</tt>は、訓練入力と対応した目的出力の組からなる<tt>(x, y)</tt>です。
+変数<tt>epochs</tt>と<tt>mini_batch_size</tt>は訓練のための世代数と、サンプリングするときに使用するミニバッチの大きさです。
+変数<tt>eta</tt>は訓練率$\eta$です。
+もしオプションの引数<tt>test_data</tt>がある場合、プログラムは各訓練の世代のあとにネットワークを評価して、逐次に性能を出力する。
+この機能は性能改善の進行状況を確認するときに役に立つが、計算に少し時間がかかるようになる。
+</p><p>
+コードは以下のように機能する。各世代では、訓練データをランダムにシャッフルすることによって開始し、適切なサイズのミニバッチに分割します。
+このコードは、訓練データからランダムにサンプルする簡単な方法になります。
+各ミニバッチに、勾配降下法を1ステップ実行します。これは、コード<tt>self.update_mini_batch(mini_batch, eta)</tt>によって行われ、
+ミニバッチの訓練データだけを使用した勾配降下法を1回の計算に基づいてネットワークの重みとバイアスを更新します。ここに、<tt>update_mini_batch</tt>のコードを示します。
+
 <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">update_mini_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mini_batch</span><span class="p">,</span> <span class="n">eta</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Update the network&#39;s weights and biases by applying</span>
 <span class="sd">        gradient descent using backpropagation to a single mini batch.</span>
@@ -2552,35 +2505,26 @@ the code for the <tt>update_mini_batch</tt> method:
                        <span class="k">for</span> <span class="n">b</span><span class="p">,</span> <span class="n">nb</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">biases</span><span class="p">,</span> <span class="n">nabla_b</span><span class="p">)]</span>
 </pre></div>
 
-Most of the work is done by the line
+作業の多くは下記のコードで行われます
 <div class="highlight"><pre>            <span class="n">delta_nabla_b</span><span class="p">,</span> <span class="n">delta_nabla_w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backprop</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 </pre></div>
 
-This invokes something called the <em>backpropagation</em> algorithm,
-which is a fast way of computing the gradient of the cost function.
-So <tt>update_mini_batch</tt> works simply by computing these gradients
-for every training example in the <tt>mini_batch</tt>, and then updating
-<tt>self.weights</tt> and <tt>self.biases</tt> appropriately.</p><p>I'm not going to show the code for <tt>self.backprop</tt> right now.
-We'll study how backpropagation works in the next chapter, including
-the code for <tt>self.backprop</tt>.  For now, just assume that it
-behaves as claimed, returning the appropriate gradient for the cost
-associated to the training example <tt>x</tt>.</p><p>Let's look at the full program, including the documentation strings,
-which I omitted above.  Apart from <tt>self.backprop</tt> the program is
-self-explanatory - all the heavy lifting is done in <tt>self.SGD</tt>
-and <tt>self.update_mini_batch</tt>, which we've already discussed.  The
-<tt>self.backprop</tt> method makes use of a few extra functions to help
-in computing the gradient, namely <tt>sigmoid_prime</tt>, which computes
-the derivative of the $\sigma$ function, its vectorized form
-<tt>sigmoid_prime_vec</tt>, and <tt>self.cost_derivative</tt>, which I
-won't describe here.  You can get the gist of these (and perhaps the
-details) just by looking at the code and documentation strings.  We'll
-look at them in detail in the next
-chapter.
-Note that while the program appears lengthy, much of the code is
-documentation strings intended to make the code easy to understand.
-In fact, the program contains just 74 lines of non-whitespace,
-non-comment code.  All the code may be found on GitHub
-<a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/code/network.py">here</a>.</p><p></p><p><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+このコードは、コスト関数の勾配を計算する高速な方法である誤差逆伝播法（<em>backpropagation</em>）アルゴリズムを起動する部分です。
+<tt>update_mini_batch</tt>は単純にミニバッチ内の訓練データごとに勾配を計算し、<tt>self.weights</tt>と<tt>self.biases</tt>を適切に更新します。</p><p>
+
+<tt>self.backprop</tt>のコードは今すぐには説明しません。次の章で誤差逆伝播法について勉強し、その際に<tt>self.backprop</tt>のコードを紹介します。
+なので今は、訓練データの<tt>x</tt>に関連するコストに対して適切な勾配を返す働きをするということを前提にします。</p><p>
+
+それでは、下記の完全なプログラムを見てください。この際、説明を省略した部分や説明文を含んでいます。
+<tt>self.backprop</tt>を除いて、プログラムは明快であり、すでにお話しした通り、全ての処理の重い部分は<tt>self.SGD</tt>と<tt>self.update_mini_batch</tt>で行われています。
+<tt>self.backprop</tt>は勾配を計算することを手助けするためのいくつかの追加機能を使用しており、詳細はここでは説明しませんが、
+$\sigma$関数の導関数を計算する<tt>sigmoid_prime</tt>、ベクトル形式の<tt>sigmoid_prime_vec</tt>と<tt>self.cost_derivative</tt>です。
+次の章で詳細を確認しますが、コードと説明を見る事によって要点を理解する事ができます。
+プログラムが長いように見えますが、多くはプログラム内の理解を促すための解説文であり、コード自体は理解が簡単に書いているつもりです。
+実際、プログラムはたった空行と解説を除いて74行である。
+コードのすべては<a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/code/network.py">GitHub</a>で見つけることができます。</p><p></p><p><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+
+
 <span class="sd">network.py</span>
 <span class="sd">~~~~~~~~~~</span>
 
@@ -2726,43 +2670,39 @@ non-comment code.  All the code may be found on GitHub
 
 <span class="n">sigmoid_prime_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">sigmoid_prime</span><span class="p">)</span>
 </pre></div>
-</p><p>How well does the program recognize handwritten digits?  Well, let's
-start by loading in the MNIST data.  I'll do this using a little
-helper program, <tt>mnist_loader.py</tt>, to be described below.  We
-execute the following commands in a Python shell,</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">mnist_loader</span>
+</p><p>それでは、このコードがどれだけ良く手書き数字を認識できるかを確認していきましょう。
+まずはMNISTデータをダウンロードするところからはじめてみよう。
+ここでは<tt>mnist_loader.py</tt>を使用する。以下のコマンドをpythonシェルで実行してください。
+
+</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">mnist_loader</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">training_data</span><span class="p">,</span> <span class="n">validation_data</span><span class="p">,</span> <span class="n">test_data</span> <span class="o">=</span> \
 <span class="o">...</span> <span class="n">mnist_loader</span><span class="o">.</span><span class="n">load_data_wrapper</span><span class="p">()</span>
 </pre></div>
-</p><p>Of course, this could also be done in a separate Python program, but
-if you're following along it's probably easiest to do in a Python
-shell.  </p><p>After loading the MNIST data, we'll set up a <tt>Network</tt> with $30$
-hidden neurons.  We do this after importing the Python program listed
-above, which is named <tt>network</tt>,</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">network</span>
+</p><p>もちろん、これは独立したpythonプログラムとして実行できますが、
+ここまで従ってきたならば、pythonシェルで簡単に処理できるでしょう。
+</p><p>MNISTデータをダウンロードした後、私たちは$30$個の隠れニューロンをもつ<tt>Network</tt>を設定します。
+私たちは<tt>network</tt>と名前を付けた上記のpythonプログラムをインポートした後に、この処理を行います。
+
+</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">network</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
 </pre></div>
-</p><p>Finally, we'll use stochastic gradient descent to learn from the MNIST
-<tt>training_data</tt> over 30 epochs, with a mini-batch size of 10, and a
-learning rate of $\eta = 3.0$, </p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">training_data</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">test_data</span><span class="o">=</span><span class="n">test_data</span><span class="p">)</span>
+</p><p>
+最後に、30世代・ミニバッチサイズ10・訓練率$\eta = 3.0$の条件で、MNISTの<tt>training_data</tt>から確率的勾配降下法を使用して学習します。
+</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">training_data</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">test_data</span><span class="o">=</span><span class="n">test_data</span><span class="p">)</span>
 </pre></div>
-</p><p>Note that if you're running the code as you read along, it will take
-some time to execute - for a typical machine (as of 2014) it will
-likely take between one and a few minutes per training epoch.  I
-suggest you set things running, continue to read, and periodically
-check the output from the code.  If you're in a rush you can speed
-things up by decreasing the number of epochs, by decreasing the number
-of hidden neurons, or by using only part of the training data.  Note
-that production code would be much, much faster: these Python scripts
-are intended to help you understand how neural nets work, not to be
-high-performance code!  And, of course, once we've trained a network
-it can be run very quickly indeed, on almost any computing
-platform. For example, once we've learned a good set of weights and
-biases for a network, it can easily be ported to run in Javascript in
-a web browser, or as a native app on a mobile device.  In any case,
-here is a partial transcript of the output of one training run of the
-neural network.  The transcript shows the number of test images
-correctly recognized by the neural network after each epoch of
-training.  As you can see, after just a single epoch this has reached
-9,129 out of 10,000, and the number continues to grow,</p><p><div class="highlight"><pre>Epoch 0: 9129 / 10000
+</p><p>
+もしこの文章を読みながらコードを実行しているならば、この計算は少々時間がかかるので注意してください。
+2014年における一般的なスペックのパソコンならば、訓練の1世代ごとに数分程度かかります。
+計算を実行しつつ、読み続けて、たまに計算結果を確認することをおすすめします。
+もしあなたが急いでいる場合は、あなたは世代数を減らすか、隠れニューロンの数を減らすか、訓練データの一部のみ使用することによって計算を速くすることができます。
+実際の商用コードはより速く計算が可能でありますが、
+このpythonコードはニューラルネットワークを理解することを助けることが目的であるため、計算が早いわけではありません。
+もちろん、私たちは多くのコンピュータープラットホーム上で非常に高速に実行可能なネットワークを訓練してきた。
+例えば、webブラウザや携帯デバイスのアプリの中でjavascriptで実行できる簡単に移植可能なもので、ネットワークの重みとバイアスの良いセットの訓練を行ってきた。
+それでは以下に、ニューラルネットワークのある訓練プロセスの一部の結果を示しました。
+この出力は訓練の世代ごとにニューラルネットワークを使用して適切に訓練データを認識できた数を表している。
+最初の世代が終わったあとに10000個中の9129個が正しく認識できており、その後は増加し続けていることがわかる。
+</p><p><div class="highlight"><pre>Epoch 0: 9129 / 10000
 Epoch 1: 9295 / 10000
 Epoch 2: 9348 / 10000
 ...
@@ -2770,37 +2710,35 @@ Epoch 27: 9528 / 10000
 Epoch 28: 9542 / 10000
 Epoch 29: 9534 / 10000
 </pre></div>
-</p><p>That is, the trained network gives us a classification rate of about
-$95$ percent - $95.42$ percent at its peak ("Epoch 28")!  That's
-quite encouraging as a first attempt.  I should warn you, however,
-that if you run the code then your results are not necessarily going
-to be quite the same as mine, since we'll be initializing our network
-using (different) random weights and biases.  To generate results in
-this chapter I've taken best-of-three runs.</p><p>Let's rerun the above experiment, changing the number of hidden
-neurons to $100$.  As was the case earlier, if you're running the code
-as you read along, you should be warned that it takes quite a while to
-execute (in this case, many minutes for each training epoch), so it's
-wise to continue reading in parallel while the code executes.</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+</p><p>
+訓練されたネットワークは95%の分類率を有しており、ピーク性能は28世代での95.42%であった。
+この結果は、最初の試みとしては大変有望である。
+ネットワークをランダムな重みとバイアスによって初期化しているので、
+このコードを実行したとしても、上記で示した値と全く一緒になるとは限らないことに注意してください。
+この章では、3回の計算のうちのベストの解を示している。</p><p>
+
+それでは、隠れニューロンの数を100個にして上記の実験を再計算してみましょう。
+この計算も同様に時間がかかりますので、計算を実行しつつ読み進めることが賢明です。（今回の場合、隠れニューロンの数が多いので各世代での計算時間がよりかかるので。）
+
+</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">training_data</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">test_data</span><span class="o">=</span><span class="n">test_data</span><span class="p">)</span>
 </pre></div>
-</p><p>Sure enough, this improves the results to $96.59$ percent.  At least
-in this case, using more hidden neurons helps us get better
-results*<span class="marginnote">
-*Reader feedback indicates quite some variation in
-  results for this experiment, and some training runs give results
-  quite a bit worse.  Using the techniques introduced in chapter 3
-  will greatly reduce the variation in performance across different
-  training runs for our networks.</span>.</p><p>Of course, to obtain these accuracies I had to make specific choices
-for the number of epochs of training, the mini-batch size, and the
-learning rate, $\eta$.  As I mentioned above, these are known as
-hyper-parameters for our neural network, in order to distinguish them
-from the parameters (weights and biases) learnt by our learning
-algorithm.  If we choose our hyper-parameters poorly, we can get bad
-results.  Suppose, for example, that we'd chosen the learning rate to
-be $\eta = 0.001$,</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+</p><p>
+予想通り、この計算では性能が96.59%に向上しました。
+少なくともこのケースでは、より多くの隠れ層を使用することでより良い結果を得ることが出来ます。*<span class="marginnote">
+
+*読者のフィードバックによると、この実験では性能の違いが報告されており、いくつかの計算結果ではかなり性能が悪くなるようです。
+3章で紹介するテクニックを使用することで、計算ごとの予測性能の違いを劇的に減らすことができます。</span>
+
+</p><p>
+もちろん、これらの精度を獲得するために、訓練の世代数、ミニバッチのサイズ、訓練率$\eta$を具体的に選択しなくてはならなかった。
+上記のように、学習アルゴリズムによって学習するパラメータ（重みとバイアス）と区別するために、これらはニューラルネットワークのハイパーパラメータとして呼ばれている。
+もしハイパーパラメータを不適切に選択したならば、悪い結果を得ることになる。例えば、学習率$\eta = 0.001$を選んだとすると、
+
+</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">training_data</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="n">test_data</span><span class="o">=</span><span class="n">test_data</span><span class="p">)</span>
 </pre></div>
-</p><p>The results are much less encouraging,
+</p><p>結果の改善の進捗は遅くなってしまいます。
 <div class="highlight"><pre>Epoch 0: 1139 / 10000
 Epoch 1: 1136 / 10000
 Epoch 2: 1135 / 10000
@@ -2810,26 +2748,21 @@ Epoch 28: 2123 / 10000
 Epoch 29: 2142 / 10000
 </pre></div>
 
-However, you can see that the performance of the network is getting
-slowly better over time.  That suggests increasing the learning rate,
-say to $\eta = 0.01$.  If we do that, we get better results, which
-suggests increasing the learning rate again.  (If making a change
-improves things, try doing more!)  If we do that several times over,
-we'll end up with a learning rate of something like $\eta = 1.0$ (and
-perhaps fine tune to $3.0$), which is close to our earlier
-experiments.  So even though we initially made a poor choice of
-hyper-parameters, we at least got enough information to help us
-improve our choice of hyper-parameters.</p><p>In general, debugging a neural network can be challenging.  This is
-especially true when the initial choice of hyper-parameters produces
-results no better than random noise.  Suppose we try the successful 30
-hidden neuron network architecture from earlier, but with the learning
-rate changed to $\eta = 100.0$:
+しかしながら、ネットワークの予測性能はゆっくりと良くなっていくことがわかる。
+これは学習率を大きくすべきということを提案しているので、学習率$\eta = 0.01$にしてみましょう。
+この設定で計算した場合、より良い結果を得ることができます。この結果は、さらに学習率を増加させたほうが良いことを意味します。
+（もし変更を与えて性能が改善したならば、さらに変更を大きくさせてみてください。）
+数回にわたって再計算を行ったならば、学習率は前の実験で使用した値に近い$\eta = 1.0$程度になるでしょう。
+最初にハイパーパラメータの不適切な選択をしたにもかかわらず、少なくともハイパーパラメータを選び方について性能を改善する情報を得ることができました。</p><p>
+
+たいていの場合、ニューラルネットワークをデバッグすることは挑戦的なことであると言えます。
+ハイパーパラメータの初期の選択がランダムノイズの結果とほぼ同然と考えられるようなときは、特に挑戦である。
+私たちは前に使用した隠れニューロンが30個のネットワークにおいて、学習率を$\eta = 100.0$に変更した場合を仮定してみましょう。
 <div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">training_data</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span> <span class="n">test_data</span><span class="o">=</span><span class="n">test_data</span><span class="p">)</span>
 </pre></div>
+この設定は実際に度を超しているとは思っていましたが、やはり学習率が高すぎるようです。
 
-At this point we've actually gone too far, and the learning rate is
-too high:
 <div class="highlight"><pre><span class="n">Epoch</span> <span class="mi">0</span><span class="p">:</span> <span class="mi">1009</span> <span class="o">/</span> <span class="mi">10000</span>
 <span class="n">Epoch</span> <span class="mi">1</span><span class="p">:</span> <span class="mi">1009</span> <span class="o">/</span> <span class="mi">10000</span>
 <span class="n">Epoch</span> <span class="mi">2</span><span class="p">:</span> <span class="mi">1009</span> <span class="o">/</span> <span class="mi">10000</span>
@@ -2840,36 +2773,30 @@ too high:
 <span class="n">Epoch</span> <span class="mi">29</span><span class="p">:</span> <span class="mi">982</span> <span class="o">/</span> <span class="mi">10000</span>
 </pre></div>
 
-Now imagine that we were coming to this problem for the first time.
-Of course, we <em>know</em> from our earlier experiments that the right
-thing to do is to decrease the learning rate.  But if we were coming
-to this problem for the first time then there wouldn't be much in the
-output to guide us on what to do.  We might worry not only about the
-learning rate, but about every other aspect of our neural network.  We
-might wonder if we've initialized the weights and biases in a way that
-makes it hard for the network to learn?  Or maybe we don't have enough
-training data to get meaningful learning?  Perhaps we haven't run for
-enough epochs?  Or maybe it's impossible for a neural network with
-this architecture to learn to recognize handwritten digits?  Maybe the
-learning rate is too <em>low</em>?  Or, maybe, the learning rate is too
-high?  When you're coming to a problem for the first time, you're not
-always sure.</p><p>The lesson to take away from this is that debugging a neural network
-is not trivial, and, just as for ordinary programming, there is an art
-to it.  You need to learn that art of debugging in order to get good
-results from neural networks.  More generally, we need to develop
-heuristics for choosing good hyper-parameters and a good architecture.
-We'll discuss all these at length through the book, including how I
-chose the hyper-parameters above.</p><p>
-<h4><a name="exercise_420023"></a><a href="#exercise_420023">Exercise</a></h4><ul></p><p><li> Try creating a network with just two layers - an input and an
-  output layer, no hidden layer - with 784 and 10 neurons,
-  respectively.  Train the network using stochastic gradient descent.
-  What classification accuracy can you achieve?
-</ul></p><p></p><p>Earlier, I skipped over the details of how the MNIST data is loaded.
-It's pretty straightforward.  For completeness, here's the code.  The
-data structures used to store the MNIST data are described in the
-documentation strings - it's straightforward stuff, tuples and lists
-of Numpy <tt>ndarray</tt> objects (think of them as vectors if you're
-not familiar with <tt>ndarray</tt>s):</p><p><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+初めてこの問題に直面したことを、今想像してみてください。
+もちろん、私たちは前の実験を知っていて、学習率を下げることが正しいことだということを今は<em>知っています</em> 。
+しかし、この問題に初めて直面する場合、多くの出力結果は、何をすべきかを教えてはくれません。
+学習率だけでなく、ニューラルネットワークの他の全ての側面について心配するかもしれません。
+ネットワークが学習することを難しくさせるような方法で重みとバイアスを初期化したのかもしれないと疑うかもしれません。
+それとも、意味のある学習をするための十分な訓練データを持っていないと思うかもしれません。
+十分な世代数を計算していないのかもしれない？手書き数字を認識するために学習することはニューラルネットワークでは不可能と思うかもしれない。
+学習率が<em>低すぎる</em>かもしれない、それとも高すぎる？
+はじめて、この問題に直面する際は、常に何もわからない状態にあるのです。
+
+</p><p>
+これらの疑問を取り除くためのニューラルネットワークのデバッグとしてのレッスンは些細な問題ではありません、そして通常のプログラミングに関して言えば、関係した技術があります。
+ニューラルネットワークから良い結果を得るためのデバッグ技術を学ぶ必要があります。
+より一般的に言えば、私たちは良いハイパーパラメータと良いアーキテクチャを選択するためのヒューリスティック技術を開発する必要があります。
+この本を通して、上記のハイパーパラメータの設定した方法を含むこれらの技術について解説します。
+
+</p><p>
+<h4><a name="exercise_420023"></a><a href="#exercise_420023">Exercise</a></h4><ul></p><p><li>
+隠れ層がない入力層と出力層のみの2層のネットワークを作ってみてください。それぞれニューロンは、784個と10個です。そして、確率的勾配法で学習させてみてください。どんな分類精度を達成できるでしょうか。
+</ul></p><p></p><p>
+以前、MNISTデータのロード方法の詳細について説明を省略していました。かなり簡単であるが、念のためにコードを以下に載せました。
+MNISTデータを格納するために使われるデータ構造は、資料内の解説にある通りで、Numpyの<tt>ndarray</tt>オブジェクトである。（もし<tt>ndarray</tt>に馴染みがない方は、ベクトルとして考えてください。）
+
+</p><p><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">mnist_loader</span>
 <span class="sd">~~~~~~~~~~~~</span>
 
@@ -2955,100 +2882,71 @@ not familiar with <tt>ndarray</tt>s):</p><p><div class="highlight"><pre><span cl
     <span class="n">e</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
     <span class="k">return</span> <span class="n">e</span>
 </pre></div>
-</p><p>I said above that our program gets pretty good results.  What does
-that mean?  Good compared to what?  It's informative to have some
-simple (non-neural-network) baseline tests to compare against, to
-understand what it means to perform well.  The simplest baseline of
-all, of course, is to randomly guess the digit.  That'll be right
-about ten percent of the time.  We're doing much better than that!</p><p>What about a less trivial baseline?  Let's try an extremenly simple
-idea: we'll look at how <em>dark</em> an image is.  For instance, an
-image of a $2$ will typically be quite a bit darker than an image of a
-$1$, just because more pixels are blackened out, as the following
-examples illustrate:</p><p><center><img src="images/mnist_2_and_1.png" width="256px"></center></p><p>This suggests using the training data to compute average darknesses
-for each digit, $0, 1, 2,\ldots, 9$.  When presented with a new image,
-we compute how dark the image is, and then guess that it's whichever
-digit has the closest average darkness.  This is a simple procedure,
-and is easy to code up, so I won't explicitly write out the code -
-if you're interested it's in the
-<a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/code/mnist_average_darkness.py">GitHub
-  repository</a>.  But it's a big improvement over random guessing,
-getting $2,225$ of the $10,000$ test images correct, i.e., $22.25$
-percent accuracy.</p><p><a name="SVM"></a></p><p>It's not difficult to find other ideas which achieve accuracies in the
-$20$ to $50$ percent range.  If you work a bit harder you can get up
-over $50$ percent.  But to get much higher accuracies it helps to use
-established machine learning algorithms.  Let's try using one of the
-best known algorithms, the <em>support vector
-  machine</em>
-or <em>SVM</em>.  If you're not
-familiar with SVMs, not to worry, we're not going to need to
-understand the details of how SVMs work.  Instead, we'll use a Python
-library called
-<a href="http://scikit-learn.org/stable/">scikit-learn</a>,
-which provides a simple Python interface to a fast C-based library for
-SVMs known as
-<a href="http://www.csie.ntu.edu.tw/&#126;cjlin/libsvm/">LIBSVM</a>.</p><p>If we run scikit-learn's SVM classifier using the default settings,
-then it gets 9,435 of 10,000 test images correct.  (The code is
-available
-<a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/code/mnist_svm.py">here</a>.)
-That's a big improvement over our naive approach of classifying an
-image based on how dark it is.  Indeed, it means that the SVM is
-performing roughly as well as our neural networks, just a little
-worse.  In later chapters we'll introduce new techniques that enable
-us to improve our neural networks so that they perform much better
-than the SVM.</p><p>That's not the end of the story, however.  The 9,435 of 10,000 result
-is for scikit-learn's default settings for SVMs.  SVMs have a number
-of tunable parameters, and it's possible to search for parameters
-which improve this out-of-the-box performance.  I won't explicitly do
-this search, but instead refer you to
-<a href="http://peekaboo-vision.blogspot.de/2010/09/mnist-for-ever.html">this
-  blog post</a> by <a href="http://peekaboo-vision.blogspot.ca/">Andreas
-  Mueller</a> if you'd like to know more.  Mueller shows that with some
-work optimizing the SVM's parameters it's possible to get the
-performance up above 98.5 percent accuracy.  In other words, a
-well-tuned SVM only makes an error on about one digit in 70.  That's
-pretty good!  Can neural networks do better?</p><p>In fact, they can.  At present, well-designed neural networks
-outperform every other technique for solving MNIST, including SVMs.
-The current (2013) record is classifying 9,979 of 10,000 images
-correctly.  This was done by <a href="http://www.cs.nyu.edu/&#126;wanli/">Li
-  Wan</a>, <a href="http://www.matthewzeiler.com/">Matthew Zeiler</a>, Sixin
-Zhang, <a href="http://yann.lecun.com/">Yann LeCun</a>, and
-<a href="http://cs.nyu.edu/&#126;fergus/pmwiki/pmwiki.php">Rob Fergus</a>.
-We'll see most of the techniques they used later in the book.  At that
-level the performance is close to human-equivalent, and is arguably
-better, since quite a few of the MNIST images are difficult even for
-humans to recognize with confidence, for example:</p><p><center><img src="images/mnist_really_bad_images.png" width="560px"></center></p><p>I trust you'll agree that those are tough to classify!  With images
-like these in the MNIST data set it's remarkable that neural networks
-can accurately classify all but 21 of the 10,000 test images.
-Usually, when programming we believe that solving a complicated
-problem like recognizing the MNIST digits requires a sophisticated
-algorithm.  But even the neural networks in the Wan <em>et al</em> paper
-just mentioned involve quite simple algorithms, variations on the
-algorithm we've seen in this chapter.  All the complexity is learned,
-automatically, from the training data. In some sense, the moral of
-both our results and those in more sophisticated papers, is that for
-some problems:
+</p><p>
+このプログラムはかなり良い結果を得られたと言いました。これはどういう意味でしょうか。
+何と比較して良いと言っているのでしょうか。お互いに比較したり、何がよい実行結果なのかを理解したりするために、いくつかのニューラルネットワークではない単純な性能基準を持つことは有益です。
+もちろん、全ての中で最もシンプルな基準は数字をランダムに推測するものです。それは、性能は10%程度になるでしょう。私たちは、それよりも遥かに良い性能を持っています。
+
+</p><p>取るに足らなくない基準とはなんでしょうか。それでは、とてもシンプルなアイデアに挑戦してみましょう。
+画像がどれくらいか<em>暗いか</em>について見ています。例えば、「2」の画像は「１」の画像に比べて、より暗い画像となります。
+なぜならば、下記の例を見ればわかる通り、多くのピクセルが黒く塗りつぶされているからです。
+</p><p><center><img src="images/mnist_2_and_1.png" width="256px"></center></p><p>
+これは、各数字（$0, 1, 2,\ldots, 9$）の黒色を持つピクセルの平均を計算するために訓練データを使用することを提案しています。
+新しい画像が示されたとき、画像がどれだけ黒いかを計算し、最も近い黒色を持つピクセルの平均の数字として区別します。
+これは簡単な手順であり、コーディングも簡単です。私は明示的にコードを書きませんが、GitHubの<a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/code/mnist_average_darkness.py">GitHub
+  repository</a>に公開しておきます。しかし、この方法では、10000枚の訓練データのうち2225枚を適切に区別することができ、つまり22.25%の精度、ランダム推測に比べて大きな改善をもたらします。
+</p><p><a name="SVM"></a></p><p>
+予測精度20から50%程度の他のアイデアを見つけることは難しくありません。
+もしあなたが少し頑張れば、予測精度50%に到達できるでしょう。
+しかしさらに高精度を取得するためには、機械学習アルゴリズムを使用することが手助けになるでしょう。
+良く知られている手法の一つであるサポートベクターマシン(<em>SVM</em>)について挑戦してみましょう。
+もしSVMに馴染みがなかったとしても、心配しないでください。SVMの働きについて詳細に理解する必要はありません。
+代わりに、私たちは<a href="http://www.csie.ntu.edu.tw/&#126;cjlin/libsvm/">LIBSVM</a>として知られているSVMの高速なCベースのライブラリのpythonインターフェースである<a href="http://scikit-learn.org/stable/">scikit-learn</a>というライブラリを使用します。
+
+</p><p>もしscikit-learnのSVM分類器のデフォルト設定で計算したとすれば、10000個の画像中の9435個を適切に分類できます。（コードは<a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/code/mnist_svm.py">ここ</a>にあります。）
+黒色の平均値に基づく分類から考えると、とても大きな改善です。
+確かに、SVMはだいたいニューラルネットワークと同じくらいか、ちょっと悪いくらいの性能を持っています。
+この章の後半では、私たちはSVMをはるかに超える良い性能を得るために、ニューラルネットワークを改良する新技術を紹介します。
+
+</p><p>話はこれで終わりではありません。
+10000個中の9435個の適切な分類は、scikit-learnのデフォルト設定のSVMによるものでした。
+SVMは調整可能なパラメータをいくつか持っていて、さらに性能の良い判別が行うことができるパラメータを探すことができる可能性があります。
+この探索を明示的には行いませんが、代わりにもし詳細を知りたいならば<a href="http://peekaboo-vision.blogspot.ca/">Andreas
+  Mueller</a>の<a href="http://peekaboo-vision.blogspot.de/2010/09/mnist-for-ever.html">ブログ</a>を確認してください。
+Muellerは、SVMのパラメータを最適化することで、98.5%の予測性能に到達していることを示しています。
+言い換えれば、適切にチューニングされたSVMでは間違いを70個しかしないことになります。これは、かなり良い性能です。ニューラルネットワークはこれより良い推定ができるでしょうか。
+
+</p><p>実際には可能です。現在、よく設計されたニューラルネットワークは、SVMを含めて他のMNISTの識字アルゴリズムの中で最も優れています。
+2014年現在の記録では、10000個中9979個の画像を適切に分類することが出来ています。
+これは、<a href="http://www.cs.nyu.edu/&#126;wanli/">Li
+  Wan</a>、 <a href="http://www.matthewzeiler.com/">Matthew Zeiler</a>,、Sixin
+Zhang、<a href="http://yann.lecun.com/">Yann LeCun</a>、
+<a href="http://cs.nyu.edu/&#126;fergus/pmwiki/pmwiki.php">Rob Fergus</a>によって行われたものです。
+この本の中の後半で、彼らが使用した技術の多くを見ることができます。その性能のレベルは人間とほぼ同等であり、おそらくより良い。
+なぜならば、人間が自信を持って認識することさえ難しいMNIST画像がいくつかあるからである。例えば以下のようなものである。
+
+</p><p><center><img src="images/mnist_really_bad_images.png" width="560px"></center></p><p>
+これらを分類するのは難しいと認めることを確信しています。MNISTデータセットの中でこのような画像があるのにもかかわらず、ニューラルネットワークは10000個の画像の中の21個以外は適切に分類できることは驚くべきことです。
+プログラミングをするとき、たいていはMNISTの識字を理解するような複雑な問題を解くことは、高度なアルゴリズムが必要だと考えています。
+しかし、Wanらのペーパーの中で言及したニューラルネットワークはかなりシンプルなアルゴリズムを意味している。私たちがこの章で見てきたアルゴリズムのバリエーションも含んでいる。
+
 <center>
-  sophisticated algorithm $\leq$ simple learning algorithm + good
-  training data.
-</center></p><p><h3><a name="toward_deep_learning"></a><a href="#toward_deep_learning">Toward deep learning</a></h3></p><p>While our neural network gives impressive performance, that
-performance is somewhat mysterious.  The weights and biases in the
-network were discovered automatically.  And that means we don't
-immediately have an explanation of how the network does what it does.
-Can we find some way to understand the principles by which our network
-is classifying handwritten digits?  And, given such principles, can we
-do better?</p><p>To put these questions more starkly, suppose that a few decades hence
-neural networks lead to artificial intelligence (AI).  Will we
-understand how such intelligent networks work?  Perhaps the networks
-will be opaque to us, with weights and biases we don't understand,
-because they've been learned automatically.  In the early days of AI
-research people hoped that the effort to build an AI would also help
-us understand the principles behind intelligence and, maybe, the
-functioning of the human brain.  But perhaps the outcome will be that
-we end up understanding neither the brain nor how artificial
-intelligence works!</p><p>To address these questions, let's think back to the interpretation of
-artificial neurons that I gave at the start of the chapter, as a means
-of weighing evidence.  Suppose we want to determine whether an image
-shows a human face or not:</p><p> </p><p>  <span class="marginnote">Credits: 1. <a
+  高度なアルゴリズム $\leq$ シンプルな学習アルゴリズム + 良い訓練データ
+</center></p><p><h3><a name="toward_deep_learning"></a><a href="#toward_deep_learning">Deep Learningに向けて</a></h3></p><p>
+ニューラルネットワークは印象的な性能を提供していますが、その性能はやや神秘的です。
+ネットワークの重みとバイアスが自動的に発見されました。そして、ネットワークが何をするかということの説明を私たちは持っていないことを意味しています。
+ネットワークが手書き数字を分類する原理を理解するいくつかの方法を見つけることができるでしょうか。そして、そのような原理を考えて、さらによりよく出来るでしょうか。
+</p><p>
+この質問により厳密に答えるために、向こう20～30年はニューラルネットワークは人工知能(AI)に繋がるだろうと仮定してください。
+私たちは、そんな賢いネットワークがどのように働くかを理解するだろうか。
+私たちが理解していない重みとバイアスを使ったネットワークは私たちにとって不透明なものになるかもしれない。
+なぜならば、ネットワークは自動的に学習してきたので。
+AI研究者の初期には、AIを構築するための努力は知能の原理（例えば、人間の脳の機能）を理解することを助けると望んでいました。
+しかし、結局私たちは脳だけでなく、人工知能の働きも理解せずに終わるということになるかもしれません。
+
+</p><p>これらの問題に答えるために、この章の最初に説明した人工ニューロンのパーセプトロンについて振り返ってみましょう。画像に人間の顔を示しているか否かを判断したいとします。
+
+</p><p> </p><p>  <span class="marginnote">Credits: 1. <a
   href="http://commons.wikimedia.org/wiki/User:ST">Ester Inbar</a>. 2.
   Unknown. 3. NASA, ESA, G. Illingworth, D. Magee, and P. Oesch
   (University of California, Santa Cruz), R. Bouwens (Leiden
@@ -3059,80 +2957,61 @@ shows a human face or not:</p><p> </p><p>  <span class="marginnote">Credits: 1. 
   href="http://commons.wikimedia.org/wiki/File:Albert_Einstein_at_the_age_of_three_(1882).jpg"><img
   src="images/Einstein_crop.jpg" height="190px"/></a> <a
   href="http://commons.wikimedia.org/wiki/File:The_Hubble_eXtreme_Deep_Field.jpg"><img
-  src="images/hubble.jpg" height="190px"/></a> </p><p>We could attack this problem the same way we attacked handwriting
-recognition - by using the pixels in the image as input to a neural
-network, with the output from the network a single neuron indicating
-either "Yes, it's a face" or "No, it's not a face".</p><p>Let's suppose we do this, but that we're not using a learning
-algorithm.  Instead, we're going to try to design a network by hand,
-choosing appropriate weights and biases.  How might we go about it?
-Forgetting neural networks entirely for the moment, a heuristic we
-could use is to decompose the problem into sub-problems: does the
-image have an eye in the top left?  Does it have an eye in the top
-right?  Does it have a nose in the middle?  Does it have a mouth in
-the bottom middle?  Is there hair on top?  And so on.</p><p>If the answers to several of these questions are "yes", or even just
-"probably yes", then we'd conclude that the image is likely to be a
-face.  Conversely, if the answers to most of the questions are "no",
-then the image probably isn't a face.</p><p>Of course, this is just a rough heuristic, and it suffers from many
-deficiencies.  Maybe the person is bald, so they have no hair.  Maybe
-we can only see part of the face, or the face is at an angle, so some
-of the facial features are obscured.  Still, the heuristic suggests
-that if we can solve the sub-problems using neural networks, then
-perhaps we can build a neural network for face-detection, by combining
-the networks for the sub-problems.  Here's a possible architecture,
-with rectangles denoting the sub-networks.  Note that this isn't
-intended as a realistic approach to solving the face-detection
-problem; rather, it's to help us build intuition about how networks
-function.  Here's the architecture:</p><p><center>
+  src="images/hubble.jpg" height="190px"/></a> </p><p>
+この問題に対して、ニューラルネットワークの入力として画像のピクセルを使い、出力の1つのニューロンによって”YES”ならば顔・”NO”ならば顔ではないかを判定させることによって手書き文字認識と同じ方法で取り組むことができます。
+
+</p><p>それでは、挑戦してみましょう。しかし我々は学習アルゴリズムは使いません。その代わりに、ネットワークを手動で設計し、適切な重みとバイアスを設定していきます。
+どのように取り組めばよいでしょうか。ニューラルネットワークを一瞬全て忘れるとして、私たちが使うことができるヒューリスティックによって問題を小さな問題に分割します。
+画像の左上に目はあるか。画像の右上に目はあるか。画像の中心に鼻はあるか。画像の中央下に口はあるか。髪の毛は上のほうにあるか。などなど。
+
+</p><p>これらの質問のいくつかの答えがもし「YES」か「おそらくYES」だとすれば、それはおそらく顔であると判定できるだろう。逆に、質問の答えがほとんど「NO」だとすれば、それはおそらく顔ではないでしょう。
+
+</p><p>
+もちろん、これはかなりラフなヒューリスティックであり、多くの欠点がある。
+例えば、髪の薄いの人を考えた場合は、彼らは髪の毛がない。私たちは顔の一部のみが見ることが出来る場合、顔に角度がついている場合、顔の一部が隠されている場合などを考えなくてはならない。
+それでも、小さい問題をニューラルネットワークを使って解くことができる場合、小さい問題を解くためのネットワークを組み合わせることで、顔判定のためのニューラルネットワークを構築することができることを、ヒューリスティックは示唆している。
+ここでは、サブネットワークを表す長方形を含むことが可能なアーキテクチャを示します。
+これは顔判定問題を解くための現実的なアプローチを意図していないことに注意してください。
+むしろ、これはどのようにネットワークが機能するかについての直感を構成することを手助けしてくれます。アーキテクチャを下記に示す。
+
+</p><p><center>
 <img src="images/tikz14.png"/>
-</center></p><p>It's also plausible that the sub-networks can be decomposed.  Suppose
-we're considering the question: "Is there an eye in the top left?"
-This can be decomposed into questions such as: "Is there an
-eyebrow?"; "Are there eyelashes?"; "Is there an iris?"; and so
-on.  Of course, these questions should really include positional
-information, as well - "Is the eyebrow in the top left, and above
-the iris?", that kind of thing - but let's keep it simple.  The
-network to answer the question "Is there an eye in the top left?"
-can now be decomposed:</p><p><center>
+</center></p><p>
+サブネットワークに分けることができることは妥当なことです。
+それでは以下の質問について検討していると仮定しましょう。
+「画像の左上に目がありますか？」これは次のような質問にさらに分けることができます。
+「眉毛はありますか？」「まつ毛はありますか？」「眼球の光彩はありますか？」などです。
+もちろん、これらの質問は本当に位置的な情報を含んでいるべきであり、「画像の右上に眉毛はありますか？また、光彩の上にありますか？」などということです。
+簡単なことですが、位置的な情報は維持しておきましょう。「左上に目はありますか？」という質問に答えるネットワークは今と同じように分解することが出来ます。
+</p><p><center>
 <img src="images/tikz15.png"/>
-</center></p><p>Those questions too can be broken down, further and further through
-multiple layers.  Ultimately, we'll be working with sub-networks that
-answer questions so simple they can easily be answered at the level of
-single pixels.  Those questions might, for example, be about the
-presence or absence of very simple shapes at particular points in the
-image.  Such questions can be answered by single neurons connected to
-the raw pixels in the image.</p><p>The end result is a network which breaks down a very complicated
-question - does this image show a face or not - into very simple
-questions answerable at the level of single pixels.  It does this
-through a series of many layers, with early layers answering very
-simple and specific questions about the input image, and later layers
-building up a hierarchy of ever more complex and abstract concepts.
-Networks with this kind of many-layer structure - two or more hidden
-layers - are called <em>deep neural networks</em>.</p><p></p><p></p><p>
-Of course, I haven't said how to do this recursive decomposition into
-sub-networks.  It certainly isn't practical to hand-design the weights
-and biases in the network.  Instead, we'd like to use learning
-algorithms so that the network can automatically learn the weights and
-biases - and thus, the hierarchy of concepts - from training data.
-Researchers in the 1980s and 1990s tried using stochastic gradient
-descent and backpropagation to train deep networks.  Unfortunately,
-except for a few special architectures, they didn't have much luck.
-The networks would learn, but very slowly, and in practice often too
-slowly to be useful.</p><p>Since 2006, a set of techniques has been developed that enable
-learning in deep neural nets.  These deep learning techniques are
-based on stochastic gradient descent and backpropagation, but also
-introduce new ideas.  These techniques have enabled much deeper (and
-larger) networks to be trained - people now routinely train networks
-with 5 to 10 hidden layers.  And, it turns out that these perform far
-better on many problems than shallow neural networks, i.e., networks
-with just a single hidden layer.  The reason, of course, is the
-ability of deep nets to build up a complex hierarchy of concepts.
-It's a bit like the way conventional programming languages use modular
-design and ideas about abstraction to enable the creation of complex
-computer programs.  Comparing a deep network to a shallow network is a
-bit like comparing a programming language with the ability to make
-function calls to a stripped down language with no ability to make
-such calls.  Abstraction takes a different form in neural networks
-than it does in conventional programming, but it's just as important.</p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p>
+</center></p><p>
+これらの質問は、さらに複数の層を介して、分解し続けることが可能です。
+最終的には、単一のピクセルというレベルで簡単に判断できるような単純な質問に答えるサブネットワークで作業することになります。
+例えば、これらの質問は画像内における特定の点でのシンプルな形状の有り・無しについてかもしれない。
+そのような質問は画像内の生データのピクセルに接続された単一のニューロンによって答えることができる。
+
+</p><p>最終的な結果は、「画像は顔を表しているか否か」のような複雑な質問を単一のピクセルというレベルで解決可能なシンプルな問題に分解することができるネットワークである。
+以上の結果を得るためには、入力画像についてとても簡単で特定の質問に答える初期の層と、より複雑で抽象的な概念の階層を構築している後半の層を含む多くの層を通ることが必要です
+。二つ以上の隠れ層を含む多層構造のネットワークは、<em>ディープニューラルネットワーク</em>と呼ばれています。
+
+</p><p></p><p></p><p>
+もちろん、私はサブネットワークに分ける再帰的な方法について述べていません。
+ネットワーク内の重みとバイアスの手動での設計は実用的ではありません。
+代わりに、私たちは訓練データからネットワークが自動的に重みとバイアス、さらに概念の階層を学習することが出来る学習アルゴリズムを使う。
+1980年～1990年の研究者は確率的勾配降下法と誤差逆伝播法をディープネットワークの訓練に使用することを試みました。
+残念ながら、いくつかの特別なアーキテクチャを除いて、彼らは良い結果を得ることができませんでした。ネットワークは学習するが、とても学習が遅く、現実的に使用するレベルに達しませんでした。
+
+
+</p><p>2006年以来、ディープニューラルネットワークを学習可能にする一連の技術が開発されました。これらの学習技術は確率的勾配降下法と誤差逆伝播法に基づいているが、新しいアイデアが追加されています。
+これらの技術はより多くのディープネットワークを訓練可能にし、現在では5～10層の隠れ層を持つニューラルネットワークを訓練できるようになりました。
+そして、これらが浅いニューラルネットワークよりも、かなり良く、さらに多くの問題を実行することができることが判明しました。
+もちろん、これらの理由は概念の複雑な階層構造を構築することが出来るディープネットワークの力です。
+これは、従来のプログラム言語で複雑なプログラムの作成を可能にするための抽象概念についてのモジュラーデザインを使用する方法に少し似ています。
+浅いネットワークとディープネットワークを比較することは、多くの機能を実行する能力をもつプログラム言語とそのような能力を持たないプログラム言語を比較することに似ています。
+抽象化は、従来のプログラミングにおいて実行するということとは異なる形式を取りますが、それは極めて重要なことなのです。
+
+</p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p>
 </div><div class="footer"> <span class="left_footer"> In academic work,
 please cite this book as: Michael A. Nielsen, "Neural Networks and
 Deep Learning", Determination Press, 2014
