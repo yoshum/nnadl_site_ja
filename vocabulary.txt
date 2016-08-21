@@ -1,4 +1,5 @@
 # 英単語のアルファベット順に並べてください。
+accuracy		精度
 activation		活性
 activation function	活性化関数
 backpropagation		逆伝播（「誤差逆伝播」が一般的な訳語だと思います）
@@ -11,6 +12,7 @@ cost function		コスト関数(costとだけ書かれている時も「コスト
 deep learning		深層学習
 derivative		微分（or 導関数？）
 design			設計
+early stopping		早期打ち切り
 epoch			エポック（訓練データ全体を1巡する事）
 error	 		誤差
 evidence		情報(パーセプトロンの入力として使われる場合。「証拠」では変なので…代案求む)
@@ -21,8 +23,10 @@ gradient		勾配
 gradient descent	勾配降下法
 handwritten digits	手書き数字
 heuristics		ヒューリスティクス
+hyper-parameter		ハイパーパラメータ
 input/output		（ニューラルネットワークの）入力/出力
 layer			層
+learning rate		学習率
 linear			線形（線型？）
 mini-batch		ミニバッチ
 model			モデル

@@ -1339,14 +1339,21 @@ merely memorizing the training set, without understanding digits well
 
 </p><p>
 
+<!--
   Overfitting is a major problem in neural networks.  This is especially
 true in modern networks, which often have very large numbers of
 weights and biases.  To train effectively, we need a way of detecting
 when overfitting is going on, so we don't overtrain.  And we'd like to
   have techniques for reducing the effects of overfitting.
+  -->
 
+  過適合はニューラルネットワークの持つ大問題です。
+  特に、現代のニューラルネットワークはしばしば極めて多数の重みやバイアスをパラメータとして持つため、過適合の問題が顕著になります。
+  ニューラルネットワークを効率的に学習させるためには、過適合の進行を検知し、過学習を避ける手立てが必要です。
+  そして、過適合の影響を軽減するための手法が望まれます。
 </p><p>
 
+<!--
   The obvious way to detect overfitting is to use the approach above,
 keeping track of accuracy on the test data as our network trains.  If
 we see that the accuracy on the test data is no longer improving, then
@@ -1354,11 +1361,24 @@ we should stop training.  Of course, strictly speaking, this is not
 necessarily a sign of overfitting.  It might be that accuracy on the
 test data and the training data both stop improving at the same time.
   Still, adopting this strategy will prevent overfitting.
+  -->
+
+  過適合を検知する安直な方法は、上述したアプローチ、つまり、
+  ニューラルネットワークを訓練しながら試験データに対する精度の変化を追跡することです。
+  もし訓練によって試験データに対する精度が向上しなくなったら、その時点で訓練を止めるべきです。
+  もちろん厳密に言えば、これを過適合の兆候であると断言することはできません。
+  試験データと訓練データに対する精度の改善が同時に止まっているのかもしれません。
+  それでも、この戦略は過適合を防ぐ手段としては有効です。
 
 </p><p>
 
+<!--
   In fact, we'll use a variation on this strategy.  Recall that when we
   load in the MNIST data we load in three data sets:
+  -->
+
+  実際に、私たちはこの戦略の変種を採用します。
+  MNISTのデータをロードする時に、私たちは3つのデータセットをロードしていることを思い出しましょう：
 
 <div class="highlight"><pre>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">mnist_loader</span>
@@ -1366,6 +1386,7 @@ test data and the training data both stop improving at the same time.
 <span class="o">...</span> <span class="n">mnist_loader</span><span class="o">.</span><span class="n">load_data_wrapper</span><span class="p">()</span>
 </pre></div>
 
+  <!--
 Up to now we've been using the <tt>training_data</tt> and
 <tt>test_data</tt>, and ignoring the <tt>validation_data</tt>.  The
 <tt>validation_data</tt> contains $10,000$ images of digits, images
@@ -1389,8 +1410,32 @@ saturated*<span class="marginnote">
   could have occurred even after epoch 400, although the magnitude of
   any further improvement would likely be small.  So it's possible to
 adopt more or less aggressive strategies for early stopping.</span>.
+-->
 
-</p><p>Why use the <tt>validation_data</tt> to prevent overfitting, rather than
+これまでのところ、私たちは <tt>training_data</tt> と <tt>test_data</tt> のみを用いて、
+<tt>validation_data</tt> を無視してきました。
+<tt>validation_data</tt> は数字の画像を $10,000$ 枚含んでいます。
+これらの画像は、MNISTの訓練データに含まれる $50,000$ 枚の画像や試験データに含まれる $10,000$ 枚の画像とは異なるものです。
+過適合を防ぐために、私たちは <tt>test_data</tt> の代わりに <tt>validation_data</tt> を用いて、
+先程述べた戦略を実行することにします。
+つまり、各エポックが終了する毎に、<tt>validation_data</tt> に対する分類精度を計算します。
+<tt>validation_data</tt> に対する分類精度が飽和したところで、ニューラルネットワークの訓練を終了します。
+この戦略を<em>早期打ち切り</em>と呼びます。
+もちろん、実際問題としては精度が飽和したことを即座に検知する術はありません。
+その代わりに、精度が飽和したと確信が持てる時点まで、訓練を続けることにします*<span class="marginnote">
+*いつ止めるべきか決めるには幾つかの判断が必要となります。
+先ほど示したグラフでは、私はエポック280を精度が飽和した地点であると定めました。
+この判断が悲観的過ぎて、実際にはまだ学習の余地が残っている可能性もあります。
+時たま、ニューラルネットワークの訓練中にしばらく学習が停滞して、その後再び改善する場合もあるのです。
+もし仮に、エポック400を過ぎてからさらなる学習が起こったとしても驚きはしません。
+ただし、そのような改善はあったとしても小さなものでしょう。
+このように早期打ち切りの判断に絶対は無く、多少楽観的な戦略を取ることも可能なのです。</span>。
+
+
+</p><p>
+
+<!--
+Why use the <tt>validation_data</tt> to prevent overfitting, rather than
 the <tt>test_data</tt>?  In fact, this is part of a more general
 strategy, which is to use the <tt>validation_data</tt> to evaluate
 different trial choices of hyper-parameters such as the number of
@@ -1399,7 +1444,21 @@ and so on.  We use such evaluations to find and set good values for
 the hyper-parameters.  Indeed, although I haven't mentioned it until
 now, that is, in part, how I arrived at the hyper-parameter choices
 made earlier in this book. (More on this
-<a href="chap3.html#how_to_choose_a_neural_network's_hyper-parameters">later</a>.)</p><p>Of course, that doesn't in any way answer the question of why we're
+<a href="chap3.html#how_to_choose_a_neural_network's_hyper-parameters">later</a>.)
+-->
+
+過適合を防ぐために、なぜ <tt>test_data</tt> ではなく <tt>validation_data</tt> を用いるのでしょうか？
+実は、過適合を防ぐために採用したこの戦略は、より一般的な戦略の一部分なのです。
+より一般的な戦略とは、訓練を続けるエポック数、学習率、最適なニューラルネットワークのアーキテクチャ等の
+ハイパーパラメータを評価・比較するために、<tt>validation_data</tt> を用いるというものです。
+そうして得られた評価を元に、良いハイパーパラメータを見つけて定めます。
+実際、これまで触れてきませんでしたが、この本でこれまでに採用してきたハイパーパラメータの一部は、
+私自身がこの戦略に基づいてたどり着いたものです。(これに関する詳細は<a href="chap3.html#how_to_choose_a_neural_network's_hyper-parameters">後ほど</a>)
+
+</p><p>
+
+<!--
+Of course, that doesn't in any way answer the question of why we're
 using the <tt>validation_data</tt> to prevent overfitting, rather than
 the <tt>test_data</tt>.  Instead, it replaces it with a more general
 question, which is why we're using the <tt>validation_data</tt> rather
@@ -1420,7 +1479,36 @@ another way, you can think of the validation data as a type of
 training data that helps us learn good hyper-parameters.  This
 approach to finding good hyper-parameters is sometimes known as the
 <em>hold out</em> method, since the <tt>validation_data</tt> is kept apart
-or "held out" from the <tt>training_data</tt>.</p><p>Now, in practice, even after evaluating performance on the
+or "held out" from the <tt>training_data</tt>.
+-->
+
+もちろん、この説明では全く元の質問に答えたことになっていません。
+過適合を防ぐために <tt>test_data</tt> ではなく <tt>validation_data</tt> を使うのはなぜか、
+という質問を、より一般的な質問、つまり、良いハイパーパラメータを見つけるために
+<tt>test_data</tt> ではなく <tt>validation_data</tt> を使うのはなぜか、というものに
+置き換えただけなのです。
+この質問への回答を理解するために思い出してほしいのは、
+私たちが良いハイパーパラメータを探すときには、普通、
+様々な異なる値のハイパーパラメータを試しては評価を行うだろうということです。
+その際、ハイパーパラメータの評価を <tt>test_data</tt> で行ったとすると、
+ハイパーパラメータが <tt>test_data</tt> に対して過適合してしまう恐れがあります。
+つまり、最終的なハイパーパラメータは <tt>test_data</tt> の持つ特有の癖を学習してしまい、
+ニューラルネットワークが学習した成果を他のデータセットに対して一般化することができない、
+ということが起こりうるのです。
+ハイパーパラメータの決定に <tt>validation_data</tt> を用いることで、
+このような事態を防ぎます。
+そうして望ましいハイパーパラメータが得られたところで、<tt>test_data</tt> を用いた
+最終的な精度評価を行います。このような手順を踏むことで、<tt>test_data</tt> に対する
+評価が一般的なデータに対してニューラルネットワークが発揮するパフォーマンスの正当な評価であると、
+自信を持って結論できるのです。言い方を変えると、検証データ (<tt>validation_data</tt>) は
+良いハイパーパラメータを学習するために使われるある種の訓練データ (<tt>training_data</tt>) であると
+言えます。このようなアプローチは、<tt>validation_data</tt> を <tt>training_data</tt> から
+除外する ("hold out") ことから、<em>ホールドアウト法</em>と呼ばれます。
+
+</p><p>
+
+<!--
+    Now, in practice, even after evaluating performance on the
 <tt>test_data</tt> we may change our minds and want to try another
 approach - perhaps a different network architecture - which will
 involve finding a new set of hyper-parameters.  If we do this, isn't
@@ -1431,7 +1519,24 @@ fully is a deep and difficult problem.  But for our practical
 purposes, we're not going to worry too much about this question.
 Instead, we'll plunge ahead, using the basic hold out method, based on
 the <tt>training_data</tt>, <tt>validation_data</tt>, and
-<tt>test_data</tt>, as described above.</p><p>We've been looking so far at overfitting when we're just using 1,000
+<tt>test_data</tt>, as described above.
+-->
+
+実際問題として、ニューラルネットワークのパフォーマンスを <tt>test_data</tt> によって
+評価してしまった後になってから、当初の課題に対して異なるアプローチを試してみたくなる
+かもしれません。その時には、ニューラルネットワークの異なるアーキテクチャを試みて、
+新たに良いハイパーパラメータを探しなおすことになるでしょう。このようなことをしてしまうと、
+結局 <tt>test_data</tt> に対して過適合してしまう危険は無いのでしょうか？
+私たちが結果の一般性に自信を持つためには、潜在的には無限に遡ってデータ・セットを用意する
+必要があるのでしょうか？この疑問に真剣に取り組むのは、深く難しい問題です。しかし、
+私たちの実用上の目的に対して必要なことではないので、ここでこの疑問について深追いすることはしません。
+むしろ、<tt>training_data</tt>、<tt>validation_data</tt>、そして <tt>test_data</tt> に基づく
+基本的なホールドアウト法を用いて、積極的に前進したいと思います。
+
+</p><p>
+
+<!--
+    We've been looking so far at overfitting when we're just using 1,000
 training images.  What happens when we use the full training set of
 50,000 images?  We'll keep all the other parameters the same (30
 hidden neurons, learning rate 0.5, mini-batch size of 10), but train
@@ -1439,7 +1544,22 @@ using all 50,000 images for 30 epochs.  Here's a graph showing the
 results for the classification accuracy on both the training data and
 the test data.  Note that I've used the test data here, rather than
 the validation data, in order to make the results more directly
-comparable with the earlier graphs.</p><p><center><img src="images/overfitting_full.png" width="520px"></center></p><p>As you can see, the accuracy on the test and training data remain much
+comparable with the earlier graphs.
+-->
+
+ここまでで、訓練画像を1,000枚に限った時に起こる過適合を見てきました。では、訓練データが
+含む50,000枚の画像全てを用いた時に何が起こるでしょうか？画像の枚数以外のパラメータはそのままに
+（30個の隠れニューロン、学習率 0.5、ミニ・バッチの大きさは 10）、
+50,000枚の画像全てを用いて30エポックに渡り訓練してみます。
+ここに示しているのは、訓練データと試験データに対する分類精度のグラフです。
+ここでは、以前のグラフと今回の結果との直接的な比較を行うために、検証データではなく試験データを用いています。
+
+</p><p>
+    <center><img src="images/overfitting_full.png" width="520px"></center>
+</p><p>
+
+<!--
+    As you can see, the accuracy on the test and training data remain much
 closer together than when we were using 1,000 training examples.  In
 particular, the best classification accuracy of $97.86$ percent on the
 training data is only $1.53$ percent higher than the $95.33$ percent
@@ -1450,7 +1570,26 @@ data to the test data.  In general, one of the best ways of reducing
 overfitting is to increase the size of the training data.  With enough
 training data it is difficult for even a very large network to
 overfit.  Unfortunately, training data can be expensive or difficult
-to acquire, so this is not always a practical option.</p><p><h4><a name="regularization"></a><a href="#regularization">Regularization</a></h4></p><p>Increasing the amount of training data is one way of reducing
+to acquire, so this is not always a practical option.
+-->
+
+明らかに、たった1,000個の訓練例を用いた時と比べると、試験データと訓練データに対する
+精度がずっと近いままでいることがわかります。訓練データに対する最大の分類精度は97.86パーセントですが、
+これは試験データに対する精度 95.33パーセントと1.53パーセントしか違いません。1,000枚の訓練例に
+限った時に生じた17.73パーセントのギャップを思い出してください！過適合は進行しているにしろ、
+大幅に軽減されています。私たちのニューラルネットワークは、訓練データから試験データに対して、
+ずっとよく一般化できています。一般的に言って、過適合を軽減する最良の方法の一つは、
+より多くの訓練データを用意することです。十分な訓練データがあれば、とても大きなニューラルネットワークでさえ
+過適合を起こすことはないでしょう。ただし残念ながら、
+訓練データはしばしば高価だったり入手困難だったりするため、
+大量の訓練データを手に入れることは常に現実的な選択肢とは限りません。
+
+
+</p><p>
+    <h4><a name="regularization"></a><a href="#regularization">Regularization</a></h4>
+</p><p>
+
+    Increasing the amount of training data is one way of reducing
 overfitting.  Are there other ways we can reduce the extent to which
 overfitting occurs?  One possible approach is to reduce the size of
 our network. However, large networks have the potential to be more
