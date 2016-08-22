@@ -1586,38 +1586,84 @@ to acquire, so this is not always a practical option.
 
 
 </p><p>
-    <h4><a name="regularization"></a><a href="#regularization">Regularization</a></h4>
+    <h4><a name="regularization"></a><a href="#regularization">正規化</a></h4>
 </p><p>
 
+<!--
     Increasing the amount of training data is one way of reducing
 overfitting.  Are there other ways we can reduce the extent to which
 overfitting occurs?  One possible approach is to reduce the size of
 our network. However, large networks have the potential to be more
 powerful than small networks, and so this is an option we'd only adopt
-reluctantly.</p><p>Fortunately, there are other techniques which can reduce overfitting,
+reluctantly.
+-->
+
+訓練データを増やすことは、過適合を軽減する一つのやり方ですが、他の方法は無いのでしょうか？
+一つの可能なアプローチは、ニューラルネットワークのサイズを小さくすることです。
+しかし、大きなニューラルネットワークには小さなニューラルネットワークよりも強力な潜在能力が
+ありますから、これは積極的に採用するような選択肢ではありません。
+
+</p><p>
+<!--
+    Fortunately, there are other techniques which can reduce overfitting,
 even when we have a fixed network and fixed training data.  These are
 known as <em>regularization</em> techniques.  In this section I describe
 one of the most commonly used regularization techniques, a technique
 sometimes known as <em>weight decay</em> or <em>L2 regularization</em>.
 The idea of L2 regularization is to add an extra term to the cost
 function, a term called the <em>regularization term</em>.  Here's the
-regularized cross-entropy:</p><p><a class="displaced_anchor" name="eqtn78"></a>\begin{eqnarray} C = -\frac{1}{n} \sum_{xj} \left[ y_j \ln a^L_j+(1-y_j) \ln
+regularized cross-entropy: -->
+
+幸いにも、ニューラルネットワークや訓練データの大きさを変えなくても、過適合を軽減する方法があります。
+それらの手法は、<em>正規化</em>法として知られています。この節では、<em>重み減衰</em>、あるいは
+<em>L2正規化</em>として知られる手法を説明します。L2正規化は最もよく用いられる正規化手法の一つです。
+L2正規化では、コスト関数に<em>正規化項</em>と呼ばれる余分な項を付け足します。これが、
+正規化されたクロスエントロピーです：
+</p><p>
+    <a class="displaced_anchor" name="eqtn78"></a>\begin{eqnarray} C = -\frac{1}{n} \sum_{xj} \left[ y_j \ln a^L_j+(1-y_j) \ln
 (1-a^L_j)\right] + \frac{\lambda}{2n} \sum_w w^2.
-\tag{78}\end{eqnarray}</p><p>The first term is just the usual expression for the cross-entropy.
+\tag{78}\end{eqnarray}
+</p><p>
+<!--
+    The first term is just the usual expression for the cross-entropy.
 But we've added a second term, namely the sum of the squares of all
 the weights in the network.  This is scaled by a factor $\lambda /
 2n$, where $\lambda > 0$ is known as the <em>regularization
   parameter</em>, and $n$ is, as usual, the size of our training set.
 I'll discuss later how $\lambda$ is chosen.  It's also worth noting
 that the regularization term <em>doesn't</em> include the biases.  I'll
-also come back to that below.</p><p>Of course, it's possible to regularize other cost functions, such as
-the quadratic cost.  This can be done in a similar way:</p><p><a class="displaced_anchor" name="eqtn79"></a>\begin{eqnarray} C = \frac{1}{2n} \sum_x \|y-a^L\|^2 +
+also come back to that below.-->
+
+第1項はこれまで通りのクロスエントロピーの表式です。しかし今回はさらに、第2項としてニューラルネットワークの
+持つ全ての重みの2乗和が足されています。この余分の項は全体に $\lambda / 2n$ の因子が掛かっています。
+$\lambda > 0$ は<em>正規化パラメータ</em>と呼ばれる実数で、$n$ はいつも通り訓練データの大きさです。
+この $\lambda$ をどう選ぶかについては後ほど議論します。また、正規化項はバイアスを<em>含まない</em>ことにも
+注意しておいてください。これについても後ほど説明します。
+</p><p>
+<!--
+    Of course, it's possible to regularize other cost functions, such as
+the quadratic cost.  This can be done in a similar way:
+-->
+もちろん、クロスエントロピー以外のコスト関数を正規化することも可能です。例えば、
+2乗コスト関数をL2正規化すると以下のようになります：
+</p><p><a class="displaced_anchor" name="eqtn79"></a>\begin{eqnarray} C = \frac{1}{2n} \sum_x \|y-a^L\|^2 +
   \frac{\lambda}{2n} \sum_w w^2.
-\tag{79}\end{eqnarray}</p><p>In both cases we can write the regularized cost function as
+\tag{79}\end{eqnarray}</p><p>
+<!--
+    In both cases we can write the regularized cost function as-->
+どちらの場合にも、正規化されたコスト関数を次のように書けます：
 <a class="displaced_anchor" name="eqtn80"></a>\begin{eqnarray}  C = C_0 + \frac{\lambda}{2n}
-\sum_w w^2,
-\tag{80}\end{eqnarray} where $C_0$ is the original, unregularized cost
-function.</p><p>Intuitively, the effect of regularization is to make it so the network
+\sum_w w^2.
+\tag{80}\end{eqnarray} <!--
+where $C_0$ is the original, unregularized cost
+function.
+-->
+ここで、$C_0$ は元の正規化されていないコスト関数です。
+
+</p><p>
+
+<!--
+    Intuitively, the effect of regularization is to make it so the network
 prefers to learn small weights, all other things being equal.  Large
 weights will only be allowed if they considerably improve the first
 part of the cost function.  Put another way, regularization can be
@@ -1625,52 +1671,120 @@ viewed as a way of compromising between finding small weights and
 minimizing the original cost function.  The relative importance of the
 two elements of the compromise depends on the value of $\lambda$: when
 $\lambda$ is small we prefer to minimize the original cost function,
-but when $\lambda$ is large we prefer small weights.</p><p>Now, it's really not at all obvious why making this kind of compromise
+but when $\lambda$ is large we prefer small weights.-->
+
+直感的には、正規化することによりニューラルネットワークがより小さな重みを好むようになります。
+大きな重みが許されるのは、そうすることがコスト関数の第1項を余程大きく改善する場合だけです。
+言い換えると、正規化とは重みを小さくすることと元のコスト関数を小さくすることの間でバランスを取る方法であると
+見ることもできます。このバランスを取る上で、2つの要素の相対的な重要性を決定するのが $\lambda$ の値です：
+$\lambda$ が小さい時は元のコスト関数を最小化することを好み、$\lambda$ が大きい時には
+より小さな重みを好むのです。
+</p><p>
+    <!--
+    Now, it's really not at all obvious why making this kind of compromise
 should help reduce overfitting!  But it turns out that it does. We'll
 address the question of why it helps in the next section.  But first,
 let's work through an example showing that regularization really does
-reduce overfitting.</p><p>To construct such an example, we first need to figure out how to apply
+reduce overfitting. -->
+
+さて、実際のところ、そのようなバランスを取ることがなぜ過適合を軽減する助けになるのか、
+その理由は誰の目にもすぐさま明らかなものではありません。
+しかし、正規化が実際に過適合を軽減することは分かっています。
+その理由については次の節で触れることにして、まずは正規化によって過適合が軽減されている例を
+調べてみることにしましょう。
+</p><p>
+<!--
+    To construct such an example, we first need to figure out how to apply
 our stochastic gradient descent learning algorithm in a regularized
 neural network.  In particular, we need to know how to compute the
 partial derivatives $\partial C / \partial w$ and $\partial C
 / \partial b$ for all the weights and biases in the network.  Taking
 the partial derivatives of Equation <span id="margin_87298027313_reveal" class="equation_link">(80)</span><span id="margin_87298027313" class="marginequation" style="display: none;"><a href="chap3.html#eqtn80" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}  C = C_0 + \frac{\lambda}{2n}
-\sum_w w^2 \nonumber\end{eqnarray}</a></span><script>$('#margin_87298027313_reveal').click(function() {$('#margin_87298027313').toggle('slow', function() {});});</script> gives</p><p><a class="displaced_anchor" name="eqtn81"></a><a class="displaced_anchor" name="eqtn82"></a>\begin{eqnarray}
+\sum_w w^2 \nonumber\end{eqnarray}</a></span><script>$('#margin_87298027313_reveal').click(function() {$('#margin_87298027313').toggle('slow', function() {});});</script> gives
+-->
+そのような例を作るにはまず、どうすれば正規化されたニューラルネットワークに確率的勾配下降法を
+適用できるのかを明らかにする必要があります。特に、2種類の偏微分、
+$\partial C / \partial w$ と $\partial C / \partial b$ をニューラルネットワークが持つ
+全ての重みとバイアスに対して計算する方法を知る必要があります。
+式 <span id="margin_87298027313_reveal" class="equation_link">(80)</span><span id="margin_87298027313" class="marginequation" style="display: none;"><a href="chap3.html#eqtn80" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}  C = C_0 + \frac{\lambda}{2n}
+\sum_w w^2 \nonumber\end{eqnarray}</a></span><script>$('#margin_87298027313_reveal').click(function() {$('#margin_87298027313').toggle('slow', function() {});});</script> の偏微分を取ると、
+次の表式が得られます：
+</p><p><a class="displaced_anchor" name="eqtn81"></a><a class="displaced_anchor" name="eqtn82"></a>\begin{eqnarray}
   \frac{\partial C}{\partial w} & = & \frac{\partial C_0}{\partial w} +
   \frac{\lambda}{n} w \tag{81}\\
   \frac{\partial C}{\partial b} & = & \frac{\partial C_0}{\partial b}.
-\tag{82}\end{eqnarray} </p><p>The $\partial C_0 / \partial w$ and $\partial C_0 / \partial b$ terms
+\tag{82}\end{eqnarray}
+</p><p>
+<!--    The $\partial C_0 / \partial w$ and $\partial C_0 / \partial b$ terms
 can be computed using backpropagation, as described in
 <a href="chap2.html">the last chapter</a>.  And so we see that it's easy to
 compute the gradient of the regularized cost function: just use
 backpropagation, as usual, and then add $\frac{\lambda}{n} w$ to the
 partial derivative of all the weight terms.  The partial derivatives
 with respect to the biases are unchanged, and so the gradient descent
-learning rule for the biases doesn't change from the usual rule:</p><p><a class="displaced_anchor" name="eqtn83"></a>\begin{eqnarray}
+learning rule for the biases doesn't change from the usual rule:
+-->
+偏微分項、$\partial C_0 / \partial w$ と $\partial C_0 / \partial b$ は、
+<a href="chap2.html">前章</a>で説明した逆伝播法を使って計算できます。
+したがって、正規化されたコスト関数の勾配は簡単に計算できることがわかります。
+これまで通りに逆伝播法を使って、その後に重みによる偏微分に対して $\frac{\lambda}{n} w$ を
+加えれば良いのです。バイアスに関する偏微分はこれまでと何も変わりません。
+つまり、バイアスに対する勾配下降法の学習規則は通常の規則そのものなのです：
+</p><p>
+    <a class="displaced_anchor" name="eqtn83"></a>\begin{eqnarray}
 b & \rightarrow & b -\eta \frac{\partial C_0}{\partial b}.
-\tag{83}\end{eqnarray}</p><p>The learning rule for the weights becomes:</p><p><a class="displaced_anchor" name="eqtn84"></a><a class="displaced_anchor" name="eqtn85"></a>\begin{eqnarray}
+\tag{83}\end{eqnarray}
+</p><p>
+<!--    The learning rule for the weights becomes: -->
+重みに関する学習規則は次のように変わります：
+</p><p><a class="displaced_anchor" name="eqtn84"></a><a class="displaced_anchor" name="eqtn85"></a>\begin{eqnarray}
   w & \rightarrow & w-\eta \frac{\partial C_0}{\partial
     w}-\frac{\eta \lambda}{n} w \tag{84}\\
   & = & \left(1-\frac{\eta \lambda}{n}\right) w -\eta \frac{\partial
     C_0}{\partial w}.
-\tag{85}\end{eqnarray}</p><p>This is exactly the same as the usual gradient descent learning rule,
+\tag{85}\end{eqnarray}
+</p><p>
+<!--
+    This is exactly the same as the usual gradient descent learning rule,
 except we first rescale the weight $w$ by a factor $1-\frac{\eta
   \lambda}{n}$.  This rescaling is sometimes referred to as
 <em>weight decay</em>, since it makes the weights smaller.  At first
 glance it looks as though this means the weights are being driven
 unstoppably toward zero.  But that's not right, since the other term
 may lead the weights to increase, if so doing causes a decrease in the
-unregularized cost function.</p><p>Okay, that's how gradient descent works.  What about stochastic
+unregularized cost function.
+-->
+これは通常の勾配下降法による学習規則とほぼ同じです。唯一の違いは、
+まず最初に重み $w$ に因子 $1-\frac{\eta\lambda}{n}$ を掛けてリスケールしている点です。
+この因子は重みを小さくするので、<em>重み減衰</em>とも呼ばれます。
+一見、重みがゼロになるまでどこまでも小さくなってしまうかのように見えます。
+しかし、それは正しくありません。なぜなら、他の項が正規化する前のコスト関数を小さくするために、
+重みを大きくする方向に働くかもしれないからです。
+
+</p><p>
+<!--
+    Okay, that's how gradient descent works.  What about stochastic
 gradient descent?  Well, just as in unregularized stochastic gradient
 descent, we can estimate $\partial C_0 / \partial w$ by averaging over
 a mini-batch of $m$ training examples.  Thus the regularized learning
 rule for stochastic gradient descent becomes
 (c.f. Equation <span id="margin_637276429741_reveal" class="equation_link">(20)</span><span id="margin_637276429741" class="marginequation" style="display: none;"><a href="chap1.html#eqtn20" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
   w_k & \rightarrow & w_k' = w_k-\frac{\eta}{m}
-  \sum_j \frac{\partial C_{X_j}}{\partial w_k}  \nonumber\end{eqnarray}</a></span><script>$('#margin_637276429741_reveal').click(function() {$('#margin_637276429741').toggle('slow', function() {});});</script>)</p><p><a class="displaced_anchor" name="eqtn86"></a>\begin{eqnarray}
+  \sum_j \frac{\partial C_{X_j}}{\partial w_k}  \nonumber\end{eqnarray}</a></span><script>$('#margin_637276429741_reveal').click(function() {$('#margin_637276429741').toggle('slow', function() {});});</script>)
+-->
+これで勾配下降法のやり方は分かりました。では確率的勾配下降法は？
+実際のところ、正規化されていない確率的勾配下降法と同じことをやります。
+つまり、$\partial C_0 / \partial w$ を見積もるのに、$m$個の訓練例を含むミニバッチに関して
+平均を取れば良いのです。そうして、次のような確率的勾配下降法の正規化された学習規則が得られます
+(c.f. 式 <span id="margin_637276429741_reveal" class="equation_link">(20)</span><span id="margin_637276429741" class="marginequation" style="display: none;"><a href="chap1.html#eqtn20" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  w_k & \rightarrow & w_k' = w_k-\frac{\eta}{m}
+  \sum_j \frac{\partial C_{X_j}}{\partial w_k}  \nonumber\end{eqnarray}</a></span><script>$('#margin_637276429741_reveal').click(function() {$('#margin_637276429741').toggle('slow', function() {});});</script>)：
+</p><p><a class="displaced_anchor" name="eqtn86"></a>\begin{eqnarray}
   w \rightarrow \left(1-\frac{\eta \lambda}{n}\right) w -\frac{\eta}{m}
-  \sum_x \frac{\partial C_x}{\partial w},
-\tag{86}\end{eqnarray}</p><p>where the sum is over training examples $x$ in the mini-batch, and
+  \sum_x \frac{\partial C_x}{\partial w}.
+\tag{86}\end{eqnarray}</p><p>
+<!--
+    where the sum is over training examples $x$ in the mini-batch, and
 $C_x$ is the (unregularized) cost for each training example.  This is
 exactly the same as the usual rule for stochastic gradient descent,
 except for the $1-\frac{\eta \lambda}{n}$ weight decay factor.
@@ -1678,10 +1792,25 @@ Finally, and for completeness, let me state the regularized learning
 rule for the biases.  This is, of course, exactly the same as in the
 unregularized case (c.f. Equation <span id="margin_891921584746_reveal" class="equation_link">(21)</span><span id="margin_891921584746" class="marginequation" style="display: none;"><a href="chap1.html#eqtn21" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
   b_l & \rightarrow & b_l' = b_l-\frac{\eta}{m}
-  \sum_j \frac{\partial C_{X_j}}{\partial b_l} \nonumber\end{eqnarray}</a></span><script>$('#margin_891921584746_reveal').click(function() {$('#margin_891921584746').toggle('slow', function() {});});</script>),</p><p><a class="displaced_anchor" name="eqtn87"></a>\begin{eqnarray}
-  b \rightarrow b - \frac{\eta}{m} \sum_x \frac{\partial C_x}{\partial b},
+  \sum_j \frac{\partial C_{X_j}}{\partial b_l} \nonumber\end{eqnarray}</a></span><script>$('#margin_891921584746_reveal').click(function() {$('#margin_891921584746').toggle('slow', function() {});});</script>),
+-->
+ここで、和はミニバッチに含まれる訓練例 $x$ について取り、$C_x$ は各訓練例の
+（正規化されていない）コストを表します。これは、$1-\frac{\eta \lambda}{n}$ という重み減衰因子を除いて、
+確率的勾配下降法のこれまで使ってきた規則と全く同じです。最後に念のため、
+バイアスの学習に関する正規化された学習規則を述べておきましょう。これはもちろん、
+正規化されていない規則と全く同じです (c.f. 式 <span id="margin_891921584746_reveal" class="equation_link">(21)</span><span id="margin_891921584746" class="marginequation" style="display: none;"><a href="chap1.html#eqtn21" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  b_l & \rightarrow & b_l' = b_l-\frac{\eta}{m}
+  \sum_j \frac{\partial C_{X_j}}{\partial b_l} \nonumber\end{eqnarray}</a></span><script>$('#margin_891921584746_reveal').click(function() {$('#margin_891921584746').toggle('slow', function() {});});</script>)：
+</p><p><a class="displaced_anchor" name="eqtn87"></a>\begin{eqnarray}
+  b \rightarrow b - \frac{\eta}{m} \sum_x \frac{\partial C_x}{\partial b}.
 \tag{87}\end{eqnarray}
-where the sum is over training examples $x$ in the mini-batch.</p><p>Let's see how regularization changes the performance of our neural
+<!--
+where the sum is over training examples $x$ in the mini-batch.
+-->
+ここで、和はミニバッチに含まれる訓練例 $x$ について取ります。
+</p><p>
+<!--
+    Let's see how regularization changes the performance of our neural
 network. We'll use a network with $30$ hidden neurons, a mini-batch
 size of $10$, a learning rate of $0.5$, and the cross-entropy cost
 function.  However, this time we'll use a regularization parameter of
@@ -1694,6 +1823,18 @@ I decided to use the <tt>test_data</tt> because it makes the results
 more directly comparable with our earlier, unregularized results.  You
 can easily change the code to use the <tt>validation_data</tt> instead,
 and you'll find that it gives similar results.
+-->
+では、正規化がどのくらいニューラルネットワークのパフォーマンスを変えるのか確かめてみましょう。
+ここでは、隠れニューロンが30個、ミニバッチの大きさが $10$、学習率が $0.5$、そして
+クロスエントロピーをコスト関数として採用したニューラルネットワークを使います。
+今回はさらに、正規化パラメータとして $\lambda=0.1$ を使用します。
+コードの中で正規化パラメータを表す変数名として <tt>lmbda</tt> を用いている点には気をつけてください。
+というのも、Pythonでは <tt>lambda</tt> が正規化パラメータとは関係の無い意味を持つ予約語だからです。
+また、ここでは再び <tt>validation_data</tt> ではなく <tt>test_data</tt> を用いました。
+既に議論したように、厳密に言えば <tt>validation_data</tt> を使うべきです。
+今回 <tt>test_data</tt> を使うのは、そうすることで正規化する前の結果とより直接的な比較が可能になるためです。
+このコードを <tt>validation_data</tt> を使うように書き換えるのは容易ですし、
+実際にそうしても同様の結果が得られることがわかるでしょう。
 <div class="highlight"><pre>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">mnist_loader</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">training_data</span><span class="p">,</span> <span class="n">validation_data</span><span class="p">,</span> <span class="n">test_data</span> <span class="o">=</span> \
@@ -1706,20 +1847,44 @@ and you'll find that it gives similar results.
 <span class="o">...</span> <span class="n">monitor_evaluation_cost</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">monitor_evaluation_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">monitor_training_cost</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">monitor_training_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
-
+<!--
 The cost on the training data decreases over the whole time, much as
 it did in the earlier, unregularized case*<span class="marginnote">
 *This and the next
   two graphs were produced with the program
-  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/overfitting.py">overfitting.py</a>.</span>:</p><p><center><img src="images/regularized1.png" width="520px"></center></p><p>But this time the accuracy on the <tt>test_data</tt> continues to
-increase for the entire 400 epochs:</p><p><center><img src="images/regularized2.png" width="520px"></center></p><p>Clearly, the use of regularization has suppressed overfitting.  What's
+  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/overfitting.py">overfitting.py</a>.</span>:
+-->
+訓練データに対するコストは時間とともに減衰し続けることが分かるでしょう。
+この点は正規化していない以前の結果と変わりません*<span class="marginnote">
+*これとこの後2つのグラフはプログラム
+  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/overfitting.py">overfitting.py</a> で生成しました。</span>：
+</p><p><center><img src="images/regularized1.png" width="520px"></center>
+</p><p>
+<!--
+    But this time the accuracy on the <tt>test_data</tt> continues to
+increase for the entire 400 epochs:
+-->
+しかし今回は、<tt>test_data</tt> に対する精度も400エポックが終わるまで向上し続けています：
+</p><p><center><img src="images/regularized2.png" width="520px"></center>
+</p><p>
+<!--
+    Clearly, the use of regularization has suppressed overfitting.  What's
 more, the accuracy is considerably higher, with a peak classification
 accuracy of $87.1$ percent, compared to the peak of $82.27$ percent
 obtained in the unregularized case.  Indeed, we could almost certainly
 get considerably better results by continuing to train past 400
 epochs. It seems that, empirically, regularization is causing our
 network to generalize better, and considerably reducing the effects of
-overfitting.</p><p>What happens if we move out of the artificial environment of just
+overfitting.
+-->
+明らかに、正規化することで過適合が抑制されています。そしてそれ以上に、精度もかなり良くなっています。
+ピーク時の分類精度が正規化無しで $82.27$パーセントだったのに対し、
+正規化した後は$87.1$パーセントに向上しています。実は、400エポックを超えて訓練し続けることで、
+目に見える改善がほぼ間違いなく得られるでしょう。経験的には、正規化することで
+ニューラルネットワークはより良く一般化するようになり、過適合の効果もかなり軽減されるようです。
+</p><p>
+<!--
+    What happens if we move out of the artificial environment of just
 having 1,000 training images, and return to the full 50,000 image
 training set?  Of course, we've seen already that overfitting is much
 less of a problem with the full 50,000 images.  Does regularization
@@ -1730,39 +1895,87 @@ is because the size $n$ of the training set has changed from $n =
 1,000$ to $n = 50,000$, and this changes the weight decay factor $1 -
 \frac{\eta \lambda}{n}$.  If we continued to use $\lambda = 0.1$ that
 would mean much less weight decay, and thus much less of a
-regularization effect.  We compensate by changing to $\lambda = 5.0$.</p><p>Okay, let's train our network, stopping first to re-initialize the
+regularization effect.  We compensate by changing to $\lambda = 5.0$.
+-->
+では、訓練画像を1,000枚に制限するのをやめて、50,000枚全ての訓練データを使うことにすると
+何が起こるでしょうか。もちろん既に見たとおり、50,000枚全ての画像を使えば過適合はそれほど
+問題になりません。その状況で、果たして正規化にご利益があるのでしょうか？
+ハイパーパラメータは前回と同じ、30エポック、学習率 $0.5$、ミニバッチの大きさは $10$、を使う
+ことにします。しかし、正規化パラメータは変更する必要があります。なぜなら、
+訓練データの大きさを $n=1,000$ から $n=50,000$ に変更したため、そのことが重み減衰因子 $1 -
+\frac{\eta \lambda}{n}$ を変えているためです。もし $\lambda =0.1$ を使い続けたならば、
+重み減衰はずっと抑えられて、正規化の効果もずっと小さなものになるでしょう。
+訓練データの大きさの違いを埋め合わせるため、$\lambda=5.0$ を使うことにします。
+</p><p>
+<!--
+    Okay, let's train our network, stopping first to re-initialize the
 weights:
+-->
+さあ、今一度重みを初期化してから、ニューラルネットワークを訓練しましょう：
 <div class="highlight"><pre>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">large_weight_initializer</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">training_data</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">evaluation_data</span><span class="o">=</span><span class="n">test_data</span><span class="p">,</span> <span class="n">lmbda</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">monitor_evaluation_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">monitor_training_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
-
-We obtain the results:</p><p><center><img src="images/regularized_full.png" width="520px"></center></p><p>There's lots of good news here.  First, our classification accuracy on
+<!--We obtain the results:
+-->
+その結果はこちら：
+</p><p><center><img src="images/regularized_full.png" width="520px"></center>
+</p><p>
+    <!--
+    There's lots of good news here.  First, our classification accuracy on
 the test data is up, from $95.49$ percent when running unregularized,
 to $96.49$ percent.  That's a big improvement.  Second, we can see
 that the gap between results on the training and test data is much
 narrower than before, running at under a percent.  That's still a
 significant gap, but we've obviously made substantial progress
-reducing overfitting.</p><p>Finally, let's see what test classification accuracy we get when we
+reducing overfitting.
+-->
+良い知らせがあります。それもたくさん。第一に、試験データに対する分類精度が、
+正規化する前の $95.49$ パーセントから $96.49$ パーセントに上昇しています。
+これは大きな改善です。第二に、訓練データと試験データに対する結果の差が、
+正規化する前と比べてずっと小さくなっていることが見て取れます。その差は今や $1$ パーセントにも
+満たない小さなものです。これでもはっきりとした差は残っていますが、
+過適合を改善するという意味ではかなりの進歩です。
+</p><p>
+<!--
+    Finally, let's see what test classification accuracy we get when we
 use 100 hidden neurons and a regularization parameter of $\lambda =
 5.0$. I won't go through a detailed analysis of overfitting here, this
 is purely for fun, just to see how high an accuracy we can get when we
 use our new tricks: the cross-entropy cost function and L2
-regularization.</p><p><div class="highlight"><pre>
+regularization.
+-->
+最後に、隠れニューロンを100個にして正規化パラメータを $\lambda=5.0$ のままにした時、
+試験データの分類精度がどうなるか見てみましょう。ここでは、過適合に関する詳細な分析は行いません。
+ただのお楽しみとして、クロスエントロピーコスト関数とL2正規化という2つの新しい手法が
+どれだけの精度をもたらすのか見てみるのが、ここでの目的です。
+</p><p>
+    <div class="highlight"><pre>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network2</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">cost</span><span class="o">=</span><span class="n">network2</span><span class="o">.</span><span class="n">CrossEntropyCost</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">large_weight_initializer</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">training_data</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">lmbda</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">evaluation_data</span><span class="o">=</span><span class="n">validation_data</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">monitor_evaluation_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
-</p><p>The final result is a classification accuracy of $97.92$ percent on
+</p><p>
+<!--
+    The final result is a classification accuracy of $97.92$ percent on
 the validation data.  That's a big jump from the 30 hidden neuron
 case.  In fact, tuning just a little more, to run for 60 epochs at
 $\eta = 0.1$ and $\lambda = 5.0$ we break the $98$ percent barrier,
 achieving $98.04$ percent classification accuracy on the validation
-data.  Not bad for what turns out to be 152 lines of code!</p><p>I've described regularization as a way to reduce overfitting and to
+data.  Not bad for what turns out to be 152 lines of code!
+-->
+最終的に得られる分類精度は、検証データに対して $97.92$ パーセントです。
+これは隠れニューロンが30個だった時と比べると大きな飛躍です。実は、もう少しだけチューニングして、
+$\eta=0.1$ と $\lambda=5.0$ にセットして60エポック走らせると、
+検証データに対する分類精度が $98$ パーセントの壁を超えて、
+$98.04$ パーセントという結果を実現します。たった152行のコードにしては悪くない仕事ですね！
+</p><p>
+    <!--
+    I've described regularization as a way to reduce overfitting and to
 increase classification accuracies.  In fact, that's not the only
 benefit.  Empirically, when doing multiple runs of our MNIST networks,
 but with different (random) weight initializations, I've found that
@@ -1770,7 +1983,19 @@ the unregularized runs will occasionally get "stuck", apparently
 caught in local minima of the cost function.  The result is that
 different runs sometimes provide quite different results.  By
 contrast, the regularized runs have provided much more easily
-replicable results.</p><p>Why is this going on?  Heuristically, if the cost function is
+replicable results.
+-->
+ここまで私は、正規化を過適合を防ぎ分類精度を向上させるための手法として説明してきました。
+実は、正規化のご利益はそれだけではありません。
+ここで作成したMNISTを分類するニューラルネットワークを、
+重みの初期値をランダムに変えながら繰り返し走らせてみましょう。
+実際にやってみて私が気づいたのは、正規化しないと時折「引っかかる」ことです。
+つまり、コスト関数の極小に捕らえられているようなのです。
+結果として、異なる初期値から始めると時々かなり異なる結果に行き着くことになります。
+対照的に、正規化した場合にはより簡単に再現可能な結果が得られます。
+</p><p>
+    <!--
+    Why is this going on?  Heuristically, if the cost function is
 unregularized, then the length of the weight vector is likely to grow,
 all other things being equal.  Over time this can lead to the weight
 vector being very large indeed.  This can cause the weight vector to
@@ -1778,7 +2003,19 @@ get stuck pointing in more or less the same direction, since changes
 due to gradient descent only make tiny changes to the direction, when
 the length is long.  I believe this phenomenon is making it hard for
 our learning algorithm to properly explore the weight space, and
-consequently harder to find good minima of the cost function.</p><p>
+consequently harder to find good minima of the cost function.
+-->
+なぜこのようなことが起こるのでしょうか？ヒューリスティックには、
+もしコスト関数が正規化されていないと、重みベクトルの長さは大きくなりがちです。
+時間が経つにつれ、実際に重みベクトルはかなり大きくなりえます。
+重みベクトルが長い時、勾配下降法はその動径方向に向かいやすく、
+重みベクトルの向きを変える方向にはわずかにしか動きません。このため、
+一旦重みベクトルが長くなってしまうと、重みベクトルが同じ方向を向いて
+動かなくなってしまう可能性があります。この現象が原因で、
+私たちが使っている学習アルゴリズムでは重み空間を十分に探索することができず、
+結果的にコスト関数の良い最小値を見つけるのが困難になっているのではないかと、
+私は考えています。
+</p><p>
 <h4><a name="why_does_regularization_help_reduce_overfitting"></a><a href="#why_does_regularization_help_reduce_overfitting">Why does regularization help reduce overfitting?</a></h4></p><p>We've seen empirically that regularization helps reduce overfitting.
 That's encouraging but, unfortunately, it's not obvious why
 regularization helps!  A standard story people tell to explain what's

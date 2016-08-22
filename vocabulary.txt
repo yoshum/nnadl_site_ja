@@ -34,7 +34,7 @@ network	 		ニューラルネットワーク(network単体でニューラルネ�
 neuron			ニューロン
 overfitting 過適合
 overtraining 過学習
-pertubation		摂動
+perturbation		摂動
 quadratic cost function	2乗コスト関数
 recognizer     認識器
 recurrent neural networks	再帰型ニューラルネットワーク
@@ -52,4 +52,5 @@ universality theorem	普遍性定理
 validation set 検証データ・セット
 vector			ベクトル
 weight	　　　 		重み(パーセプトロンの)
+weight decay        重み減衰
 weighted input		重み付き入力
