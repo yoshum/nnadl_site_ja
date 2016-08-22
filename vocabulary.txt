@@ -39,7 +39,7 @@ quadratic cost function	2乗コスト関数
 recognizer     認識器
 recurrent neural networks	再帰型ニューラルネットワーク
 rectified linear unit		Rectified Linear Unit/ReLU
-regularization 規格化
+regularization 正規化（混用解消のため、規格化から使用数の多かった正規化に統一。）
 saturation/saturated	飽和/飽和している
 step function		ステップ関数
 stochastic gradient descent 確率的勾配降下法
