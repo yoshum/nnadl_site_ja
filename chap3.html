@@ -2042,6 +2042,7 @@ which we wish to build a model:-->
 </p><p><div
 id="simple_model"></div> <script type="text/javascript" src="js/simple_data.js">
  </script> </p><p>
+ <!--
      Implicitly, we're studying some real-world phenomenon here, with $x$
 and $y$ representing real-world data.  Our goal is to build a model
 which lets us predict $y$ as a function of $x$.  We could try using
@@ -2060,6 +2061,7 @@ exactly.  Here's the graph of that polynomial*<span class="marginnote">
     for the graph</a> if you're curious.  It's the function <tt>p(x)</tt>
   defined starting on line 14 of the program which produces the
   graph.</span>:
+-->
 私たちはここで、暗にある現実の現象を調べています。そして、$x$ と $y$ は現実のデータを表しています。
 ここでの目標は、$x$ の関数として $y$ を予言するモデルの構築です。
 そのためにニューラルネットワークを用いることも可能ではありますが、
@@ -2460,7 +2462,12 @@ usually include bias terms when regularizing.
 特に、大きなバイアスを許すことでニューロンの出力が容易に飽和できるようになります。
 時にこの性質が望ましい場合があります。
 これらの理由から、普通はバイアス項を正規化に含めません。
-</p><p><h4><a name="other_techniques_for_regularization"></a><a href="#other_techniques_for_regularization">Other techniques for regularization</a></h4></p><p>There are many regularization techniques other that L2 regularization.
+</p><p>
+<!--<h4><a name="other_techniques_for_regularization"></a><a href="#other_techniques_for_regularization">Other techniques for regularization</a></h4>-->
+<h4><a name="other_techniques_for_regularization"></a><a href="#other_techniques_for_regularization">その他の正規化手法</a></h4>
+</p><p>
+<!--
+There are many regularization techniques other that L2 regularization.
 In fact, so many techniques have been developed that I can't possibly
 summarize them all.  In this section I briefly describe three other
 approaches to reducing overfitting: L1 regularization, dropout, and
@@ -2468,21 +2475,55 @@ artificially increasing the training set size.  We won't go into
 nearly as much depth studying these techniques as we did earlier.
 Instead, the purpose is to get familiar with the main ideas, and to
 appreciate something of the diversity of regularization techniques
-available.</p><p><strong>L1 regularization:</strong> In this approach we modify the
+available.
+-->
+正規化の手法はL2正規化以外にもたくさんあります。
+実は、余りにたくさんありすぎて、その全てを要約することはできそうもありません。
+この節では、3つの手法、L1正規化、ドロップアウト、そして人工的な学習データの伸張、
+に的を絞って手短に紹介します。ここではL2正規化についてしてきたような詳細な説明はしません。
+その代わり、ここでの目的は主要なアイデアに親しんでもらうことと、
+正規化手法の多様性を認識してもらうことです。
+</p><p>
+<!--
+<strong>L1 regularization:</strong> In this approach we modify the
 unregularized cost function by adding the sum of the absolute values
-of the weights:</p><p><a class="displaced_anchor" name="eqtn88"></a>\begin{eqnarray}  C = C_0 + \frac{\lambda}{n} \sum_w |w|.
-\tag{88}\end{eqnarray} </p><p>Intuitively, this is similar to L2 regularization, penalizing large
+of the weights:-->
+<strong>L1正規化：</strong> このアプローチでは、
+正規化する前のコスト関数に重みの絶対値の和を足します：
+</p><p><a class="displaced_anchor" name="eqtn88"></a>\begin{eqnarray}  C = C_0 + \frac{\lambda}{n} \sum_w |w|.
+\tag{88}\end{eqnarray} </p><p>
+<!--
+Intuitively, this is similar to L2 regularization, penalizing large
 weights, and tending to make the network prefer small weights.  Of
 course, the L1 regularization term isn't the same as the L2
 regularization term, and so we shouldn't expect to get exactly the
 same behaviour.  Let's try to understand how the behaviour of a
 network trained using L1 regularization differs from a network trained
-using L2 regularization.</p><p>To do that, we'll look at the partial derivatives of the cost
+using L2 regularization.
+-->
+直感的には、大きな重みを不利にし、ニューラルネットワークが小さな重みを好むように仕向けるという意味で、
+L2正規化と似ています。もちろん、L1正規化項はL2正規化項と同じではないので、
+両者が全く同じ振る舞いをするわけでもありません。
+L1正規化して訓練したニューラルネットワークの振る舞いがL2正規化の場合とどう違うのか見てみましょう。
+</p><p>
+<!--
+To do that, we'll look at the partial derivatives of the cost
 function.  Differentiating <span id="margin_81306900706_reveal" class="equation_link">(88)</span><span id="margin_81306900706" class="marginequation" style="display: none;"><a href="chap3.html#eqtn88" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}  C = C_0 + \frac{\lambda}{n} \sum_w |w| \nonumber\end{eqnarray}</a></span><script>$('#margin_81306900706_reveal').click(function() {$('#margin_81306900706').toggle('slow', function() {});});</script> we obtain:
 <a class="displaced_anchor" name="eqtn89"></a>\begin{eqnarray}  \frac{\partial C}{\partial
     w} = \frac{\partial C_0}{\partial w} + \frac{\lambda}{n} \, {\rm
     sgn}(w),
-\tag{89}\end{eqnarray}</p><p>where ${\rm sgn}(w)$ is the sign of $w$, that is, $+1$ if $w$ is
+    \tag{89}\end{eqnarray}
+    -->
+そのために、まずはコスト関数の偏微分を調べましょう。
+式<span id="margin_81306900706_reveal" class="equation_link">(88)</span><span id="margin_81306900706" class="marginequation" style="display: none;"><a href="chap3.html#eqtn88" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}  C = C_0 + \frac{\lambda}{n} \sum_w |w| \nonumber\end{eqnarray}</a></span><script>$('#margin_81306900706_reveal').click(function() {$('#margin_81306900706').toggle('slow', function() {});});</script>
+を微分して、次の表式が得られます：
+<a class="displaced_anchor" name="eqtn89"></a>\begin{eqnarray}  \frac{\partial C}{\partial
+    w} = \frac{\partial C_0}{\partial w} + \frac{\lambda}{n} \, {\rm
+    sgn}(w).
+    \tag{89}\end{eqnarray}
+</p><p>
+<!--
+    where ${\rm sgn}(w)$ is the sign of $w$, that is, $+1$ if $w$ is
 positive, and $-1$ if $w$ is negative.  Using this expression, we can
 easily modify backpropagation to do stochastic gradient descent using
 L1 regularization.  The resulting update rule for an L1 regularized
@@ -2490,7 +2531,18 @@ network is
 <a class="displaced_anchor" name="eqtn90"></a>\begin{eqnarray}  w \rightarrow w' =
   w-\frac{\eta \lambda}{n} \mbox{sgn}(w) - \eta \frac{\partial
     C_0}{\partial w},
-\tag{90}\end{eqnarray} </p><p>where, as per usual, we can estimate $\partial C_0 / \partial w$ using
+    \tag{90}\end{eqnarray}
+    -->
+ここで、${\rm sgn}(w)$ は $w$ の符号、つまり、$w$ が正なら $+1$ で負なら $-1$ です。
+この表式を使うと、L1正規化を使った確率的勾配下降法を実行するように逆伝播法を修正できます。
+そうやって求めたL1正規化の下での更新規則は、
+<a class="displaced_anchor" name="eqtn90"></a>\begin{eqnarray}  w \rightarrow w' =
+  w-\frac{\eta \lambda}{n} \mbox{sgn}(w) - \eta \frac{\partial
+    C_0}{\partial w}
+    \tag{90}\end{eqnarray}
+    </p><p>
+   <!--
+    where, as per usual, we can estimate $\partial C_0 / \partial w$ using
 a mini-batch average, if we wish.  Compare that to the update rule for
 L2 regularization (c.f. Equation <span id="margin_398765654565_reveal" class="equation_link">(86)</span><span id="margin_398765654565" class="marginequation" style="display: none;"><a href="chap3.html#eqtn86" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
   w \rightarrow \left(1-\frac{\eta \lambda}{n}\right) w -\frac{\eta}{m}
@@ -2511,7 +2563,28 @@ small, L1 regularization shrinks the weight much more than L2
 regularization.  The net result is that L1 regularization tends to
 concentrate the weight of the network in a relatively small number of
 high-importance connections, while the other weights are driven toward
-zero.</p><p>I've glossed over an issue in the above discussion, which is that the
+zero.
+-->
+です。ここでいつも通り、$\partial C_0 / \partial w$ をミニバッチ平均によって評価することができます。
+これをL2正規化を用いた更新規則と比べてみましょう：
+(c.f. Equation <span id="margin_398765654565_reveal" class="equation_link">(86)</span><span id="margin_398765654565" class="marginequation" style="display: none;"><a href="chap3.html#eqtn86" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  w \rightarrow \left(1-\frac{\eta \lambda}{n}\right) w -\frac{\eta}{m}
+  \sum_x \frac{\partial C_x}{\partial w},  \nonumber\end{eqnarray}</a></span><script>$('#margin_398765654565_reveal').click(function() {$('#margin_398765654565').toggle('slow', function() {});});</script>),
+<a class="displaced_anchor" name="eqtn91"></a>\begin{eqnarray}
+  w \rightarrow w' = w\left(1 - \frac{\eta \lambda}{n} \right)
+  - \eta \frac{\partial C_0}{\partial w}.
+\tag{91}\end{eqnarray}
+どちらの表式でも、正規化の効果は重みを縮小することだとわかります。
+この点は、どちらの正規化も大きな重みを不利にするという直感と整合します。
+しかし、縮小の仕方が異なります。L1正規化は、重みを0の方向に一定の大きさだけ縮小します。
+L2正規化では、重みは $w$ に比例する量だけ縮小します。そのため、
+特定の重みが大きな絶対値 $|w|$ を取っている時に、L1正規化はL2正規化と比べるとほんのわずかにしか $w$ の値を変化させません。
+反対に、ある重みが小さな絶対値 $|w|$ を持っている時には、L2正規化よりもずっと大きく $w$ の値を変化させます。
+全体としては、L1正規化をした後のニューラルネットワークでは、一部の比較的少数の重要なリンクに重みに集中し、
+他の重みは0の方に追いやられることになります。
+</p><p>
+<!--
+I've glossed over an issue in the above discussion, which is that the
 partial derivative $\partial C / \partial w$ isn't defined when $w =
 0$.  The reason is that the function $|w|$ has a sharp "corner" at
 $w = 0$, and so isn't differentiable at that point.  That's okay,
@@ -2526,13 +2599,46 @@ and <span id="margin_321890282168_reveal" class="equation_link">(90)</span><span
   w-\frac{\eta \lambda}{n} \mbox{sgn}(w) - \eta \frac{\partial
     C_0}{\partial w} \nonumber\end{eqnarray}</a></span><script>$('#margin_321890282168_reveal').click(function() {$('#margin_321890282168').toggle('slow', function() {});});</script> with the convention that $\mbox{sgn}(0) = 0$.
 That gives a nice, compact rule for doing stochastic gradient descent
-with L1 regularization.</p><p><strong>Dropout:</strong> Dropout is a radically different technique for
+with L1 regularization.
+-->
+ここまでの議論で、偏微分 $\partial C / \partial w$ が $w=0$ で定義されないことについて
+敢えて触れずに来ました。関数 $|w|$ は $w=0$ に尖った「角」があるので、
+この点で微分不可能なのです。とはいえ、実はこのことは問題ありません。
+もし $w=0$ なら、その点で通常の（正規化していない）規則を使って確率的勾配下降法を行えば良いのです。
+この方法なら問題無いでしょう。というのも、直感的には正規化の効果が重みを縮小することなら、
+$w=0$ では明らかにこれ以上縮小のしようが無いからです。より正確には、
+式  <span id="margin_253754174974_reveal" class="equation_link">(89)</span><span id="margin_253754174974" class="marginequation" style="display: none;"><a href="chap3.html#eqtn89" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}  \frac{\partial C}{\partial
+    w} = \frac{\partial C_0}{\partial w} + \frac{\lambda}{n} \, {\rm
+    sgn}(w) \nonumber\end{eqnarray}</a></span><script>$('#margin_253754174974_reveal').click(function() {$('#margin_253754174974').toggle('slow', function() {});});</script>
+と <span id="margin_321890282168_reveal" class="equation_link">(90)</span><span id="margin_321890282168" class="marginequation" style="display: none;"><a href="chap3.html#eqtn90" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}  w \rightarrow w' =
+  w-\frac{\eta \lambda}{n} \mbox{sgn}(w) - \eta \frac{\partial
+    C_0}{\partial w} \nonumber\end{eqnarray}</a></span><script>$('#margin_321890282168_reveal').click(function() {$('#margin_321890282168').toggle('slow', function() {});});</script>
+の中で、$\mbox{sgn}(0) = 0$ という定義を採用します。
+そうすることで、L1正規化して確率的勾配下降法を実行するコンパクトな規則が出来上がります。
+</p><p>
+<!--
+    <strong>Dropout:</strong> Dropout is a radically different technique for
 regularization.  Unlike L1 and L2 regularization, dropout doesn't rely
 on modifying the cost function.  Instead, in dropout we modify the
 network itself.  Let me describe the basic mechanics of how dropout
-works, before getting into why it works, and what the results are.</p><p>Suppose we're trying to train a network:</p><p><center>
+works, before getting into why it works, and what the results are.
+-->
+<strong>ドロップアウト：</strong>
+ドロップアウトは、これまで紹介してきたものとは全く違う正規化の手法です。
+L1正規化やL2正規化と違って、ドロップアウトでは元のコスト関数をそのまま使います。
+その代わり、ドロップアウトではニューラルネットワークそのものを修正します。
+まずはドロップアウトの基本的な仕組みを説明してから、
+なぜドロップアウトで上手くいくのか、そしてどのような結果をもたらすのかを説明します。
+</p><p>
+<!--
+    Suppose we're trying to train a network:
+-->
+あるニューラルネットワークを訓練しようとしていると仮定しましょう：
+</p><p><center>
 <img src="images/tikz30.png"/>
-</center></p><p>In particular, suppose we have a training input $x$ and corresponding
+</center></p><p>
+<!--
+    In particular, suppose we have a training input $x$ and corresponding
 desired output $y$.  Ordinarily, we'd train by forward-propagating $x$
 through the network, and then backpropagating to determine the
 contribution to the gradient.  With dropout, this process is modified.
@@ -2540,20 +2646,52 @@ We start by randomly (and temporarily) deleting half the hidden
 neurons in the network, while leaving the input and output neurons
 untouched.  After doing this, we'll end up with a network along the
 following lines.  Note that the dropout neurons, i.e., the neurons
-which have been temporarily deleted, are still ghosted in:</p><p><center>
+which have been temporarily deleted, are still ghosted in:
+-->
+特に、訓練入力 $x$ とそれに対応する正解の出力 $y$ を知っているとします。
+通常、ニューラルネットワークを訓練するためにまず $x$ を順伝播させて、
+次に勾配を求めるために逆伝播を行います。ドロップアウトではこのプロセスを修正します。
+まず、ランダムに（そして一時的に）ニューラルネットワークの隠れニューロンを半分削除します。
+このとき入力・出力ニューロンは削除せずにそのままにしておきます。
+すると、下に示したようなニューラルネットワークが得られます。
+ここで、抜け落ちた（ドロップアウトした）ニューロン、つまり一時的に削除された
+ニューロンは、点線で残してあることに注意してください：
+</p><p><center>
 <img src="images/tikz31.png"/>
-</center></p><p>We forward-propagate the input $x$ through the modified network, and
+</center></p><p>
+<!--
+    We forward-propagate the input $x$ through the modified network, and
 then backpropagate the result, also through the modified network.
 After doing this over a mini-batch of examples, we update the
 appropriate weights and biases.  We then repeat the process, first
 restoring the dropout neurons, then choosing a new random subset of
 hidden neurons to delete, estimating the gradient for a different
-mini-batch, and updating the weights and biases in the network.</p><p></p><p></p><p></p><p></p><p>By repeating this process over and over, our network will learn a set
+mini-batch, and updating the weights and biases in the network.
+-->
+その後、入力 $x$ を修正されたニューラルネットワークで順伝播させ、
+次にその結果を再び修正後のニューラルネットワークで逆伝搬させます。
+ミニバッチに含まれる全ての例についてこれを実行した後、
+削除されずに残っている重みとバイアスを更新します。
+そしてこの過程を繰り返します。つまり、まずドロップアウトしたニューロンを戻し、
+削除するニューロンを再びランダムに選び直し、新しいミニバッチを用いて勾配を評価し、
+ニューラルネットワークの重みとバイアスを更新します。
+</p><p>
+<!--
+    By repeating this process over and over, our network will learn a set
 of weights and biases.  Of course, those weights and biases will have
 been learnt under conditions in which half the hidden neurons were
 dropped out.  When we actually run the full network that means that
 twice as many hidden neurons will be active.  To compensate for that,
-we halve the weights outgoing from the hidden neurons.</p><p>This dropout procedure may seem strange and <em>ad hoc</em>.  Why would
+we halve the weights outgoing from the hidden neurons.
+-->
+これを繰り返すことで、ニューラルネットワークは重みとバイアスを学習します。
+もちろん、ここで得られた重みやバイアスは、
+隠れニューロンの半分がドロップアウトしているという条件の元で学習した結果です。
+実際にニューラルネットワークの全体を動かすと、2倍のニューロンが有効になります。
+この点を補うために、隠れニューロンから出て行く重みを半分にします。
+</p><p>
+<!--
+    This dropout procedure may seem strange and <em>ad hoc</em>.  Why would
 we expect it to help with regularization?  To explain what's going on,
 I'd like you to briefly stop thinking about dropout, and instead
 imagine training neural networks in the standard way (no dropout).  In
@@ -2568,12 +2706,43 @@ The other two networks are probably just making a mistake.  This kind
 of averaging scheme is often found to be a powerful (though expensive)
 way of reducing overfitting.  The reason is that the different
 networks may overfit in different ways, and averaging may help
-eliminate that kind of overfitting.</p><p>What's this got to do with dropout?  Heuristically, when we dropout
+eliminate that kind of overfitting.
+-->
+このドロップアウトの手続きは奇妙でアドホックに思えるかもしれません。
+なぜこれが正規化を助けるのでしょうか？何が起こっているのか説明するために、
+一旦ドロップアウトについて考えるのをやめて、ドロップアウト無しに
+通常の方法でニューラルネットワークを訓練することを想像してみてください。
+特に、複数のニューラルネットワークを同じ訓練データで訓練する
+状況を考えてみましょう。もちろん、それぞれのニューラルネットワークは
+全く同じものではありませんから、
+結果として訓練した後のニューラルネットワークから得られる出力も
+ニューラルネットワークごと異なるかもしれません。
+そうなった時には、何らかの平均化や多数決のような手法を用いることで
+どの出力を採用するか決定できるでしょう。例えば、5つのニューラルネットワークを
+訓練して、そのうち3つが数字の画像を "3" に分類したとすると、その時は
+おそらく実際に "3" なのでしょう。残り2つのニューラルネットワークは
+単に間違えてしまっただけだと思われます。この種の平均化の手法は、
+しばしば過適合を軽減する強力な（しかし負担も大きい）手法です。
+異なるニューラルネットワークは異なる過適合のしかたをすることがあるので、
+平均化がこの種の過適合を防ぐ助けになるのです。
+</p><p>
+<!--
+    What's this got to do with dropout?  Heuristically, when we dropout
 different sets of neurons, it's rather like we're training different
 neural networks.  And so the dropout procedure is like averaging the
 effects of a very large number of different networks.  The different
 networks will overfit in different ways, and so, hopefully, the net
-effect of dropout will be to reduce overfitting.</p><p><a name="dropout_explanation"></a></p><p>A related heuristic explanation for dropout is given in one of the
+effect of dropout will be to reduce overfitting.
+-->
+これとドロップアウトがどう関係するというのでしょうか？直感的には、
+異なるニューロンの組み合わせをドロップアウトしてから訓練するのは、
+異なるニューラルネットワークを訓練しているようなものです。
+だから、ドロップアウトの手続きは、大量の異なるニューラルネットワークの結果を
+平均化しているようなものであると見なせます。異なるニューラルネットワークは
+違った過適合のしかたをするでしょうから、上手くいけば全体としては過適合が軽減されるでしょう。
+</p><p><a name="dropout_explanation"></a></p><p>
+<!--
+    A related heuristic explanation for dropout is given in one of the
 earliest papers to use the
 technique*<span class="marginnote">
 *<a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">ImageNet
@@ -2588,7 +2757,24 @@ predictions, then we can think of dropout as a way of making sure that
 the model is robust to the loss of any individual piece of evidence.
 In this, it's somewhat similar to L1 and L2 regularization, which tend
 to reduce weights, and thus make the network more robust to losing any
-individual connection in the network.</p><p>Of course, the true measure of dropout is that it has been very
+individual connection in the network.
+-->
+これと関連するヒューリスティックな説明は、この手法を用いた最初期の論文で与えられています<span class="marginnote">
+*<a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">ImageNet
+    Classification with Deep Convolutional Neural Networks</a>, by Alex
+  Krizhevsky, Ilya Sutskever, and Geoffrey Hinton (2012).</span>：
+「この手法はニューロン間の複雑な相互適合を軽減します。というのも、
+訓練に際してニューロンは特定の他のニューロンを頼りにすることができないからです。
+したがって、あるニューロンは、ランダムに選ばれた他のニューロンと一緒にされても役に立つような、
+データのより強固な特徴を学ぶように強制されるのです。」
+ニューラルネットワークのことを何らかの予言をするモデルだと見なすなら、
+ドロップアウトは入力される情報の欠落に対して強いモデルを作る方法だと言うことができるでしょう。
+この点において、何となくL1正規化やL2正規化と似ているとも言えます。
+これらの手法は、重みを小さくすることで、ニューロン間の接続を失うことに対して
+ニューラルネットワークを強くしていると言えるからです。
+</p><p>
+<!--
+    Of course, the true measure of dropout is that it has been very
 successful in improving the performance of neural networks.  The
 original
 paper*<span class="marginnote">
@@ -2609,7 +2795,30 @@ regularization.  Similarly impressive results have been obtained for
 many other tasks, including problems in image and speech recognition,
 and natural language processing.  Dropout has been especially useful
 in training large, deep networks, where the problem of overfitting is
-often acute.</p><p><strong>Artificially expanding the training data:</strong> We saw earlier that
+often acute.
+-->
+もちろん、ドロップアウトの実力を測る真の尺度は、それがニューラルネットワークの
+パフォーマンス改善に大きな成功を収めてきたという点です。
+この手法を導入した原論文*<span class="marginnote">
+*<a href="http://arxiv.org/pdf/1207.0580.pdf">Improving
+    neural networks by preventing co-adaptation of feature detectors</a>
+  by Geoffrey Hinton, Nitish Srivastava, Alex Krizhevsky, Ilya
+  Sutskever, and Ruslan Salakhutdinov (2012). この論文では、
+このドロップアウトに関する短い紹介文ではあえて触れずに来た
+多くの繊細な点についても議論しています。</span>
+では、様々な異なるタスクにこの手法を適用しています。
+私たちにとっては、彼らがドロップアウトをMNISTの分類問題に適用していることが
+特に興味深いところです。彼らはシンプルなフィードフォワードニューラルネットワークを使って、
+私たちがやってきたのと同じようなことをしています。
+論文には、その時点で達成されていた試験データに対する最高の分類精度が $98.4$ パーセントであると
+書いてあります。彼らはドロップアウトと修正されたL2正規化を組み合わせて、
+それを $98.7$ パーセントに改善しました。同様に印象的な結果が画像や音声認識、自然言語処理
+などたくさんの他のタスクに関しても得られています。
+ドロップアウトは過適合の問題が深刻になる巨大で多層のニューラルネットワークを訓練するときに、
+特に有用になります。
+</p><p>
+<!--
+    <strong>Artificially expanding the training data:</strong> We saw earlier that
 our MNIST classification accuracy dropped down to percentages in the
 mid-80s when we used only 1,000 training images.  It's not surprising
 that this is the case, since less training data means our network will
@@ -2627,27 +2836,83 @@ down $\lambda$ proportionally when smaller training sets are
 used*<span class="marginnote">
 *This and the next two graph are produced with the
   program
-  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/more_data.py">more_data.py</a>.</span>.</p><p><center><img src="images/more_data.png" width="520px"></center></p><p>As you can see, the classification accuracies improve considerably as
+  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/more_data.py">more_data.py</a>.</span>.
+-->
+<strong>人工的な学習データの伸張:</strong> 前に確かめたように、訓練画像が1,000枚しか無いと
+MNISTの分類精度は80パーセント中盤にまで減少してしまいます。このこと自体は驚くべきことではありません。
+訓練データが少ない分、ニューラルネットワークが学ぶ手書き文字のバリエーションも少なくなるからです。
+では、30個の隠れニューロンを持つニューラルネットワークを異なるサイズの訓練データセットで
+訓練したら、分類精度はどのように変化するでしょうか。ここでは、ミニバッチの大きさを10、
+学習率を $\eta = 0.5$、正規化パラメータを $\lambda=5.0$ とし、コスト関数にはクロスエントロピーを
+使うことにします。訓練データセットの全体を使うときには訓練を30エポック回します。
+訓練データを小さくするのに反比例するように、エポック数を大きくすることにします。
+重み減衰因子が訓練データセットの大きさに依らず一定になるように、全訓練データを用いるときには
+ $\lambda = 5.0$ とし、小さい訓練データセットを使うときには
+そのサイズに比例して $\lambda$ を小さくすることにします*<span class="marginnote">
+*これと次のグラフはプログラム
+  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/more_data.py">more_data.py</a> が生成したものです。</span>。
+</p><p><center><img src="images/more_data.png" width="520px"></center></p><p>
+<!--
+    As you can see, the classification accuracies improve considerably as
 we use more training data.  Presumably this improvement would continue
 still further if more data was available.  Of course, looking at the
 graph above it does appear that we're getting near saturation.
 Suppose, however, that we redo the graph with the training set size
-plotted logarithmically:</p><p><center><img src="images/more_data_log.png" width="520px"></center></p><p>It seems clear that the graph is still going up toward the end.  This
+plotted logarithmically:
+-->
+見て分かるように、より多くの訓練データを使うことで分類精度はかなり改善されます。
+おそらく、訓練データをさらに増やすことでこの改善はまだまだ続くでしょう。
+上のグラフを見るとほとんど飽和しているようにも見えますが、
+横軸を訓練データサイズの対数にしてプロットし直すと、次のグラフが得られます：
+</p><p><center><img src="images/more_data_log.png" width="520px"></center></p><p>
+<!--
+    It seems clear that the graph is still going up toward the end.  This
 suggests that if we used vastly more training data - say, millions
 or even billions of handwriting samples, instead of just 50,000 -
 then we'd likely get considerably better performance, even from this
-very small network.</p><p>Obtaining more training data is a great idea. Unfortunately, it can be
+very small network.
+-->
+こうしてみると、終わりに向けてまだグラフが上昇しているのが明らかになります。
+もしもっと莫大な数の訓練データを使えたら、例えば、100万も10億も手書きの数字を集められたら、
+このとても小さなニューラルネットワークでもかなり良いパフォーマンスを発揮するでしょう。
+</p><p>
+<!--
+    Obtaining more training data is a great idea. Unfortunately, it can be
 expensive, and so is not always possible in practice.  However,
 there's another idea which can work nearly as well, and that's to
 artificially expand the training data.  Suppose, for example, that we
-take an MNIST training image of a five,</p><p></p><p><center><img src="images/more_data_5.png" width="120px"></center></p><p>and rotate it by a small amount, let's say 15 degrees:</p><p><center><img src="images/more_data_rotated_5.png" width="120px"></center></p><p>It's still recognizably the same digit.  And yet at the pixel level
+take an MNIST training image of a five,
+-->
+訓練データをもっと集めようというのは素晴らしいアイデアです。ただ残念なことに、
+それはとても負担が大きく、現実的にはいつでも実行できることではありません。
+しかし、訓練データを集めるのと同じくらい効果的な別の方法があります。
+例えば、MNISTの訓練画像から「5」の画像を一枚取り出してみましょう。
+</p><p></p><p><center><img src="images/more_data_5.png" width="120px"></center></p><p>
+<!--
+and rotate it by a small amount, let's say 15 degrees:
+-->
+そして、この画像を少しだけ、例えば15度回転させてみます：
+</p><p><center><img src="images/more_data_rotated_5.png" width="120px"></center></p><p>
+<!--
+    It's still recognizably the same digit.  And yet at the pixel level
 it's quite different to any image currently in the MNIST training
 data.  It's conceivable that adding this image to the training data
 might help our network learn more about how to classify digits.
 What's more, obviously we're not limited to adding just this one
 image.  We can expand our training data by making <em>many</em> small
 rotations of <em>all</em> the MNIST training images, and then using the
-expanded training data to improve our network's performance.</p><p>This idea is very powerful and has been widely used.  Let's look at
+expanded training data to improve our network's performance.
+-->
+私たちが見れば、まだこの画像が同じ数字を表していると分かります。それでも、ピクセル単位で見ると、
+MNISTに含まれるどの画像ともかなり異なります。この画像を訓練データに加えれば、
+これからニューラルネットワークは数字の分類についてより多く学ぶだろうことは想像に難くありません。
+さらに、訓練データに加えて良いのはこの1枚だけではありません。
+<em>全ての</em>MNIST訓練画像について<em>たくさんの</em>小さな回転を施して、
+元の訓練データを拡張することができます。
+そしてこの拡張された訓練データを使ってニューラルネットワークのパフォーマンスを改善できるのです。
+</p><p>
+<!--
+    This idea is very powerful and has been widely used.  Let's look at
 some of the results from a
 paper*<span class="marginnote">
 *<a href="http://dx.doi.org/10.1109/ICDAR.2003.1227801">Best
@@ -2668,7 +2933,29 @@ intended to emulate the random oscillations found in hand muscles.  By
 using the elastic distortions to expand the data they achieved an even
 higher accuracy, 99.3 percent.  Effectively, they were broadening the
 experience of their network by exposing it to the sort of variations
-that are found in real handwriting.</p><p>Variations on this idea can be used to improve peformance on many
+that are found in real handwriting.
+-->
+このアイデアは非常に強力で広く使われています。ある論文*<span class="marginnote">
+*<a href="http://dx.doi.org/10.1109/ICDAR.2003.1227801">Best
+    Practices for Convolutional Neural Networks Applied to Visual
+    Document Analysis</a>, by Patrice Simard, Dave Steinkraus, and John
+  Platt (2003).</span>から幾つかの結果を紹介しましょう。この論文では、
+訓練データを拡張する方法の幾つかの変種をMNISTに適用しています。
+彼らが考えたニューラルネットワークの構造は、私たちが使ってきたものと似た
+フィードフォワードニューラルネットワークで、800個の隠れニューロンを持ち
+コスト関数にはクロスエントロピーを使っています。
+通常のMNIST訓練データでニューラルネットワークを訓練した時には、
+彼らは試験データに対して98.4%の分類精度を達成しました。しかし、次に訓練データを
+上で説明したような回転に加えて、平行移動と歪みで拡張しました。
+拡張された訓練データでニューラルネットワークを訓練すると、98.9% の分類精度を達成しました。
+彼らはさらに、彼らが「弾性歪み」と呼んだ変形を使って実験しました。これは
+手の筋肉で起こるランダムな振動を模倣する、特別な変形です。訓練データの拡張に弾性歪みを使うことで、
+さらに改善して99.3%という分類精度を達成しました。
+彼らが行ったことは、実際の手書き文字に見られるバラつきに触れさせることで
+ニューラルネットワークに実質的により多くの手書き文字を経験させていたと言えます。
+</p><p>
+<!--
+    Variations on this idea can be used to improve peformance on many
 learning tasks, not just handwriting recognition.  The general
 principle is to expand the training data by applying operations that
 reflect real-world variation.  It's not difficult to think of ways of
@@ -2682,7 +2969,21 @@ we can expand the training data.  These techniques are not always used
 noise, it may well be more efficient to clean up the input to the
 network by first applying a noise reduction filter.  Still, it's worth
 keeping the idea of expanding the training data in mind, and looking
-for opportunities to apply it.</p><p><h4><a name="exercise_195778"></a><a href="#exercise_195778">Exercise</a></h4><ul>
+for opportunities to apply it.
+-->
+このアイデアの仲間は、手書き文字認識に限らず多くの機械学習のタスクで
+パフォーマンスを改善するために使うことができます。基本的な原理は、現実的なデータに見られる
+バラつきを反映するような操作を訓練データに行い、訓練データを拡張するということです。
+これをどう実行するか考えるのは難しいことではありません。
+例えば、音声認識を行うニューラルネットワークを作っているとしましょう。
+私たち人間は、背後に雑音があっても会話を認識できます。ですから、雑音を加えてデータを拡張できます。
+また、会話の速度が早くても遅くても、会話を認識できます。
+したがってこれも訓練データを拡張する一つの方法です。これらの手法はいつも使われるわけではありません。
+例えば、訓練データにノイズを加えて拡張する代わりに、まずノイズ軽減フィルターを通して綺麗にした
+データをニューラルネットワークに入力することにした方が効率的だとしても不思議ではありません。
+それでも、訓練データを拡張するという選択肢を頭の片隅においておき、
+それを実行する機会を伺うのは、良い心がけです。
+</p><p><h4><a name="exercise_195778"></a><a href="#exercise_195778">Exercise</a></h4><ul>
 <li> As discussed above, one way of expanding the MNIST training data
   is to use small rotations of training images.  What's a problem that
   might occur if we allow arbitrarily large rotations of training
