@@ -218,7 +218,7 @@ results obtained on the handwriting classification problem studied in
 <a href="chap1.html">Chapter 1</a>.</p> -->
 
 <p>この章で説明するテクニックは以下のとおりです。<a href="chap3.html#the_cross-entropy_cost_function">クロスエントロピー</a>と呼ばれるより良いコスト関数、
-ネットワークを学習データによらず一般化するのに役立つ<a href="chap3.html#overfitting_and_regularization">「正規化」法</a>と呼ばれる4つの手法（L1正規化およびL2正規化、ドロップアウト、そして人工的な学習データの伸張）、
+ネットワークを学習データによらず汎化するのに役立つ<a href="chap3.html#overfitting_and_regularization">「正規化」法</a>と呼ばれる4つの手法（L1正規化およびL2正規化、ドロップアウト、そして人工的な学習データの伸張）、
 ネットワークの中の<a href="chap3.html#weight_initialization">重みを初期化するより良い方法</a>、
 そして、ネットワークに対して<a href="#how_to_choose_a_neural_network's_hyper-parameters">良いハイパーパラメータを選択するためのいくつかの発見的方法</a>です。また、<a href="chap3.html#other_techniques">それ以外のいくつかのテクニック</a>についても、あまり細部にこだわらず概観します。
 これらの議論は完全にお互いに独立なので、必要に応じて読み飛ばすこともできます。また、多くのテクニックを動くコードとして<a href="#handwriting_recognition_revisited_the_code">実装</a>もします。それらの実装を使うと、<a href="chap1.html">第1章</a>で説明した手書き文字の分類問題の結果が改善されます。</p>
@@ -672,7 +672,7 @@ expression <span id="margin_932302704635_reveal" class="equation_link">(63)</spa
   \sum_j \left[y_j \ln a^L_j + (1-y_j) \ln (1-a^L_j) \right] \nonumber\end{eqnarray}</a></span><script>$('#margin_932302704635_reveal').click(function() {$('#margin_932302704635').toggle('slow', function() {});});</script> avoids a learning slowdown in
 many-neuron networks.  If you're interested, you can work through the
 derivation in the problem below.  </p>-->
-<p>私達は、一つのニューロンのときのクロスエントロピーを調べてきました。しかし、多層の多くのニューロンの場合に一般化するのは簡単です。とくに、$y = y_1, y_2, \ldots$がニューロンの望まれる出力だと仮定しましょう。つまり、ニューロンの最終層の出力です。また、$a^L_1, a^L_2, \ldots$がニューロンの実際の出力だとしましょう。ここで、クロスエントロピーを次の式で定義します。
+<p>私達は、一つのニューロンのときのクロスエントロピーを調べてきました。しかし、多層の多くのニューロンの場合に汎化するのは簡単です。とくに、$y = y_1, y_2, \ldots$がニューロンの望まれる出力だと仮定しましょう。つまり、ニューロンの最終層の出力です。また、$a^L_1, a^L_2, \ldots$がニューロンの実際の出力だとしましょう。ここで、クロスエントロピーを次の式で定義します。
 <a class="displaced_anchor" name="eqtn63"></a>\begin{eqnarray}  C = -\frac{1}{n} \sum_x
   \sum_j \left[y_j \ln a^L_j + (1-y_j) \ln (1-a^L_j) \right].
 \tag{63}\end{eqnarray}
@@ -1255,7 +1255,7 @@ learning.  We say the network is <em>overfitting</em> or
   コスト関数を見るかぎり、モデルの性能はいっけん良くなり続けているようです。しかし試験データの分類精度をみると、
   コスト関数でみられた「改善」は幻であることがわかります。
   エポック280以降のニューラルネットワークが学習した知識は、
-  フェルミがディスっていたモデルと同じく、試験データに一般化できない知識だったのです。
+  フェルミがディスっていたモデルと同じく、試験データに汎化できない知識だったのです。
   したがって、有用な学習ではなかった、といえます。このようなとき、エポック280以降のニューラルネットワークは
  <em>過適合</em>している、
   <em>過学習</em>している、などと言います。
@@ -1493,7 +1493,7 @@ or "held out" from the <tt>training_data</tt>.
 その際、ハイパーパラメータの評価を <tt>test_data</tt> で行ったとすると、
 ハイパーパラメータが <tt>test_data</tt> に対して過適合してしまう恐れがあります。
 つまり、最終的なハイパーパラメータは <tt>test_data</tt> の持つ特有の癖を学習してしまい、
-ニューラルネットワークが学習した成果を他のデータセットに対して一般化することができない、
+ニューラルネットワークが学習した成果を他のデータセットに対して汎化することができない、
 ということが起こりうるのです。
 ハイパーパラメータの決定に <tt>validation_data</tt> を用いることで、
 このような事態を防ぎます。
@@ -1578,7 +1578,7 @@ to acquire, so this is not always a practical option.
 これは試験データに対する精度 95.33パーセントと1.53パーセントしか違いません。1,000枚の訓練例に
 限った時に生じた17.73パーセントのギャップを思い出してください！過適合は進行しているにしろ、
 大幅に軽減されています。私たちのニューラルネットワークは、訓練データから試験データに対して、
-ずっとよく一般化できています。一般的に言って、過適合を軽減する最良の方法の一つは、
+ずっとよく汎化できています。一般的に言って、過適合を軽減する最良の方法の一つは、
 より多くの訓練データを用意することです。十分な訓練データがあれば、とても大きなニューラルネットワークでさえ
 過適合を起こすことはないでしょう。ただし残念ながら、
 訓練データはしばしば高価だったり入手困難だったりするため、
@@ -1881,7 +1881,7 @@ overfitting.
 ピーク時の分類精度が正規化無しで $82.27$パーセントだったのに対し、
 正規化した後は$87.1$パーセントに向上しています。実は、400エポックを超えて訓練し続けることで、
 目に見える改善がほぼ間違いなく得られるでしょう。経験的には、正規化することで
-ニューラルネットワークはより良く一般化するようになり、過適合の効果もかなり軽減されるようです。
+ニューラルネットワークはより良く汎化するようになり、過適合の効果もかなり軽減されるようです。
 </p><p>
 <!--
     What happens if we move out of the artificial environment of just
@@ -2016,7 +2016,13 @@ consequently harder to find good minima of the cost function.
 結果的にコスト関数の良い最小値を見つけるのが困難になっているのではないかと、
 私は考えています。
 </p><p>
-<h4><a name="why_does_regularization_help_reduce_overfitting"></a><a href="#why_does_regularization_help_reduce_overfitting">Why does regularization help reduce overfitting?</a></h4></p><p>We've seen empirically that regularization helps reduce overfitting.
+<!--
+<h4><a name="why_does_regularization_help_reduce_overfitting"></a><a href="#why_does_regularization_help_reduce_overfitting">Why does regularization help reduce overfitting?</a></h4>
+-->
+<h4><a name="why_does_regularization_help_reduce_overfitting"></a><a href="#why_does_regularization_help_reduce_overfitting">なぜ正規化で過適合が軽減されるのか？</a></h4>
+</p><p>
+    <!--
+    We've seen empirically that regularization helps reduce overfitting.
 That's encouraging but, unfortunately, it's not obvious why
 regularization helps!  A standard story people tell to explain what's
 going on is along the following lines: smaller weights are, in some
@@ -2025,9 +2031,18 @@ explanation for the data, and should thus be preferred.  That's a
 pretty terse story, though, and contains several elements that perhaps
 seem dubious or mystifying.  Let's unpack the story and examine it
 critically.  To do that, let's suppose we have a simple data set for
-which we wish to build a model:</p><p><div
+which we wish to build a model:-->
+実際に正規化を実装してみることで、確かに正規化によって過適合が軽減されることを見てきました。
+この結果には勇気づけられますが、残念ながら、なぜ正規化が過適合を軽減してくれるのか明白とは言えません。
+この点についてしばしばなされる説明は次のようなものです。「重みがより小さいということは、ある意味で、
+複雑さがより小さいことを意味し、それゆえ、より単純で強力にデータを説明してくれるのだ。」
+ただ、この説明はずいぶん簡潔で、曖昧で誤魔化されているようにも思えます。
+ですから、この説明を批判的に検証してみましょう。
+そのために、次のような単純なデータセットを用意して、これを説明するモデルの構築してみましょう：
+</p><p><div
 id="simple_model"></div> <script type="text/javascript" src="js/simple_data.js">
- </script> </p><p>Implicitly, we're studying some real-world phenomenon here, with $x$
+ </script> </p><p>
+     Implicitly, we're studying some real-world phenomenon here, with $x$
 and $y$ representing real-world data.  Our goal is to build a model
 which lets us predict $y$ as a function of $x$.  We could try using
 neural networks to build such a model, but I'm going to do something
@@ -2044,19 +2059,57 @@ exactly.  Here's the graph of that polynomial*<span class="marginnote">
   of the polynomial in the <a href="js/polynomial_model.js">source code
     for the graph</a> if you're curious.  It's the function <tt>p(x)</tt>
   defined starting on line 14 of the program which produces the
-  graph.</span>:</p><p><div id="polynomial_fit"></div> <script
-type="text/javascript" src="js/polynomial_model.js"></script></p><p>That provides an exact fit.  But we can also get a good fit using the
-linear model $y = 2x$:</p><p><div id="linear_fit"></div> <script
-type="text/javascript" src="js/linear_model.js"></script> </p><p>Which of these is the better model?  Which is more likely to be true?
+  graph.</span>:
+私たちはここで、暗にある現実の現象を調べています。そして、$x$ と $y$ は現実のデータを表しています。
+ここでの目標は、$x$ の関数として $y$ を予言するモデルの構築です。
+そのためにニューラルネットワークを用いることも可能ではありますが、
+今はもっと単純なことを考えます：$y$ を $x$ の多項式としてモデル化してみます。
+ニューラルネットワークの代わりに多項式を利用するのは、
+多項式は何が起こっているのか特に見やすいためです。
+そこで、まずは多項式で起こっていることを理解してから、
+それをニューラルネットワークに翻訳しようと思います。
+今、上のグラフには10個のデータ点があるので、
+これらの点を全て通過する9次多項式 $y = a_0 x^9 + a_1 x^8 + \ldots + a_9$ がただ一つに定まります。
+これがその多項式のグラフです*<span class="marginnote">
+*ここでは多項式の係数を明示しませんが、例えば Numpy に含まれる <tt>polyfit</tt> 等の
+ルーチンを使って簡単に係数を計算できます。
+もし興味があれば、多項式の正確な形は<a href="js/polynomial_model.js">グラフのソースコード</a>で
+見ることが出来ます。グラフを生成するプログラムの14行目から定義されている関数 <tt>p(x)</tt> です。</span>：
+</p><p><div id="polynomial_fit"></div> <script
+type="text/javascript" src="js/polynomial_model.js"></script>
+</p><p>
+    <!---
+    That provides an exact fit.  But we can also get a good fit using the
+linear model $y = 2x$:-->
+この多項式はデータ点を正確にフィッティングしています。
+しかし、これらのデータ点は $y = 2x$ という直線を使っても良くフィッティングできます：
+</p><p><div id="linear_fit"></div> <script
+type="text/javascript" src="js/linear_model.js"></script>
+</p><p>
+<!--    Which of these is the better model?  Which is more likely to be true?
 And which model is more likely to generalize well to other examples of
-the same underlying real-world phenomenon?</p><p>These are difficult questions.  In fact, we can't determine with
+the same underlying real-world phenomenon?-->
+この2つのうち、どちらがより良いモデルであると言えるでしょうか？
+どちらがよりもっともらしく、真実に近いのでしょうか？
+そして、同じ現実の現象の他の例に対して、どちらのモデルがより良く汎化できるでしょうか。
+</p><p><!--
+    These are difficult questions.  In fact, we can't determine with
 certainty the answer to any of the above questions, without much more
 information about the underlying real-world phenomenon.  But let's
 consider two possibilities: (1) the $9$th order polynomial is, in
 fact, the model which truly describes the real-world phenomenon, and
 the model will therefore generalize perfectly; (2) the correct model
 is $y = 2x$, but there's a little additional noise due to, say,
-measurement error, and that's why the model isn't an exact fit.</p><p>It's not <em>a priori</em> possible to say which of these two
+measurement error, and that's why the model isn't an exact fit.-->
+これらは難しい質問です。実は、どの質問に対しても、確証を持って答えることは出来ません。
+そうするには、背後にある現実の現象に関する情報がもっと必要です。
+しかし、2つの可能性を考えてみましょう：(1) 実は9次多項式が本当に現実の現象を記述するモデルになっていて、
+したがって他の例に対しても完璧に汎化できる可能性、そして
+ (2) 正しいモデルは $y=2x$ なのだが、例えば測定の誤差などに起因するノイズが乗っているため、
+ モデルがデータ点を完全にはフィットしていない可能性、です。
+</p><p>
+    <!--
+    It's not <em>a priori</em> possible to say which of these two
 possibilities is correct.  (Or, indeed, if some third possibility
 holds).  Logically, either could be true.  And it's not a trivial
 difference.  It's true that on the data provided there's only a small
@@ -2065,7 +2118,18 @@ value of $y$ corresponding to some large value of $x$, much larger
 than any shown on the graph above.  If we try to do that there will be
 a dramatic difference between the predictions of the two models, as
 the $9$th order polynomial model comes to be dominated by the $x^9$
-term, while the linear model remains, well, linear.</p><p>One point of view is to say that in science we should go with the
+term, while the linear model remains, well, linear.-->
+どちらが正解だと言い切る根拠はありません（あるいは、どちらでもない、
+第3の可能性もありうるかもしれません）。論理的には、どちらでもありうるのです。
+にも関わらず、両者の違いは決して些細なものではありません。
+確かに、データ点の与えられている領域では2つのモデルの予言には小さな違いしかありません。
+しかし、もしも上のグラフで示されているよりももっとずっと大きな $x$ に対して $y$ を予言したいとしたら、
+どうでしょうか。その時には、両者の予言の間にはとてつもない違いが生じるでしょう。
+なぜならば、9次多項式では $x^9$ の項が支配的になりますが、
+線形モデルは、なんというか、線形のままですから。
+</p><p>
+<!--
+    One point of view is to say that in science we should go with the
 simpler explanation, unless compelled not to.  When we find a simple
 model that seems to explain many data points we are tempted to shout
 "Eureka!"  After all, it seems unlikely that a simple explanation
@@ -2079,7 +2143,24 @@ simplicity had occurred by chance, and so we suspect that $y = 2x+{\rm
 noise. And so while the 9th order model works perfectly for these
 particular data points, the model will fail to generalize to other
 data points, and the noisy linear model will have greater predictive
-power.</p><p>Let's see what this point of view means for neural networks.  Suppose
+power.
+-->
+一つの立場は、どうしても複雑なモデルを採用しなければならない特段の事情がない限り、
+科学においてはより単純な説明を採用するのが望ましいという考え方です。
+多くのデータ点を説明できる簡単なモデルが見つかった時には、「エウレカ！」と叫びたい
+衝動に駆られるでしょう。なんといっても、単純な説明とデータが単なる偶然の一致を見せるとは、
+考えにくいように思われます。むしろ、そのモデルは現象の背後にある何らかの真理を言い当てている
+と信じたくなるでしょう。今考えている例では、$y=2x+\text{(ノイズ)}$ というモデルは
+$y=a_0x^9 + a_1 x^8 + \ldots$ よりずっとシンプルに見えます。
+そんな単純さが偶然に現れたのだとすると驚きです。だからこそ、
+私たちは $y=2x+\text{(ノイズ)}$ が背後にある何らかの真理を表していると期待するのです。
+この立場に基づくと、9次多項式モデルは局所的なノイズの効果を学習しているに過ぎません。
+だから、9次多項式モデルは与えられたデータ点を完璧に説明はするけれども、
+他のデータ点に対して汎化はできないでしょう。そして、ノイズ付き線形モデルが
+より強力な予言能力を持つでしょう。
+</p><p>
+<!--
+    Let's see what this point of view means for neural networks.  Suppose
 our network mostly has small weights, as will tend to happen in a
 regularized network.  The smallness of the weights means that the
 behaviour of the network won't change too much if we change a few
@@ -2097,13 +2178,41 @@ constrained to build relatively simple models based on patterns seen
 often in the training data, and are resistant to learning
 peculiarities of the noise in the training data.  The hope is that
 this will force our networks to do real learning about the phenemonon
-at hand, and to generalize better from what they learn.</p><p>With that said, this idea of preferring simpler explanation should
+at hand, and to generalize better from what they learn.
+-->
+この立場がニューラルネットワークにおいて何を意味するのか見てみましょう。
+正規化されたニューラルネットワークで期待されるように、
+ニューラルネットワークの大部分では小さな重みを持つと仮定しましょう。
+重みが小さいということは、ここそこでランダムな入力を変化させても
+ニューラルネットワークの振る舞いが大きくは変わらないことを意味します。
+そのため、正規化されたニューラルネットワークでは、
+データに含まれる局所的なノイズの効果を学習しづらくなっています。
+その代わり、正規化されたニューラルネットワークは訓練データの中で繰り返し見られる
+データの特徴に反応するのです。対照的に、大きな重みを持つニューラルネットワークは、
+入力の小さな変化に敏感に反応してその振る舞いを大きく変えてしまいます。
+そのため、正規化されていないニューラルネットワークは、大きな重みを使って、
+訓練データのノイズに関する情報をたくさん含んだ複雑なモデルを学習してしまうのです。
+要するに、正規化されたニューラルネットワークは訓練データに頻繁に現れるパターンに基づいた
+比較的シンプルなモデルを構築します。そして、訓練データが持つノイズの特異性を学ぶことに対して
+耐性を持つのです。このため、ニューラルネットワークがノイズではなく現象そのものに対する真の学習をして、
+それをより良く汎化できるのではないかと、希望が持てます。
+</p><p>
+<!--
+    With that said, this idea of preferring simpler explanation should
 make you nervous.  People sometimes refer to this idea as "Occam's
 Razor", and will zealously apply it as though it has the status of
 some general scientific principle.  But, of course, it's not a general
 scientific principle.  There is no <em>a priori</em> logical reason to
 prefer simple explanations over more complex explanations.  Indeed,
-sometimes the more complex explanation turns out to be correct.</p><p>Let me describe two examples where more complex explanations have
+sometimes the more complex explanation turns out to be correct.
+-->
+ここまで説明したところで、よりシンプルなモデルが好ましいという考え方に不安を感じるかもしれません。
+この考えはしばしば「オッカムの剃刀」と呼ばれ、何か一般的な科学の原理であるかのように扱われます。
+しかし、もちろん、これは一般的な科学の原理ではありません。
+複雑なモデルよりも単純なモデルを好むべき、ア・プリオリな論理的理由は無いのです。
+実際、より複雑な説明が正しいという場合もあるのです。
+</p><p>
+<!--    Let me describe two examples where more complex explanations have
 turned out to be correct.  In the 1940s the physicist Marcel Schein
 announced the discovery of a new particle of nature.  The company he
 worked for, General Electric, was ecstatic, and publicised the
@@ -2127,7 +2236,32 @@ particle is no more*<span class="marginnote">
 *The story is related by the physicist
   Richard Feynman in an
   <a href="http://www.aip.org/history/ohilist/5020_4.html">interview</a>
-  with the historian Charles Weiner.</span>.</p><p>As a second example, in 1859 the astronomer Urbain Le Verrier observed
+  with the historian Charles Weiner.</span>.
+-->
+結果的には複雑な説明の方が正しかったという例を2つ紹介しましょう。
+1940年台に物理学者のマルツェル・シャインは新粒子を発見したと主張しました。
+彼が働いていたゼネラル・エレクトリック社はすっかり盛り上がって、
+その発見を広く宣伝しました。しかし、物理学者のハンス・ベーテは懐疑的でした。
+ベーテはシャインの元を訪れ、シャインの新粒子の飛跡が残るプレートを調べました。
+シャインは次々にプレートを見せましたが、
+ベーテはそれぞれのプレートにデータとして採用すべきでない理由を見出しました。
+最後に、シャインは問題なさそうに見えるプレートを差し出しました。
+ベーテは、それが統計的なまぐれ当たりに過ぎないのではないかと言いました。
+シャイン：「そうかもしれないが、その確率はあなたの公式によると5分の1しかありません。」
+ベーテ：「しかし、もう既に5つのプレートを見ました。」
+そこでシャインは次のように言いました：「しかし、あなたは一つ一つのプレート、
+一つ一つの写真に対して異なる理論で批判をしました。
+ところが、それらが新粒子であるというたった一つの仮説は、全てのプレートを説明します。」
+ベーテは次のように答えました：「あなたと私のたった一つの違いは、
+あなたの説明は間違っているが、私の説明は全てが正しいということです。
+あなたのただ一つの説明は間違いですが、私の複数の説明は正しいのです。」
+後の研究により、ベーテが正しかったことが確かめられました*<span class="marginnote">
+*この話は、物理学者のリチャード・ファインマンが歴史家のチャールズ・ワイナーとの
+<a href="http://www.aip.org/history/ohilist/5020_4.html">インタビュー</a>
+の中で紹介したものです。</span>。
+</p><p>
+    <!--
+    As a second example, in 1859 the astronomer Urbain Le Verrier observed
 that the orbit of the planet Mercury doesn't have quite the shape that
 Newton's theory of gravitation says it should have.  It was a tiny,
 tiny deviation from Newton's theory, and several of the explanations
@@ -2145,12 +2279,41 @@ Einstein's theory accurately predicts several phenomena which aren't
 predicted by Newtonian gravity at all. But these impressive qualities
 weren't entirely obvious in the early days.  If one had judged merely
 on the grounds of simplicity, then some modified form of Newton's
-theory would arguably have been more attractive.</p><p>There are three morals to draw from these stories.  First, it can be
+theory would arguably have been more attractive.
+-->
+2つ目の例として水星の軌道にまつわる話を紹介します。
+天文学者のユルバン・ルヴェリエは1859年に水星の軌道がニュートンの重力理論による
+予測と一致しないことを発見しました。そのずれは本当に、本当に僅かなもので、
+当時よく見られた説明は、つまるところ、ニュートンの重力理論はだいたい正しく、
+しかし僅かな修正が必要であるというものでした。
+1916年に、アインシュタインはそのズレが彼の一般相対性理論を使うととてもよく
+説明できることを示しました。ところが、一般相対性理論はニュートンの重力理論と
+根本的に異なっており、ずっと複雑な数学に基づいていました。
+このようにとても複雑な一般相対性理論ですが、今日ではアインシュタインの説明が
+広く受け入れられています。そして、ニュートンの理論は修正されたものも含めて間違っていると
+考えられています。これは一つには、アインシュタインの理論がニュートンの理論では
+説明が困難な他の多くの現象を説明できるためです。そしてさらに、
+ニュートンの重力では全くもって予言できない現象を正確に予言できるのです。
+しかし、これらの印象的な性質は、初期の頃から明らかであったわけではありません。
+もし単純さのみに基づいて判断していたら、おそらくいずれかの修正されたニュートン理論が
+もっと魅力的に映ったことでしょう。
+</p><p>
+    <!--There are three morals to draw from these stories.  First, it can be
 quite a subtle business deciding which of two explanations is truly
 "simpler".  Second, even if we can make such a judgement, simplicity
 is a guide that must be used with great caution!  Third, the true test
 of a model is not simplicity, but rather how well it does in
-predicting new phenomena, in new regimes of behaviour.</p><p>With that said, and keeping the need for caution in mind, it's an
+predicting new phenomena, in new regimes of behaviour.
+-->
+これらの逸話から3つの教訓が得られます。
+第1に、2つのモデルのどちらが真に「より単純」かを決めるのは、
+非常に微妙な問題であること。第2に、もしそのような判断を下すことができたとしても、
+単純さが正しさの指標になりうるかどうかは注意深く検討する必要があること。
+第3に、モデルを測る本当の尺度は単純さではなく、
+未知の領域で新しい現象をどれほど良く予言できるかという点であることです。
+
+</p><p><!--
+    With that said, and keeping the need for caution in mind, it's an
 empirical fact that regularized neural networks usually generalize
 better than unregularized networks.  And so through the remainder of
 the book we will make frequent use of regularization.  I've included
@@ -2162,7 +2325,21 @@ them to see which works better, and attept to understand why different
 approaches work better or worse.  And so you can view regularization
 as something of a kludge.  While it often helps, we don't have an
 entirely satisfactory systematic understanding of what's going on,
-merely incomplete heuristics and rules of thumb.</p><p>There's a deeper set of issues here, issues which go to the heart of
+merely incomplete heuristics and rules of thumb.
+-->
+これらの注意を頭の片隅においておいて、経験的な事実として、
+正規化したニューラルネットワークは通常、正規化されていないニューラルネットワークよりも
+よく汎化するのだと言っておきます。なので、この本の残りの部分では頻繁に
+正規化を利用します。私が上でいくつかの逸話を紹介したのは、
+正規化によってニューラルネットワークの汎化が助けられることについて、
+完全に納得できる理論的な説明が存在しないことを伝えるためなのです。
+実は、研究者は新しい正規化の手法を試しては、それらを比較してどちらがより良いか調べ、
+その理由を理解しようと試みています。ですから、正規化は今の段階ではある種の
+その場しのぎであるとみなすこともできます。
+正規化は仕事の助けになりますが、正規化によって実際に何が起こっているのかについて、
+完全に満足の行く系統的な理解は無く、不完全なヒューリスティックと経験則しかないのです。
+</p><p><!--
+    There's a deeper set of issues here, issues which go to the heart of
 science.  It's the question of how we generalize.  Regularization may
 give us a computional magic wand that helps our networks generalize
 better, but it doesn't give us a principled understanding of how
@@ -2176,7 +2353,23 @@ generalization works, nor of what the best approach is*<span class="marginnote">
   induction has been given a modern machine learning form in the
   no-free lunch theorem
   (<a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&arnumber=585893">link</a>)
-  of David Wolpert and William Macready (1997).</span>.</p><p>This is particularly galling because in everyday life, we humans
+  of David Wolpert and William Macready (1997).</span>.-->
+ここには科学の核心に関わる、さらに深い論点があります。
+それは、私たちが経験的な理解をどう汎化するのかという問いです。
+正規化は上手く計算するための魔法のようなもので、
+それは確かにニューラルネットワークが汎化するのを助けますが、
+どのように汎化しているのかという原理に関する理解も、
+何が最良のアプローチなのかという答えも教えてはくれないのです*<span class="marginnote">
+*これらの論点は、スコットランド人の哲学者、デイビッド・ヒュームによって
+<a href="http://www.gutenberg.org/ebooks/9662">"An Enquiry Concerning Human Understanding"</a> (1748)
+ の中で議論された、<a href="http://en.wikipedia.org/wiki/Problem_of_induction">帰納法の問題</a>に
+遡ります。帰納法の問題は、現代の機械学習においては、
+デイビッド・ウォルパートとウィリアム・マクレディーによるノーフリーランチ定理として現れます。
+(<a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&arnumber=585893">リンク</a>)
+</span>。
+</p><p>
+<!--
+    This is particularly galling because in everyday life, we humans
 generalize phenomenally well.  Shown just a few images of an elephant
 a child will quickly learn to recognize other elephants.  Of course,
 they may occasionally make mistakes, perhaps confusing a rhinoceros
@@ -2188,7 +2381,23 @@ brains are, in some sense, regularizing amazingly well!  How do we do
 it?  At this point we don't know.  I expect that in years to come we
 will develop more powerful techniques for regularization in artificial
 neural networks, techniques that will ultimately enable neural nets to
-generalize well even from small data sets.</p><p>In fact, our networks already generalize better than one might <em>a
+generalize well even from small data sets.
+-->
+このことが一際悩ましく思えるのは、私たち人間が日常的に驚くほどうまく汎化するからです。
+象の画像をほんの数枚見ただけで、子供はすぐに他の象を認識し始めるでしょう。
+もちろん、時には間違えもするでしょうし、サイを象と混同するかもしれません。
+それでも多くの場合に非常に正確でしょう。つまり、ここに一つのシステム、
+すなわち人間の脳があって、それは莫大な数のパラメータを持ちます。
+そしてそれは、たった数枚の訓練画像を見せられるだけで、
+このシステムは他の画像に対して汎化しはじめるのです。
+私たちの脳はある意味で、非常に上手く正規化されているのです！
+どうすれば私たちにもニューラルネットワークで同じことができるでしょうか？
+現時点では分かりません。向こう数年のうちに、人工的なニューラルネットワークを
+正規化するより強力な手法が開発されて、
+究極的にはわずかな訓練データから良く汎化できるようになると期待します。
+</p><p>
+    <!--
+    In fact, our networks already generalize better than one might <em>a
   priori</em> expect.  A network with 100 hidden neurons has nearly 80,000
 parameters.  We have only 50,000 images in our training data.  It's
 like trying to fit an 80,000th degree polynomial to 50,000 data
@@ -2205,7 +2414,24 @@ multilayer nets has a `self-regularization' effect".  This is
 exceptionally fortunate, but it's also somewhat disquieting that we
 don't understand why it's the case.  In the meantime, we will adopt
 the pragmatic approach and use regularization whenever we can.  Our
-neural networks will be the better for it.</p><p>Let me conclude this section by returning to a detail which I left
+neural networks will be the better for it.
+-->
+実は、これまで実装してきたニューラルネットワークは、
+既に<em>ア・プリオリ</em>に期待されるよりも良く汎化しています。
+100個の隠れニューロンを持つニューラルネットワークには、80,000個近いパラメータがあります。
+訓練データには50,000枚の画像しかありません。いわば、80,000次多項式で50,000個のデータ点を
+フィットしようとしているようなものです。本来なら、このニューラルネットワークはひどく
+過適合を起こしても当然なわけです。にも関わらず、これまで見てきたように非常に良く汎化するのです。
+なぜこんなことが起こるのでしょうか？これはよく理解されているわけではありません。
+「多層ニューラルネットワークにおける勾配下降学習のダイナミクスには
+『自己正規化』効果がある」という仮説はあります*<span class="marginnote">
+*出典は <a href="http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf">Gradient-Based
+    Learning Applied to Document Recognition</a>, by Yann LeCun,
+ Léon Bottou, Yoshua Bengio, and Patrick Haffner
+ (1998) です。</span>。
+</p><p>
+    <!--
+    Let me conclude this section by returning to a detail which I left
 unexplained earlier: the fact that L2 regularization <em>doesn't</em>
 constrain the biases.  Of course, it would be easy to modify the
 regularization procedure to regularize the biases.  Empirically, doing
@@ -2218,7 +2444,23 @@ our network to learn the noise in our training data.  At the same
 time, allowing large biases gives our networks more flexibility in
 behaviour - in particular, large biases make it easier for neurons
 to saturate, which is sometimes desirable.  For these reasons we don't
-usually include bias terms when regularizing.</p><p><h4><a name="other_techniques_for_regularization"></a><a href="#other_techniques_for_regularization">Other techniques for regularization</a></h4></p><p>There are many regularization techniques other that L2 regularization.
+usually include bias terms when regularizing.
+-->
+この節の終わりに、ここまで説明せずに来た詳細に戻ってきましょう：
+なぜL2正規化でバイアスを制限し<em>ない</em>のでしょうか？
+もちろん、バイアスを正規化するように正規化の手順を修正するのは簡単です。
+経験的には、そうしても結果が大きく変わらないので、
+バイアスを正規化するかどうかは単なる慣例であるということも出来ます。
+しかし、次の事実には言及しておく価値があるでしょう。
+それは、バイアスが大きくなっても、重みが大きくなった時のように
+入力に対するニューロンの感受性が高まるわけではない、という事実です。
+だから、大きなバイアスのために訓練データのノイズを学習してしまうのではないかと
+心配する必要は無いわけです。同時に、大きなバイアスを許すことで、
+ニューラルネットワークはより柔軟に振る舞えるようになります。
+特に、大きなバイアスを許すことでニューロンの出力が容易に飽和できるようになります。
+時にこの性質が望ましい場合があります。
+これらの理由から、普通はバイアス項を正規化に含めません。
+</p><p><h4><a name="other_techniques_for_regularization"></a><a href="#other_techniques_for_regularization">Other techniques for regularization</a></h4></p><p>There are many regularization techniques other that L2 regularization.
 In fact, so many techniques have been developed that I can't possibly
 summarize them all.  In this section I briefly describe three other
 approaches to reducing overfitting: L1 regularization, dropout, and
