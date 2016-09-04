@@ -2983,14 +2983,31 @@ for opportunities to apply it.
 データをニューラルネットワークに入力することにした方が効率的だとしても不思議ではありません。
 それでも、訓練データを拡張するという選択肢を頭の片隅においておき、
 それを実行する機会を伺うのは、良い心がけです。
-</p><p><h4><a name="exercise_195778"></a><a href="#exercise_195778">Exercise</a></h4><ul>
+</p><p>
+<!--
+    <h4><a name="exercise_195778"></a><a href="#exercise_195778">Exercise</a></h4><ul>
 <li> As discussed above, one way of expanding the MNIST training data
   is to use small rotations of training images.  What's a problem that
   might occur if we allow arbitrarily large rotations of training
   images?
-</ul></p><p><strong>An aside on big data and what it means to compare
+</ul>
+-->
+<h4><a name="exercise_195778"></a><a href="#exercise_195778">演習</a></h4><ul>
+<li> 上で議論したように、訓練画像を少し回転させるのはMNISTの訓練データを拡張する一つの方法です。
+この時、任意の回転角を許すとどのような問題が起こるでしょうか？
+</ul>
+</p><p>
+<!--
+    <strong>An aside on big data and what it means to compare
   classification accuracies:</strong> Let's look again at how our neural
-network's accuracy varies with training set size:</p><p><center><img src="images/more_data_log.png" width="520px"></center></p><p>Suppose that instead of using a neural network we use some other
+network's accuracy varies with training set size:
+-->
+<strong>ビッグデータと分類精度比較に関する余談：</strong>
+ニューラルネットワークの分類精度が訓練データセットの大きさによってどう変化するのか
+もう一度見てみましょう：
+</p><p><center><img src="images/more_data_log.png" width="520px"></center></p><p>
+<!--
+    Suppose that instead of using a neural network we use some other
 machine learning technique to classify digits.  For instance, let's
 try using the support vector machines (SVM) which we met briefly back
 in <a href="chap1.html#SVM">Chapter 1</a>.  As was the case in Chapter 1,
@@ -3002,7 +3019,23 @@ plotted the neural net results as well, to make comparison
 easy*<span class="marginnote">
 *This graph was produced with the program
   <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/more_data.py">more_data.py</a>
-  (as were the last few graphs).</span>:</p><p><center><img src="images/more_data_comparison.png" width="520px"></center></p><p>Probably the first thing that strikes you about this graph is that our
+  (as were the last few graphs).</span>:
+-->
+ここで、ニューラルネットワークの代わりに、何か他の機械学習手法で数字を分類することを
+考えてみましょう。例えば、<a href="chap1.html#SVM">Chapter 1</a>で手短に紹介した
+サポートベクターマシン（SVM）を使ってみましょう。SVMに馴染みがなくても心配は不要です。
+ここでの議論にはその詳細を理解している必要はありません。SVMを自分で実装する代わりに、
+<a href="http://scikit-learn.org/stable/">scikit-learn ライブラリ</a>で提供されている
+SVMをここでは利用します。SVMのパフォーマンスが訓練データセットの大きさに関して
+どう変化するのかを示したのが下の図です。比較のために、ニューラルネットワークの結果も
+合わせてプロットしました*<span class="marginnote">
+*このグラフは、（これまでのいくつかのグラフと同様に）プログラム
+  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/more_data.py">more_data.py</a> で生成したものです。</span>：
+</p><p>
+<center><img src="images/more_data_comparison.png" width="520px"></center>
+</p><p>
+<!--
+    Probably the first thing that strikes you about this graph is that our
 neural network outperforms the SVM for every training set size.
 That's nice, although you shouldn't read too much into it, since I
 just used the out-of-the-box settings from scikit-learn's SVM, while
@@ -3012,7 +3045,22 @@ our SVM using 50,000 images then it actually has better performance
 (94.48 percent accuracy) than our neural network does when trained
 using 5,000 images (93.24 percent accuracy).  In other words, more
 training data can sometimes compensate for differences in the machine
-learning algorithm used.</p><p>Something even more interesting can occur.  Suppose we're trying to
+learning algorithm used.
+-->
+たぶんこのグラフを見てまず皆さんが驚くのは、ニューラルネットワークが
+どんな大きさの訓練データセットについてもSVMを大きく上回る結果を上げていることでしょう。
+これは素晴らしいことではありますが、過大評価してもいけません。
+というのも、私たちはニューラルネットワークのパフォーマンス改善のために様々な
+チューニングを施してきましたが、ここで使ったSVMについてはscikit-learnで提供されている
+設定をそのまま使ったものだからです。このグラフに関するもっと微妙で、しかし興味深い事実は、
+50,000枚の訓練画像を使って訓練したSVMが94.48パーセントの分類精度を達成しており、
+これは5,000枚の訓練画像で訓練されたニューラルネットワークの分類精度93.24パーセントよりも
+高いパフォーマンスを発揮しているという点です。言い換えるなら、
+時として、より多くの訓練データを使うことで、使用している機械学習アルゴリズムの差は
+埋められるということです。
+</p><p>
+<!--
+    Something even more interesting can occur.  Suppose we're trying to
 solve a problem using two machine learning algorithms, algorithm A and
 algorithm B.  It sometimes happens that algorithm A will outperform
 algorithm B with one set of training data, while algorithm B will
@@ -3024,7 +3072,23 @@ but it does happen*<span class="marginnote">
     very large corpora for natural language disambiguation</a>, by
   Michele Banko and Eric Brill (2001).</span>.  The correct response to the
 question "Is algorithm A better than algorithm B?" is really: "What
-training data set are you using?"</p><p>All this is a caution to keep in mind, both when doing development,
+training data set are you using?"
+-->
+時にはより一層面白いことが起こります。ある問題をアルゴリズムAとアルゴリズムBという
+2つの機械学習アルゴリズムを使って解こうとしているとしましょう。時々、
+ある訓練データセットではアルゴリズムAが勝ち、異なる訓練データセットではアルゴリズムBが
+勝つ、ということが起こります。上のグラフではそのようなことは起きていません。
+もしそうなら、2つのグラフが交差するはずです。しかし実際に、そのようなことは起こりうるのです*<span class="marginnote">
+*次の論文の中でその顕著な例が与えられています：
+  <a href="http://dx.doi.org/10.3115/1073012.1073017">Scaling to very
+    very large corpora for natural language disambiguation</a>, by
+  Michele Banko and Eric Brill (2001).</span>。したがって、
+「アルゴリズムAはアルゴリズムBよりも優れていますか？」と質問された時、正しい返事のし方は
+「使っているデータセットは何ですか？」になります。
+データセットが指定されない限り、パフォーマンスの比較はできないのです。
+</p><p>
+<!--
+    All this is a caution to keep in mind, both when doing development,
 and when reading research papers.  Many papers focus on finding new
 tricks to wring out improved performance on standard benchmark data
 sets.  "Our whiz-bang technique gave us an improvement of X percent
@@ -3041,7 +3105,26 @@ message to take away, especially in practical applications, is that
 what we want is both better algorithms <em>and</em> better training
 data.  It's fine to look for better algorithms, but make sure you're
 not focusing on better algorithms to the exclusion of easy wins
-getting more or better training data.</p><p><h4><a name="problem_953063"></a><a href="#problem_953063">Problem</a></h4><ul>
+getting more or better training data.
+-->
+これらの注意は、開発を行う時にも研究論文を読む時にも心に留めておくべきです。
+多くの論文では、標準的なベンチマークとなるデータセットに対するパフォーマンスを改善する
+新しい手法やコツを探すことに注力しています。「我々の素晴らしい手法は、標準的なベンチマークX
+に対してYパーセントの改善をもたらしました」というのは、研究の主張の標準的な形式です。
+このような主張はしばしばそれ自体が本当に興味深いものですが、
+使用した特定の訓練データセットにおいてのみ適用できるものだと理解しなければなりません。
+もしこの世界とは別に、ベンチマークのデータセットを作成した人がより多くの研究資金を獲得できる
+世界があったら何が起こっているだろうか？研究者たちはより多くの訓練データを集めるために
+より多くのお金を掛けるかもしれない。すると、「素晴らしい手法」がもたらした「改善」が、
+より大きな訓練データセットでは消滅してしまう、なんてことも、全くもってありうることなのです。
+言い換えると、元々主張した「改善」は、歴史の偶然に過ぎないのかもしれません。
+ここから学ぶべき教訓は、特に実際の応用においては、より良いアルゴリズム<em>と</em>より良い
+訓練データがどちらも必要なのです。より良いアルゴリズムを追求するのは構いませんが、
+より多くの訓練データを集めることでより簡単に目標を達成できる可能性を見落として、
+アルゴリズム探しに注力する愚は避けなければなりません。
+</p><p>
+<!--
+    <h4><a name="problem_953063"></a><a href="#problem_953063">Problem</a></h4><ul>
 <li><strong>(Research problem)</strong> How do our machine learning algorithms
   perform in the limit of very large data sets?  For any given
   algorithm it's natural to attempt to define a notion of asymptotic
@@ -3053,13 +3136,38 @@ getting more or better training data.</p><p><h4><a name="problem_953063"></a><a 
   performance.  Can you find a principled justification for fitting to
   some particular class of curves?  If so, compare the asymptotic
   performance of several different machine learning algorithms.
-</ul></p><p><strong>Summing up:</strong> We've now completed our dive into overfitting and
+</ul>
+-->
+<h4><a name="problem_953063"></a><a href="#problem_953063">問題</a></h4><ul>
+<li><strong>(研究課題)</strong> 機械学習アルゴリズムは訓練データセットを
+大きくする極限でどう振る舞うのでしょうか？どのようなアルゴリズムに対しても、
+漸近的パフォーマンスの概念を大きな訓練データの極限で定義してみるのは自然なことです。
+この問題に対する手っ取り早い方針としては、上に示したようなグラフを適当な近似曲線で
+フィッティングして、それを無限大まで外挿してみることです。このようなアプローチに
+対しては、近似曲線の選び方によって異なる漸近的パフォーマンスにたどり着いてしまう
+という批判があるでしょう。特定の種類の近似曲線を使うことに対して、原理的な
+正当化は可能ですか？もしそうなら、いくつかの異なる機械学習アルゴリズムに対して、
+漸近的パフォーマンスの比較を行ってください。
+</ul>
+</p><p>
+<!--
+    <strong>Summing up:</strong> We've now completed our dive into overfitting and
 regularization.  Of course, we'll return again to the issue.  As I've
 mentioned several times, overfitting is a major problem in neural
 networks, especially as computers get more powerful, and we have the
 ability to train larger networks.  As a result there's a pressing need
 to develop powerful regularization techniques to reduce overfitting,
-and this is an extremely active area of current work.</p><p><h3><a name="weight_initialization"></a><a href="#weight_initialization">Weight initialization</a></h3></p><p>When we create our neural networks, we have to make choices for the
+and this is an extremely active area of current work.
+-->
+<strong>まとめ：</strong> ここまで過適合と正規化について集中的に考察してきました。
+これについては一旦ここでお終いにして次のトピックに移りますが、
+これらの問題については再び戻ってくることになります。
+何度も述べたように、コンピュータの性能が向上し、より大きなニューラルネットワークの
+訓練が可能になるにつれ、ニューラルネットワークにおける過適合の問題も重要性を増しています。
+結果として、過適合を軽減するより強力な正規化手法の開発が急務となっており、
+現在も極めて活発な研究分野をなしています。
+</p><p>
+<h3><a name="weight_initialization"></a><a href="#weight_initialization">Weight initialization</a></h3></p><p>When we create our neural networks, we have to make choices for the
 initial weights and biases.  Up to now, we've beeen choosing them
 according to a prescription which I discussed only briefly
 <a href="chap1.html#weight_initialization">back in Chapter 1</a>.  Just to
