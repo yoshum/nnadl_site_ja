@@ -2093,7 +2093,7 @@ And which model is more likely to generalize well to other examples of
 the same underlying real-world phenomenon?-->
 この2つのうち、どちらがより良いモデルであると言えるでしょうか？
 どちらがよりもっともらしく、真実に近いのでしょうか？
-そして、同じ現実の現象の他の例に対して、どちらのモデルがより良く汎化できるでしょうか。
+そして、同じ現実の現象の他の例に対して、どちらのモデルがより良く汎化できるでしょうか？
 </p><p><!--
     These are difficult questions.  In fact, we can't determine with
 certainty the answer to any of the above questions, without much more
@@ -2285,7 +2285,7 @@ theory would arguably have been more attractive.
 -->
 2つ目の例として水星の軌道にまつわる話を紹介します。
 天文学者のユルバン・ルヴェリエは1859年に水星の軌道がニュートンの重力理論による
-予測と一致しないことを発見しました。そのずれは本当に、本当に僅かなもので、
+予測と一致しないことを発見しました。そのズレは本当に、本当に僅かなもので、
 当時よく見られた説明は、つまるところ、ニュートンの重力理論はだいたい正しく、
 しかし僅かな修正が必要であるというものでした。
 1916年に、アインシュタインはそのズレが彼の一般相対性理論を使うととてもよく
@@ -2567,7 +2567,7 @@ zero.
 -->
 です。ここでいつも通り、$\partial C_0 / \partial w$ をミニバッチ平均によって評価することができます。
 これをL2正規化を用いた更新規則と比べてみましょう：
-(c.f. Equation <span id="margin_398765654565_reveal" class="equation_link">(86)</span><span id="margin_398765654565" class="marginequation" style="display: none;"><a href="chap3.html#eqtn86" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+(c.f. 式 <span id="margin_398765654565_reveal" class="equation_link">(86)</span><span id="margin_398765654565" class="marginequation" style="display: none;"><a href="chap3.html#eqtn86" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
   w \rightarrow \left(1-\frac{\eta \lambda}{n}\right) w -\frac{\eta}{m}
   \sum_x \frac{\partial C_x}{\partial w},  \nonumber\end{eqnarray}</a></span><script>$('#margin_398765654565_reveal').click(function() {$('#margin_398765654565').toggle('slow', function() {});});</script>),
 <a class="displaced_anchor" name="eqtn91"></a>\begin{eqnarray}
@@ -2766,7 +2766,7 @@ individual connection in the network.
 「この手法はニューロン間の複雑な相互適合を軽減します。というのも、
 訓練に際してニューロンは特定の他のニューロンを頼りにすることができないからです。
 したがって、あるニューロンは、ランダムに選ばれた他のニューロンと一緒にされても役に立つような、
-データのより強固な特徴を学ぶように強制されるのです。」
+データが持つより強固な特徴を学ぶように強制されるのです。」
 ニューラルネットワークのことを何らかの予言をするモデルだと見なすなら、
 ドロップアウトは入力される情報の欠落に対して強いモデルを作る方法だと言うことができるでしょう。
 この点において、何となくL1正規化やL2正規化と似ているとも言えます。
@@ -2977,7 +2977,7 @@ for opportunities to apply it.
 これをどう実行するか考えるのは難しいことではありません。
 例えば、音声認識を行うニューラルネットワークを作っているとしましょう。
 私たち人間は、背後に雑音があっても会話を認識できます。ですから、雑音を加えてデータを拡張できます。
-また、会話の速度が早くても遅くても、会話を認識できます。
+また、人間は会話の速度が早くても遅くても、会話を認識できます。
 したがってこれも訓練データを拡張する一つの方法です。これらの手法はいつも使われるわけではありません。
 例えば、訓練データにノイズを加えて拡張する代わりに、まずノイズ軽減フィルターを通して綺麗にした
 データをニューラルネットワークに入力することにした方が効率的だとしても不思議ではありません。
@@ -3110,12 +3110,12 @@ getting more or better training data.
 これらの注意は、開発を行う時にも研究論文を読む時にも心に留めておくべきです。
 多くの論文では、標準的なベンチマークとなるデータセットに対するパフォーマンスを改善する
 新しい手法やコツを探すことに注力しています。「我々の素晴らしい手法は、標準的なベンチマークX
-に対してYパーセントの改善をもたらしました」というのは、研究の主張の標準的な形式です。
+に対してYパーセントの改善をもたらしました」という主張の形式は、研究論文で見られる標準的ものです。
 このような主張はしばしばそれ自体が本当に興味深いものですが、
 使用した特定の訓練データセットにおいてのみ適用できるものだと理解しなければなりません。
 もしこの世界とは別に、ベンチマークのデータセットを作成した人がより多くの研究資金を獲得できる
-世界があったら何が起こっているだろうか？研究者たちはより多くの訓練データを集めるために
-より多くのお金を掛けるかもしれない。すると、「素晴らしい手法」がもたらした「改善」が、
+世界があったら何が起こっているでしょうか？研究者たちはより多くの訓練データを集めるために
+より多くのお金を掛けるかもしれません。すると、「素晴らしい手法」がもたらした「改善」が、
 より大きな訓練データセットでは消滅してしまう、なんてことも、全くもってありうることなのです。
 言い換えると、元々主張した「改善」は、歴史の偶然に過ぎないのかもしれません。
 ここから学ぶべき教訓は、特に実際の応用においては、より良いアルゴリズム<em>と</em>より良い
