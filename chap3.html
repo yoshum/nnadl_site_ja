@@ -1096,8 +1096,8 @@ asked how many free parameters could be set in the model.  "Four"
   <a href="http://www.nature.com/nature/journal/v427/n6972/full/427297a.html">フリーマン・ダイソン
   </a>
   のチャーミングな文章から引用したものです。ダイソンはまさにフェルミが批判したモデルの提案者の一人でした。
-  4パラメータの象はここ
-  <a href="http://www.johndcook.com/blog/2011/06/21/how-to-fit-an-elephant/">
+  4パラメータの象は
+  <a href="http://www.johndcook.com/blog/2011/06/21/how-to-fit-an-elephant/">ここ
   </a>にあります。 </span>:
 
   <!--
@@ -1702,7 +1702,7 @@ partial derivatives $\partial C / \partial w$ and $\partial C
 the partial derivatives of Equation <span id="margin_87298027313_reveal" class="equation_link">(80)</span><span id="margin_87298027313" class="marginequation" style="display: none;"><a href="chap3.html#eqtn80" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}  C = C_0 + \frac{\lambda}{2n}
 \sum_w w^2 \nonumber\end{eqnarray}</a></span><script>$('#margin_87298027313_reveal').click(function() {$('#margin_87298027313').toggle('slow', function() {});});</script> gives
 -->
-そのような例を作るにはまず、どうすれば正規化されたニューラルネットワークに確率的勾配下降法を
+そのような例を作るにはまず、どうすれば正規化されたニューラルネットワークに確率的勾配降下法を
 適用できるのかを明らかにする必要があります。特に、2種類の偏微分、
 $\partial C / \partial w$ と $\partial C / \partial b$ をニューラルネットワークが持つ
 全ての重みとバイアスに対して計算する方法を知る必要があります。
@@ -1729,7 +1729,7 @@ learning rule for the biases doesn't change from the usual rule:
 したがって、正規化されたコスト関数の勾配は簡単に計算できることがわかります。
 これまで通りに逆伝播法を使って、その後に重みによる偏微分に対して $\frac{\lambda}{n} w$ を
 加えれば良いのです。バイアスに関する偏微分はこれまでと何も変わりません。
-つまり、バイアスに対する勾配下降法の学習規則は通常の規則そのものなのです：
+つまり、バイアスに対する勾配降下法の学習規則は通常の規則そのものなのです：
 </p><p>
     <a class="displaced_anchor" name="eqtn83"></a>\begin{eqnarray}
 b & \rightarrow & b -\eta \frac{\partial C_0}{\partial b}.
@@ -1754,7 +1754,7 @@ unstoppably toward zero.  But that's not right, since the other term
 may lead the weights to increase, if so doing causes a decrease in the
 unregularized cost function.
 -->
-これは通常の勾配下降法による学習規則とほぼ同じです。唯一の違いは、
+これは通常の勾配降下法による学習規則とほぼ同じです。唯一の違いは、
 まず最初に重み $w$ に因子 $1-\frac{\eta\lambda}{n}$ を掛けてリスケールしている点です。
 この因子は重みを小さくするので、<em>重み減衰</em>とも呼ばれます。
 一見、重みがゼロになるまでどこまでも小さくなってしまうかのように見えます。
@@ -1772,10 +1772,10 @@ rule for stochastic gradient descent becomes
   w_k & \rightarrow & w_k' = w_k-\frac{\eta}{m}
   \sum_j \frac{\partial C_{X_j}}{\partial w_k}  \nonumber\end{eqnarray}</a></span><script>$('#margin_637276429741_reveal').click(function() {$('#margin_637276429741').toggle('slow', function() {});});</script>)
 -->
-これで勾配下降法のやり方は分かりました。では確率的勾配下降法は？
-実際のところ、正規化されていない確率的勾配下降法と同じことをやります。
+これで勾配降下法のやり方は分かりました。では確率的勾配降下法は？
+実際のところ、正規化されていない確率的勾配降下法と同じことをやります。
 つまり、$\partial C_0 / \partial w$ を見積もるのに、$m$個の訓練例を含むミニバッチに関して
-平均を取れば良いのです。そうして、次のような確率的勾配下降法の正規化された学習規則が得られます
+平均を取れば良いのです。そうして、次のような確率的勾配降下法の正規化された学習規則が得られます
 (c.f. 式 <span id="margin_637276429741_reveal" class="equation_link">(20)</span><span id="margin_637276429741" class="marginequation" style="display: none;"><a href="chap1.html#eqtn20" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
   w_k & \rightarrow & w_k' = w_k-\frac{\eta}{m}
   \sum_j \frac{\partial C_{X_j}}{\partial w_k}  \nonumber\end{eqnarray}</a></span><script>$('#margin_637276429741_reveal').click(function() {$('#margin_637276429741').toggle('slow', function() {});});</script>)：
@@ -1796,7 +1796,7 @@ unregularized case (c.f. Equation <span id="margin_891921584746_reveal" class="e
 -->
 ここで、和はミニバッチに含まれる訓練例 $x$ について取り、$C_x$ は各訓練例の
 （正規化されていない）コストを表します。これは、$1-\frac{\eta \lambda}{n}$ という重み減衰因子を除いて、
-確率的勾配下降法のこれまで使ってきた規則と全く同じです。最後に念のため、
+確率的勾配降下法のこれまで使ってきた規則と全く同じです。最後に念のため、
 バイアスの学習に関する正規化された学習規則を述べておきましょう。これはもちろん、
 正規化されていない規則と全く同じです (c.f. 式 <span id="margin_891921584746_reveal" class="equation_link">(21)</span><span id="margin_891921584746" class="marginequation" style="display: none;"><a href="chap1.html#eqtn21" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
   b_l & \rightarrow & b_l' = b_l-\frac{\eta}{m}
@@ -2008,7 +2008,7 @@ consequently harder to find good minima of the cost function.
 なぜこのようなことが起こるのでしょうか？ヒューリスティックには、
 もしコスト関数が正規化されていないと、重みベクトルの長さは大きくなりがちです。
 時間が経つにつれ、実際に重みベクトルはかなり大きくなりえます。
-重みベクトルが長い時、勾配下降法はその動径方向に向かいやすく、
+重みベクトルが長い時、勾配降下法はその動径方向に向かいやすく、
 重みベクトルの向きを変える方向にはわずかにしか動きません。このため、
 一旦重みベクトルが長くなってしまうと、重みベクトルが同じ方向を向いて
 動かなくなってしまう可能性があります。この現象が原因で、
@@ -2425,7 +2425,7 @@ neural networks will be the better for it.
 フィットしようとしているようなものです。本来なら、このニューラルネットワークはひどく
 過適合を起こしても当然なわけです。にも関わらず、これまで見てきたように非常に良く汎化するのです。
 なぜこんなことが起こるのでしょうか？これはよく理解されているわけではありません。
-「多層ニューラルネットワークにおける勾配下降学習のダイナミクスには
+「多層ニューラルネットワークにおける勾配降下学習のダイナミクスには
 『自己正規化』効果がある」という仮説はあります*<span class="marginnote">
 *出典は <a href="http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf">Gradient-Based
     Learning Applied to Document Recognition</a>, by Yann LeCun,
@@ -2534,7 +2534,7 @@ network is
     \tag{90}\end{eqnarray}
     -->
 ここで、${\rm sgn}(w)$ は $w$ の符号、つまり、$w$ が正なら $+1$ で負なら $-1$ です。
-この表式を使うと、L1正規化を使った確率的勾配下降法を実行するように逆伝播法を修正できます。
+この表式を使うと、L1正規化を使った確率的勾配降下法を実行するように逆伝播法を修正できます。
 そうやって求めたL1正規化の下での更新規則は、
 <a class="displaced_anchor" name="eqtn90"></a>\begin{eqnarray}  w \rightarrow w' =
   w-\frac{\eta \lambda}{n} \mbox{sgn}(w) - \eta \frac{\partial
@@ -2604,7 +2604,7 @@ with L1 regularization.
 ここまでの議論で、偏微分 $\partial C / \partial w$ が $w=0$ で定義されないことについて
 敢えて触れずに来ました。関数 $|w|$ は $w=0$ に尖った「角」があるので、
 この点で微分不可能なのです。とはいえ、実はこのことは問題ありません。
-もし $w=0$ なら、その点で通常の（正規化していない）規則を使って確率的勾配下降法を行えば良いのです。
+もし $w=0$ なら、その点で通常の（正規化していない）規則を使って確率的勾配降下法を行えば良いのです。
 この方法なら問題無いでしょう。というのも、直感的には正規化の効果が重みを縮小することなら、
 $w=0$ では明らかにこれ以上縮小のしようが無いからです。より正確には、
 式  <span id="margin_253754174974_reveal" class="equation_link">(89)</span><span id="margin_253754174974" class="marginequation" style="display: none;"><a href="chap3.html#eqtn89" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}  \frac{\partial C}{\partial
@@ -2614,7 +2614,7 @@ $w=0$ では明らかにこれ以上縮小のしようが無いからです。�
   w-\frac{\eta \lambda}{n} \mbox{sgn}(w) - \eta \frac{\partial
     C_0}{\partial w} \nonumber\end{eqnarray}</a></span><script>$('#margin_321890282168_reveal').click(function() {$('#margin_321890282168').toggle('slow', function() {});});</script>
 の中で、$\mbox{sgn}(0) = 0$ という定義を採用します。
-そうすることで、L1正規化して確率的勾配下降法を実行するコンパクトな規則が出来上がります。
+そうすることで、L1正規化して確率的勾配降下法を実行するコンパクトな規則が出来上がります。
 </p><p>
 <!--
     <strong>Dropout:</strong> Dropout is a radically different technique for
