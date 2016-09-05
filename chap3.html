@@ -218,7 +218,7 @@ results obtained on the handwriting classification problem studied in
 <a href="chap1.html">Chapter 1</a>.</p> -->
 
 <p>この章で説明するテクニックは以下のとおりです。<a href="chap3.html#the_cross-entropy_cost_function">クロスエントロピー</a>と呼ばれるより良いコスト関数、
-ネットワークを学習データによらず一般化するのに役立つ<a href="chap3.html#overfitting_and_regularization">「正規化」法</a>と呼ばれる4つの手法（L1正規化およびL2正規化、ドロップアウト、そして人工的な学習データの伸張）、
+ネットワークを学習データによらず汎化するのに役立つ<a href="chap3.html#overfitting_and_regularization">「正規化」法</a>と呼ばれる4つの手法（L1正規化およびL2正規化、ドロップアウト、そして人工的な学習データの伸張）、
 ネットワークの中の<a href="chap3.html#weight_initialization">重みを初期化するより良い方法</a>、
 そして、ネットワークに対して<a href="#how_to_choose_a_neural_network's_hyper-parameters">良いハイパーパラメータを選択するためのいくつかの発見的方法</a>です。また、<a href="chap3.html#other_techniques">それ以外のいくつかのテクニック</a>についても、あまり細部にこだわらず概観します。
 これらの議論は完全にお互いに独立なので、必要に応じて読み飛ばすこともできます。また、多くのテクニックを動くコードとして<a href="#handwriting_recognition_revisited_the_code">実装</a>もします。それらの実装を使うと、<a href="chap1.html">第1章</a>で説明した手書き文字の分類問題の結果が改善されます。</p>
@@ -672,7 +672,7 @@ expression <span id="margin_932302704635_reveal" class="equation_link">(63)</spa
   \sum_j \left[y_j \ln a^L_j + (1-y_j) \ln (1-a^L_j) \right] \nonumber\end{eqnarray}</a></span><script>$('#margin_932302704635_reveal').click(function() {$('#margin_932302704635').toggle('slow', function() {});});</script> avoids a learning slowdown in
 many-neuron networks.  If you're interested, you can work through the
 derivation in the problem below.  </p>-->
-<p>私達は、一つのニューロンのときのクロスエントロピーを調べてきました。しかし、多層の多くのニューロンの場合に一般化するのは簡単です。とくに、$y = y_1, y_2, \ldots$がニューロンの望まれる出力だと仮定しましょう。つまり、ニューロンの最終層の出力です。また、$a^L_1, a^L_2, \ldots$がニューロンの実際の出力だとしましょう。ここで、クロスエントロピーを次の式で定義します。
+<p>私達は、一つのニューロンのときのクロスエントロピーを調べてきました。しかし、多層の多くのニューロンの場合に汎化するのは簡単です。とくに、$y = y_1, y_2, \ldots$がニューロンの望まれる出力だと仮定しましょう。つまり、ニューロンの最終層の出力です。また、$a^L_1, a^L_2, \ldots$がニューロンの実際の出力だとしましょう。ここで、クロスエントロピーを次の式で定義します。
 <a class="displaced_anchor" name="eqtn63"></a>\begin{eqnarray}  C = -\frac{1}{n} \sum_x
   \sum_j \left[y_j \ln a^L_j + (1-y_j) \ln (1-a^L_j) \right].
 \tag{63}\end{eqnarray}
@@ -1072,7 +1072,7 @@ Kraft inequality in chapter 5 of the book about information theory by
 </ul></p>
 <p>
 <!--  <h3><a name="overfitting_and_regularization"></a><a href="#overfitting_and_regularization">Overfitting and regularization</a></h3></p>-->
-<h3><a name="overfitting_and_regularization"></a><a href="#overfitting_and_regularization">過適合と規格化</a></h3></p>
+<h3><a name="overfitting_and_regularization"></a><a href="#overfitting_and_regularization">過適合と正規化</a></h3></p>
 
 <!--
 <p>The Nobel prizewinning physicist Enrico Fermi was once asked his
@@ -1096,8 +1096,8 @@ asked how many free parameters could be set in the model.  "Four"
   <a href="http://www.nature.com/nature/journal/v427/n6972/full/427297a.html">フリーマン・ダイソン
   </a>
   のチャーミングな文章から引用したものです。ダイソンはまさにフェルミが批判したモデルの提案者の一人でした。
-  4パラメータの象はここ
-  <a href="http://www.johndcook.com/blog/2011/06/21/how-to-fit-an-elephant/">
+  4パラメータの象は
+  <a href="http://www.johndcook.com/blog/2011/06/21/how-to-fit-an-elephant/">ここ
   </a>にあります。 </span>:
 
   <!--
@@ -1255,7 +1255,7 @@ learning.  We say the network is <em>overfitting</em> or
   コスト関数を見るかぎり、モデルの性能はいっけん良くなり続けているようです。しかし試験データの分類精度をみると、
   コスト関数でみられた「改善」は幻であることがわかります。
   エポック280以降のニューラルネットワークが学習した知識は、
-  フェルミがディスっていたモデルと同じく、試験データに一般化できない知識だったのです。
+  フェルミがディスっていたモデルと同じく、試験データに汎化できない知識だったのです。
   したがって、有用な学習ではなかった、といえます。このようなとき、エポック280以降のニューラルネットワークは
  <em>過適合</em>している、
   <em>過学習</em>している、などと言います。
@@ -1339,14 +1339,21 @@ merely memorizing the training set, without understanding digits well
 
 </p><p>
 
+<!--
   Overfitting is a major problem in neural networks.  This is especially
 true in modern networks, which often have very large numbers of
 weights and biases.  To train effectively, we need a way of detecting
 when overfitting is going on, so we don't overtrain.  And we'd like to
   have techniques for reducing the effects of overfitting.
+  -->
 
+  過適合はニューラルネットワークの持つ大問題です。
+  特に、現代のニューラルネットワークはしばしば極めて多数の重みやバイアスをパラメータとして持つため、過適合の問題が顕著になります。
+  ニューラルネットワークを効率的に学習させるためには、過適合の進行を検知し、過学習を避ける手立てが必要です。
+  そして、過適合の影響を軽減するための手法が望まれます。
 </p><p>
 
+<!--
   The obvious way to detect overfitting is to use the approach above,
 keeping track of accuracy on the test data as our network trains.  If
 we see that the accuracy on the test data is no longer improving, then
@@ -1354,11 +1361,24 @@ we should stop training.  Of course, strictly speaking, this is not
 necessarily a sign of overfitting.  It might be that accuracy on the
 test data and the training data both stop improving at the same time.
   Still, adopting this strategy will prevent overfitting.
+  -->
+
+  過適合を検知する安直な方法は、上述したアプローチ、つまり、
+  ニューラルネットワークを訓練しながら試験データに対する精度の変化を追跡することです。
+  もし訓練によって試験データに対する精度が向上しなくなったら、その時点で訓練を止めるべきです。
+  もちろん厳密に言えば、これを過適合の兆候であると断言することはできません。
+  試験データと訓練データに対する精度の改善が同時に止まっているのかもしれません。
+  それでも、この戦略は過適合を防ぐ手段としては有効です。
 
 </p><p>
 
+<!--
   In fact, we'll use a variation on this strategy.  Recall that when we
   load in the MNIST data we load in three data sets:
+  -->
+
+  実際に、私たちはこの戦略の変種を採用します。
+  MNISTのデータをロードする時に、私たちは3つのデータセットをロードしていることを思い出しましょう：
 
 <div class="highlight"><pre>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">mnist_loader</span>
@@ -1366,6 +1386,7 @@ test data and the training data both stop improving at the same time.
 <span class="o">...</span> <span class="n">mnist_loader</span><span class="o">.</span><span class="n">load_data_wrapper</span><span class="p">()</span>
 </pre></div>
 
+  <!--
 Up to now we've been using the <tt>training_data</tt> and
 <tt>test_data</tt>, and ignoring the <tt>validation_data</tt>.  The
 <tt>validation_data</tt> contains $10,000$ images of digits, images
@@ -1389,8 +1410,32 @@ saturated*<span class="marginnote">
   could have occurred even after epoch 400, although the magnitude of
   any further improvement would likely be small.  So it's possible to
 adopt more or less aggressive strategies for early stopping.</span>.
+-->
 
-</p><p>Why use the <tt>validation_data</tt> to prevent overfitting, rather than
+これまでのところ、私たちは <tt>training_data</tt> と <tt>test_data</tt> のみを用いて、
+<tt>validation_data</tt> を無視してきました。
+<tt>validation_data</tt> は数字の画像を $10,000$ 枚含んでいます。
+これらの画像は、MNISTの訓練データに含まれる $50,000$ 枚の画像や試験データに含まれる $10,000$ 枚の画像とは異なるものです。
+過適合を防ぐために、私たちは <tt>test_data</tt> の代わりに <tt>validation_data</tt> を用いて、
+先程述べた戦略を実行することにします。
+つまり、各エポックが終了する毎に、<tt>validation_data</tt> に対する分類精度を計算します。
+<tt>validation_data</tt> に対する分類精度が飽和したところで、ニューラルネットワークの訓練を終了します。
+この戦略を<em>早期打ち切り</em>と呼びます。
+もちろん、実際問題としては精度が飽和したことを即座に検知する術はありません。
+その代わりに、精度が飽和したと確信が持てる時点まで、訓練を続けることにします*<span class="marginnote">
+*いつ止めるべきか決めるには幾つかの判断が必要となります。
+先ほど示したグラフでは、私はエポック280を精度が飽和した地点であると定めました。
+この判断が悲観的過ぎて、実際にはまだ学習の余地が残っている可能性もあります。
+時たま、ニューラルネットワークの訓練中にしばらく学習が停滞して、その後再び改善する場合もあるのです。
+もし仮に、エポック400を過ぎてからさらなる学習が起こったとしても驚きはしません。
+ただし、そのような改善はあったとしても小さなものでしょう。
+このように早期打ち切りの判断に絶対は無く、多少楽観的な戦略を取ることも可能なのです。</span>。
+
+
+</p><p>
+
+<!--
+Why use the <tt>validation_data</tt> to prevent overfitting, rather than
 the <tt>test_data</tt>?  In fact, this is part of a more general
 strategy, which is to use the <tt>validation_data</tt> to evaluate
 different trial choices of hyper-parameters such as the number of
@@ -1399,7 +1444,21 @@ and so on.  We use such evaluations to find and set good values for
 the hyper-parameters.  Indeed, although I haven't mentioned it until
 now, that is, in part, how I arrived at the hyper-parameter choices
 made earlier in this book. (More on this
-<a href="chap3.html#how_to_choose_a_neural_network's_hyper-parameters">later</a>.)</p><p>Of course, that doesn't in any way answer the question of why we're
+<a href="chap3.html#how_to_choose_a_neural_network's_hyper-parameters">later</a>.)
+-->
+
+過適合を防ぐために、なぜ <tt>test_data</tt> ではなく <tt>validation_data</tt> を用いるのでしょうか？
+実は、過適合を防ぐために採用したこの戦略は、より一般的な戦略の一部分なのです。
+より一般的な戦略とは、訓練を続けるエポック数、学習率、最適なニューラルネットワークのアーキテクチャ等の
+ハイパーパラメータを評価・比較するために、<tt>validation_data</tt> を用いるというものです。
+そうして得られた評価を元に、良いハイパーパラメータを見つけて定めます。
+実際、これまで触れてきませんでしたが、この本でこれまでに採用してきたハイパーパラメータの一部は、
+私自身がこの戦略に基づいてたどり着いたものです。(これに関する詳細は<a href="chap3.html#how_to_choose_a_neural_network's_hyper-parameters">後ほど</a>)
+
+</p><p>
+
+<!--
+Of course, that doesn't in any way answer the question of why we're
 using the <tt>validation_data</tt> to prevent overfitting, rather than
 the <tt>test_data</tt>.  Instead, it replaces it with a more general
 question, which is why we're using the <tt>validation_data</tt> rather
@@ -1420,7 +1479,36 @@ another way, you can think of the validation data as a type of
 training data that helps us learn good hyper-parameters.  This
 approach to finding good hyper-parameters is sometimes known as the
 <em>hold out</em> method, since the <tt>validation_data</tt> is kept apart
-or "held out" from the <tt>training_data</tt>.</p><p>Now, in practice, even after evaluating performance on the
+or "held out" from the <tt>training_data</tt>.
+-->
+
+もちろん、この説明では全く元の質問に答えたことになっていません。
+過適合を防ぐために <tt>test_data</tt> ではなく <tt>validation_data</tt> を使うのはなぜか、
+という質問を、より一般的な質問、つまり、良いハイパーパラメータを見つけるために
+<tt>test_data</tt> ではなく <tt>validation_data</tt> を使うのはなぜか、というものに
+置き換えただけなのです。
+この質問への回答を理解するために思い出してほしいのは、
+私たちが良いハイパーパラメータを探すときには、普通、
+様々な異なる値のハイパーパラメータを試しては評価を行うだろうということです。
+その際、ハイパーパラメータの評価を <tt>test_data</tt> で行ったとすると、
+ハイパーパラメータが <tt>test_data</tt> に対して過適合してしまう恐れがあります。
+つまり、最終的なハイパーパラメータは <tt>test_data</tt> の持つ特有の癖を学習してしまい、
+ニューラルネットワークが学習した成果を他のデータセットに対して汎化することができない、
+ということが起こりうるのです。
+ハイパーパラメータの決定に <tt>validation_data</tt> を用いることで、
+このような事態を防ぎます。
+そうして望ましいハイパーパラメータが得られたところで、<tt>test_data</tt> を用いた
+最終的な精度評価を行います。このような手順を踏むことで、<tt>test_data</tt> に対する
+評価が一般的なデータに対してニューラルネットワークが発揮するパフォーマンスの正当な評価であると、
+自信を持って結論できるのです。言い方を変えると、検証データ (<tt>validation_data</tt>) は
+良いハイパーパラメータを学習するために使われるある種の訓練データ (<tt>training_data</tt>) であると
+言えます。このようなアプローチは、<tt>validation_data</tt> を <tt>training_data</tt> から
+除外する ("hold out") ことから、<em>ホールドアウト法</em>と呼ばれます。
+
+</p><p>
+
+<!--
+    Now, in practice, even after evaluating performance on the
 <tt>test_data</tt> we may change our minds and want to try another
 approach - perhaps a different network architecture - which will
 involve finding a new set of hyper-parameters.  If we do this, isn't
@@ -1431,7 +1519,24 @@ fully is a deep and difficult problem.  But for our practical
 purposes, we're not going to worry too much about this question.
 Instead, we'll plunge ahead, using the basic hold out method, based on
 the <tt>training_data</tt>, <tt>validation_data</tt>, and
-<tt>test_data</tt>, as described above.</p><p>We've been looking so far at overfitting when we're just using 1,000
+<tt>test_data</tt>, as described above.
+-->
+
+実際問題として、ニューラルネットワークのパフォーマンスを <tt>test_data</tt> によって
+評価してしまった後になってから、当初の課題に対して異なるアプローチを試してみたくなる
+かもしれません。その時には、ニューラルネットワークの異なるアーキテクチャを試みて、
+新たに良いハイパーパラメータを探しなおすことになるでしょう。このようなことをしてしまうと、
+結局 <tt>test_data</tt> に対して過適合してしまう危険は無いのでしょうか？
+私たちが結果の一般性に自信を持つためには、潜在的には無限に遡ってデータ・セットを用意する
+必要があるのでしょうか？この疑問に真剣に取り組むのは、深く難しい問題です。しかし、
+私たちの実用上の目的に対して必要なことではないので、ここでこの疑問について深追いすることはしません。
+むしろ、<tt>training_data</tt>、<tt>validation_data</tt>、そして <tt>test_data</tt> に基づく
+基本的なホールドアウト法を用いて、積極的に前進したいと思います。
+
+</p><p>
+
+<!--
+    We've been looking so far at overfitting when we're just using 1,000
 training images.  What happens when we use the full training set of
 50,000 images?  We'll keep all the other parameters the same (30
 hidden neurons, learning rate 0.5, mini-batch size of 10), but train
@@ -1439,7 +1544,22 @@ using all 50,000 images for 30 epochs.  Here's a graph showing the
 results for the classification accuracy on both the training data and
 the test data.  Note that I've used the test data here, rather than
 the validation data, in order to make the results more directly
-comparable with the earlier graphs.</p><p><center><img src="images/overfitting_full.png" width="520px"></center></p><p>As you can see, the accuracy on the test and training data remain much
+comparable with the earlier graphs.
+-->
+
+ここまでで、訓練画像を1,000枚に限った時に起こる過適合を見てきました。では、訓練データが
+含む50,000枚の画像全てを用いた時に何が起こるでしょうか？画像の枚数以外のパラメータはそのままに
+（30個の隠れニューロン、学習率 0.5、ミニ・バッチの大きさは 10）、
+50,000枚の画像全てを用いて30エポックに渡り訓練してみます。
+ここに示しているのは、訓練データと試験データに対する分類精度のグラフです。
+ここでは、以前のグラフと今回の結果との直接的な比較を行うために、検証データではなく試験データを用いています。
+
+</p><p>
+    <center><img src="images/overfitting_full.png" width="520px"></center>
+</p><p>
+
+<!--
+    As you can see, the accuracy on the test and training data remain much
 closer together than when we were using 1,000 training examples.  In
 particular, the best classification accuracy of $97.86$ percent on the
 training data is only $1.53$ percent higher than the $95.33$ percent
@@ -1450,35 +1570,100 @@ data to the test data.  In general, one of the best ways of reducing
 overfitting is to increase the size of the training data.  With enough
 training data it is difficult for even a very large network to
 overfit.  Unfortunately, training data can be expensive or difficult
-to acquire, so this is not always a practical option.</p><p><h4><a name="regularization"></a><a href="#regularization">Regularization</a></h4></p><p>Increasing the amount of training data is one way of reducing
+to acquire, so this is not always a practical option.
+-->
+
+明らかに、たった1,000個の訓練例を用いた時と比べると、試験データと訓練データに対する
+精度がずっと近いままでいることがわかります。訓練データに対する最大の分類精度は97.86パーセントですが、
+これは試験データに対する精度 95.33パーセントと1.53パーセントしか違いません。1,000枚の訓練例に
+限った時に生じた17.73パーセントのギャップを思い出してください！過適合は進行しているにしろ、
+大幅に軽減されています。私たちのニューラルネットワークは、訓練データから試験データに対して、
+ずっとよく汎化できています。一般的に言って、過適合を軽減する最良の方法の一つは、
+より多くの訓練データを用意することです。十分な訓練データがあれば、とても大きなニューラルネットワークでさえ
+過適合を起こすことはないでしょう。ただし残念ながら、
+訓練データはしばしば高価だったり入手困難だったりするため、
+大量の訓練データを手に入れることは常に現実的な選択肢とは限りません。
+
+
+</p><p>
+    <h4><a name="regularization"></a><a href="#regularization">正規化</a></h4>
+</p><p>
+
+<!--
+    Increasing the amount of training data is one way of reducing
 overfitting.  Are there other ways we can reduce the extent to which
 overfitting occurs?  One possible approach is to reduce the size of
 our network. However, large networks have the potential to be more
 powerful than small networks, and so this is an option we'd only adopt
-reluctantly.</p><p>Fortunately, there are other techniques which can reduce overfitting,
+reluctantly.
+-->
+
+訓練データを増やすことは、過適合を軽減する一つのやり方ですが、他の方法は無いのでしょうか？
+一つの可能なアプローチは、ニューラルネットワークのサイズを小さくすることです。
+しかし、大きなニューラルネットワークには小さなニューラルネットワークよりも強力な潜在能力が
+ありますから、これは積極的に採用するような選択肢ではありません。
+
+</p><p>
+<!--
+    Fortunately, there are other techniques which can reduce overfitting,
 even when we have a fixed network and fixed training data.  These are
 known as <em>regularization</em> techniques.  In this section I describe
 one of the most commonly used regularization techniques, a technique
 sometimes known as <em>weight decay</em> or <em>L2 regularization</em>.
 The idea of L2 regularization is to add an extra term to the cost
 function, a term called the <em>regularization term</em>.  Here's the
-regularized cross-entropy:</p><p><a class="displaced_anchor" name="eqtn78"></a>\begin{eqnarray} C = -\frac{1}{n} \sum_{xj} \left[ y_j \ln a^L_j+(1-y_j) \ln
+regularized cross-entropy: -->
+
+幸いにも、ニューラルネットワークや訓練データの大きさを変えなくても、過適合を軽減する方法があります。
+それらの手法は、<em>正規化</em>法として知られています。この節では、<em>重み減衰</em>、あるいは
+<em>L2正規化</em>として知られる手法を説明します。L2正規化は最もよく用いられる正規化手法の一つです。
+L2正規化では、コスト関数に<em>正規化項</em>と呼ばれる余分な項を付け足します。これが、
+正規化されたクロスエントロピーです：
+</p><p>
+    <a class="displaced_anchor" name="eqtn78"></a>\begin{eqnarray} C = -\frac{1}{n} \sum_{xj} \left[ y_j \ln a^L_j+(1-y_j) \ln
 (1-a^L_j)\right] + \frac{\lambda}{2n} \sum_w w^2.
-\tag{78}\end{eqnarray}</p><p>The first term is just the usual expression for the cross-entropy.
+\tag{78}\end{eqnarray}
+</p><p>
+<!--
+    The first term is just the usual expression for the cross-entropy.
 But we've added a second term, namely the sum of the squares of all
 the weights in the network.  This is scaled by a factor $\lambda /
 2n$, where $\lambda > 0$ is known as the <em>regularization
   parameter</em>, and $n$ is, as usual, the size of our training set.
 I'll discuss later how $\lambda$ is chosen.  It's also worth noting
 that the regularization term <em>doesn't</em> include the biases.  I'll
-also come back to that below.</p><p>Of course, it's possible to regularize other cost functions, such as
-the quadratic cost.  This can be done in a similar way:</p><p><a class="displaced_anchor" name="eqtn79"></a>\begin{eqnarray} C = \frac{1}{2n} \sum_x \|y-a^L\|^2 +
+also come back to that below.-->
+
+第1項はこれまで通りのクロスエントロピーの表式です。しかし今回はさらに、第2項としてニューラルネットワークの
+持つ全ての重みの2乗和が足されています。この余分の項は全体に $\lambda / 2n$ の因子が掛かっています。
+$\lambda > 0$ は<em>正規化パラメータ</em>と呼ばれる実数で、$n$ はいつも通り訓練データの大きさです。
+この $\lambda$ をどう選ぶかについては後ほど議論します。また、正規化項はバイアスを<em>含まない</em>ことにも
+注意しておいてください。これについても後ほど説明します。
+</p><p>
+<!--
+    Of course, it's possible to regularize other cost functions, such as
+the quadratic cost.  This can be done in a similar way:
+-->
+もちろん、クロスエントロピー以外のコスト関数を正規化することも可能です。例えば、
+2乗コスト関数をL2正規化すると以下のようになります：
+</p><p><a class="displaced_anchor" name="eqtn79"></a>\begin{eqnarray} C = \frac{1}{2n} \sum_x \|y-a^L\|^2 +
   \frac{\lambda}{2n} \sum_w w^2.
-\tag{79}\end{eqnarray}</p><p>In both cases we can write the regularized cost function as
+\tag{79}\end{eqnarray}</p><p>
+<!--
+    In both cases we can write the regularized cost function as-->
+どちらの場合にも、正規化されたコスト関数を次のように書けます：
 <a class="displaced_anchor" name="eqtn80"></a>\begin{eqnarray}  C = C_0 + \frac{\lambda}{2n}
-\sum_w w^2,
-\tag{80}\end{eqnarray} where $C_0$ is the original, unregularized cost
-function.</p><p>Intuitively, the effect of regularization is to make it so the network
+\sum_w w^2.
+\tag{80}\end{eqnarray} <!--
+where $C_0$ is the original, unregularized cost
+function.
+-->
+ここで、$C_0$ は元の正規化されていないコスト関数です。
+
+</p><p>
+
+<!--
+    Intuitively, the effect of regularization is to make it so the network
 prefers to learn small weights, all other things being equal.  Large
 weights will only be allowed if they considerably improve the first
 part of the cost function.  Put another way, regularization can be
@@ -1486,52 +1671,120 @@ viewed as a way of compromising between finding small weights and
 minimizing the original cost function.  The relative importance of the
 two elements of the compromise depends on the value of $\lambda$: when
 $\lambda$ is small we prefer to minimize the original cost function,
-but when $\lambda$ is large we prefer small weights.</p><p>Now, it's really not at all obvious why making this kind of compromise
+but when $\lambda$ is large we prefer small weights.-->
+
+直感的には、正規化することによりニューラルネットワークがより小さな重みを好むようになります。
+大きな重みが許されるのは、そうすることがコスト関数の第1項を余程大きく改善する場合だけです。
+言い換えると、正規化とは重みを小さくすることと元のコスト関数を小さくすることの間でバランスを取る方法であると
+見ることもできます。このバランスを取る上で、2つの要素の相対的な重要性を決定するのが $\lambda$ の値です：
+$\lambda$ が小さい時は元のコスト関数を最小化することを好み、$\lambda$ が大きい時には
+より小さな重みを好むのです。
+</p><p>
+    <!--
+    Now, it's really not at all obvious why making this kind of compromise
 should help reduce overfitting!  But it turns out that it does. We'll
 address the question of why it helps in the next section.  But first,
 let's work through an example showing that regularization really does
-reduce overfitting.</p><p>To construct such an example, we first need to figure out how to apply
+reduce overfitting. -->
+
+さて、実際のところ、そのようなバランスを取ることがなぜ過適合を軽減する助けになるのか、
+その理由は誰の目にもすぐさま明らかなものではありません。
+しかし、正規化が実際に過適合を軽減することは分かっています。
+その理由については次の節で触れることにして、まずは正規化によって過適合が軽減されている例を
+調べてみることにしましょう。
+</p><p>
+<!--
+    To construct such an example, we first need to figure out how to apply
 our stochastic gradient descent learning algorithm in a regularized
 neural network.  In particular, we need to know how to compute the
 partial derivatives $\partial C / \partial w$ and $\partial C
 / \partial b$ for all the weights and biases in the network.  Taking
 the partial derivatives of Equation <span id="margin_87298027313_reveal" class="equation_link">(80)</span><span id="margin_87298027313" class="marginequation" style="display: none;"><a href="chap3.html#eqtn80" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}  C = C_0 + \frac{\lambda}{2n}
-\sum_w w^2 \nonumber\end{eqnarray}</a></span><script>$('#margin_87298027313_reveal').click(function() {$('#margin_87298027313').toggle('slow', function() {});});</script> gives</p><p><a class="displaced_anchor" name="eqtn81"></a><a class="displaced_anchor" name="eqtn82"></a>\begin{eqnarray}
+\sum_w w^2 \nonumber\end{eqnarray}</a></span><script>$('#margin_87298027313_reveal').click(function() {$('#margin_87298027313').toggle('slow', function() {});});</script> gives
+-->
+そのような例を作るにはまず、どうすれば正規化されたニューラルネットワークに確率的勾配降下法を
+適用できるのかを明らかにする必要があります。特に、2種類の偏微分、
+$\partial C / \partial w$ と $\partial C / \partial b$ をニューラルネットワークが持つ
+全ての重みとバイアスに対して計算する方法を知る必要があります。
+式 <span id="margin_87298027313_reveal" class="equation_link">(80)</span><span id="margin_87298027313" class="marginequation" style="display: none;"><a href="chap3.html#eqtn80" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}  C = C_0 + \frac{\lambda}{2n}
+\sum_w w^2 \nonumber\end{eqnarray}</a></span><script>$('#margin_87298027313_reveal').click(function() {$('#margin_87298027313').toggle('slow', function() {});});</script> の偏微分を取ると、
+次の表式が得られます：
+</p><p><a class="displaced_anchor" name="eqtn81"></a><a class="displaced_anchor" name="eqtn82"></a>\begin{eqnarray}
   \frac{\partial C}{\partial w} & = & \frac{\partial C_0}{\partial w} +
   \frac{\lambda}{n} w \tag{81}\\
   \frac{\partial C}{\partial b} & = & \frac{\partial C_0}{\partial b}.
-\tag{82}\end{eqnarray} </p><p>The $\partial C_0 / \partial w$ and $\partial C_0 / \partial b$ terms
+\tag{82}\end{eqnarray}
+</p><p>
+<!--    The $\partial C_0 / \partial w$ and $\partial C_0 / \partial b$ terms
 can be computed using backpropagation, as described in
 <a href="chap2.html">the last chapter</a>.  And so we see that it's easy to
 compute the gradient of the regularized cost function: just use
 backpropagation, as usual, and then add $\frac{\lambda}{n} w$ to the
 partial derivative of all the weight terms.  The partial derivatives
 with respect to the biases are unchanged, and so the gradient descent
-learning rule for the biases doesn't change from the usual rule:</p><p><a class="displaced_anchor" name="eqtn83"></a>\begin{eqnarray}
+learning rule for the biases doesn't change from the usual rule:
+-->
+偏微分項、$\partial C_0 / \partial w$ と $\partial C_0 / \partial b$ は、
+<a href="chap2.html">前章</a>で説明した逆伝播法を使って計算できます。
+したがって、正規化されたコスト関数の勾配は簡単に計算できることがわかります。
+これまで通りに逆伝播法を使って、その後に重みによる偏微分に対して $\frac{\lambda}{n} w$ を
+加えれば良いのです。バイアスに関する偏微分はこれまでと何も変わりません。
+つまり、バイアスに対する勾配降下法の学習規則は通常の規則そのものなのです：
+</p><p>
+    <a class="displaced_anchor" name="eqtn83"></a>\begin{eqnarray}
 b & \rightarrow & b -\eta \frac{\partial C_0}{\partial b}.
-\tag{83}\end{eqnarray}</p><p>The learning rule for the weights becomes:</p><p><a class="displaced_anchor" name="eqtn84"></a><a class="displaced_anchor" name="eqtn85"></a>\begin{eqnarray}
+\tag{83}\end{eqnarray}
+</p><p>
+<!--    The learning rule for the weights becomes: -->
+重みに関する学習規則は次のように変わります：
+</p><p><a class="displaced_anchor" name="eqtn84"></a><a class="displaced_anchor" name="eqtn85"></a>\begin{eqnarray}
   w & \rightarrow & w-\eta \frac{\partial C_0}{\partial
     w}-\frac{\eta \lambda}{n} w \tag{84}\\
   & = & \left(1-\frac{\eta \lambda}{n}\right) w -\eta \frac{\partial
     C_0}{\partial w}.
-\tag{85}\end{eqnarray}</p><p>This is exactly the same as the usual gradient descent learning rule,
+\tag{85}\end{eqnarray}
+</p><p>
+<!--
+    This is exactly the same as the usual gradient descent learning rule,
 except we first rescale the weight $w$ by a factor $1-\frac{\eta
   \lambda}{n}$.  This rescaling is sometimes referred to as
 <em>weight decay</em>, since it makes the weights smaller.  At first
 glance it looks as though this means the weights are being driven
 unstoppably toward zero.  But that's not right, since the other term
 may lead the weights to increase, if so doing causes a decrease in the
-unregularized cost function.</p><p>Okay, that's how gradient descent works.  What about stochastic
+unregularized cost function.
+-->
+これは通常の勾配降下法による学習規則とほぼ同じです。唯一の違いは、
+まず最初に重み $w$ に因子 $1-\frac{\eta\lambda}{n}$ を掛けてリスケールしている点です。
+この因子は重みを小さくするので、<em>重み減衰</em>とも呼ばれます。
+一見、重みがゼロになるまでどこまでも小さくなってしまうかのように見えます。
+しかし、それは正しくありません。なぜなら、他の項が正規化する前のコスト関数を小さくするために、
+重みを大きくする方向に働くかもしれないからです。
+
+</p><p>
+<!--
+    Okay, that's how gradient descent works.  What about stochastic
 gradient descent?  Well, just as in unregularized stochastic gradient
 descent, we can estimate $\partial C_0 / \partial w$ by averaging over
 a mini-batch of $m$ training examples.  Thus the regularized learning
 rule for stochastic gradient descent becomes
 (c.f. Equation <span id="margin_637276429741_reveal" class="equation_link">(20)</span><span id="margin_637276429741" class="marginequation" style="display: none;"><a href="chap1.html#eqtn20" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
   w_k & \rightarrow & w_k' = w_k-\frac{\eta}{m}
-  \sum_j \frac{\partial C_{X_j}}{\partial w_k}  \nonumber\end{eqnarray}</a></span><script>$('#margin_637276429741_reveal').click(function() {$('#margin_637276429741').toggle('slow', function() {});});</script>)</p><p><a class="displaced_anchor" name="eqtn86"></a>\begin{eqnarray}
+  \sum_j \frac{\partial C_{X_j}}{\partial w_k}  \nonumber\end{eqnarray}</a></span><script>$('#margin_637276429741_reveal').click(function() {$('#margin_637276429741').toggle('slow', function() {});});</script>)
+-->
+これで勾配降下法のやり方は分かりました。では確率的勾配降下法は？
+実際のところ、正規化されていない確率的勾配降下法と同じことをやります。
+つまり、$\partial C_0 / \partial w$ を見積もるのに、$m$個の訓練例を含むミニバッチに関して
+平均を取れば良いのです。そうして、次のような確率的勾配降下法の正規化された学習規則が得られます
+(c.f. 式 <span id="margin_637276429741_reveal" class="equation_link">(20)</span><span id="margin_637276429741" class="marginequation" style="display: none;"><a href="chap1.html#eqtn20" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  w_k & \rightarrow & w_k' = w_k-\frac{\eta}{m}
+  \sum_j \frac{\partial C_{X_j}}{\partial w_k}  \nonumber\end{eqnarray}</a></span><script>$('#margin_637276429741_reveal').click(function() {$('#margin_637276429741').toggle('slow', function() {});});</script>)：
+</p><p><a class="displaced_anchor" name="eqtn86"></a>\begin{eqnarray}
   w \rightarrow \left(1-\frac{\eta \lambda}{n}\right) w -\frac{\eta}{m}
-  \sum_x \frac{\partial C_x}{\partial w},
-\tag{86}\end{eqnarray}</p><p>where the sum is over training examples $x$ in the mini-batch, and
+  \sum_x \frac{\partial C_x}{\partial w}.
+\tag{86}\end{eqnarray}</p><p>
+<!--
+    where the sum is over training examples $x$ in the mini-batch, and
 $C_x$ is the (unregularized) cost for each training example.  This is
 exactly the same as the usual rule for stochastic gradient descent,
 except for the $1-\frac{\eta \lambda}{n}$ weight decay factor.
@@ -1539,10 +1792,25 @@ Finally, and for completeness, let me state the regularized learning
 rule for the biases.  This is, of course, exactly the same as in the
 unregularized case (c.f. Equation <span id="margin_891921584746_reveal" class="equation_link">(21)</span><span id="margin_891921584746" class="marginequation" style="display: none;"><a href="chap1.html#eqtn21" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
   b_l & \rightarrow & b_l' = b_l-\frac{\eta}{m}
-  \sum_j \frac{\partial C_{X_j}}{\partial b_l} \nonumber\end{eqnarray}</a></span><script>$('#margin_891921584746_reveal').click(function() {$('#margin_891921584746').toggle('slow', function() {});});</script>),</p><p><a class="displaced_anchor" name="eqtn87"></a>\begin{eqnarray}
-  b \rightarrow b - \frac{\eta}{m} \sum_x \frac{\partial C_x}{\partial b},
+  \sum_j \frac{\partial C_{X_j}}{\partial b_l} \nonumber\end{eqnarray}</a></span><script>$('#margin_891921584746_reveal').click(function() {$('#margin_891921584746').toggle('slow', function() {});});</script>),
+-->
+ここで、和はミニバッチに含まれる訓練例 $x$ について取り、$C_x$ は各訓練例の
+（正規化されていない）コストを表します。これは、$1-\frac{\eta \lambda}{n}$ という重み減衰因子を除いて、
+確率的勾配降下法のこれまで使ってきた規則と全く同じです。最後に念のため、
+バイアスの学習に関する正規化された学習規則を述べておきましょう。これはもちろん、
+正規化されていない規則と全く同じです (c.f. 式 <span id="margin_891921584746_reveal" class="equation_link">(21)</span><span id="margin_891921584746" class="marginequation" style="display: none;"><a href="chap1.html#eqtn21" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  b_l & \rightarrow & b_l' = b_l-\frac{\eta}{m}
+  \sum_j \frac{\partial C_{X_j}}{\partial b_l} \nonumber\end{eqnarray}</a></span><script>$('#margin_891921584746_reveal').click(function() {$('#margin_891921584746').toggle('slow', function() {});});</script>)：
+</p><p><a class="displaced_anchor" name="eqtn87"></a>\begin{eqnarray}
+  b \rightarrow b - \frac{\eta}{m} \sum_x \frac{\partial C_x}{\partial b}.
 \tag{87}\end{eqnarray}
-where the sum is over training examples $x$ in the mini-batch.</p><p>Let's see how regularization changes the performance of our neural
+<!--
+where the sum is over training examples $x$ in the mini-batch.
+-->
+ここで、和はミニバッチに含まれる訓練例 $x$ について取ります。
+</p><p>
+<!--
+    Let's see how regularization changes the performance of our neural
 network. We'll use a network with $30$ hidden neurons, a mini-batch
 size of $10$, a learning rate of $0.5$, and the cross-entropy cost
 function.  However, this time we'll use a regularization parameter of
@@ -1555,6 +1823,18 @@ I decided to use the <tt>test_data</tt> because it makes the results
 more directly comparable with our earlier, unregularized results.  You
 can easily change the code to use the <tt>validation_data</tt> instead,
 and you'll find that it gives similar results.
+-->
+では、正規化がどのくらいニューラルネットワークのパフォーマンスを変えるのか確かめてみましょう。
+ここでは、隠れニューロンが30個、ミニバッチの大きさが $10$、学習率が $0.5$、そして
+クロスエントロピーをコスト関数として採用したニューラルネットワークを使います。
+今回はさらに、正規化パラメータとして $\lambda=0.1$ を使用します。
+コードの中で正規化パラメータを表す変数名として <tt>lmbda</tt> を用いている点には気をつけてください。
+というのも、Pythonでは <tt>lambda</tt> が正規化パラメータとは関係の無い意味を持つ予約語だからです。
+また、ここでは再び <tt>validation_data</tt> ではなく <tt>test_data</tt> を用いました。
+既に議論したように、厳密に言えば <tt>validation_data</tt> を使うべきです。
+今回 <tt>test_data</tt> を使うのは、そうすることで正規化する前の結果とより直接的な比較が可能になるためです。
+このコードを <tt>validation_data</tt> を使うように書き換えるのは容易ですし、
+実際にそうしても同様の結果が得られることがわかるでしょう。
 <div class="highlight"><pre>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">mnist_loader</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">training_data</span><span class="p">,</span> <span class="n">validation_data</span><span class="p">,</span> <span class="n">test_data</span> <span class="o">=</span> \
@@ -1567,20 +1847,44 @@ and you'll find that it gives similar results.
 <span class="o">...</span> <span class="n">monitor_evaluation_cost</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">monitor_evaluation_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">monitor_training_cost</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">monitor_training_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
-
+<!--
 The cost on the training data decreases over the whole time, much as
 it did in the earlier, unregularized case*<span class="marginnote">
 *This and the next
   two graphs were produced with the program
-  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/overfitting.py">overfitting.py</a>.</span>:</p><p><center><img src="images/regularized1.png" width="520px"></center></p><p>But this time the accuracy on the <tt>test_data</tt> continues to
-increase for the entire 400 epochs:</p><p><center><img src="images/regularized2.png" width="520px"></center></p><p>Clearly, the use of regularization has suppressed overfitting.  What's
+  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/overfitting.py">overfitting.py</a>.</span>:
+-->
+訓練データに対するコストは時間とともに減衰し続けることが分かるでしょう。
+この点は正規化していない以前の結果と変わりません*<span class="marginnote">
+*これとこの後2つのグラフはプログラム
+  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/overfitting.py">overfitting.py</a> で生成しました。</span>：
+</p><p><center><img src="images/regularized1.png" width="520px"></center>
+</p><p>
+<!--
+    But this time the accuracy on the <tt>test_data</tt> continues to
+increase for the entire 400 epochs:
+-->
+しかし今回は、<tt>test_data</tt> に対する精度も400エポックが終わるまで向上し続けています：
+</p><p><center><img src="images/regularized2.png" width="520px"></center>
+</p><p>
+<!--
+    Clearly, the use of regularization has suppressed overfitting.  What's
 more, the accuracy is considerably higher, with a peak classification
 accuracy of $87.1$ percent, compared to the peak of $82.27$ percent
 obtained in the unregularized case.  Indeed, we could almost certainly
 get considerably better results by continuing to train past 400
 epochs. It seems that, empirically, regularization is causing our
 network to generalize better, and considerably reducing the effects of
-overfitting.</p><p>What happens if we move out of the artificial environment of just
+overfitting.
+-->
+明らかに、正規化することで過適合が抑制されています。そしてそれ以上に、精度もかなり良くなっています。
+ピーク時の分類精度が正規化無しで $82.27$パーセントだったのに対し、
+正規化した後は$87.1$パーセントに向上しています。実は、400エポックを超えて訓練し続けることで、
+目に見える改善がほぼ間違いなく得られるでしょう。経験的には、正規化することで
+ニューラルネットワークはより良く汎化するようになり、過適合の効果もかなり軽減されるようです。
+</p><p>
+<!--
+    What happens if we move out of the artificial environment of just
 having 1,000 training images, and return to the full 50,000 image
 training set?  Of course, we've seen already that overfitting is much
 less of a problem with the full 50,000 images.  Does regularization
@@ -1591,39 +1895,87 @@ is because the size $n$ of the training set has changed from $n =
 1,000$ to $n = 50,000$, and this changes the weight decay factor $1 -
 \frac{\eta \lambda}{n}$.  If we continued to use $\lambda = 0.1$ that
 would mean much less weight decay, and thus much less of a
-regularization effect.  We compensate by changing to $\lambda = 5.0$.</p><p>Okay, let's train our network, stopping first to re-initialize the
+regularization effect.  We compensate by changing to $\lambda = 5.0$.
+-->
+では、訓練画像を1,000枚に制限するのをやめて、50,000枚全ての訓練データを使うことにすると
+何が起こるでしょうか。もちろん既に見たとおり、50,000枚全ての画像を使えば過適合はそれほど
+問題になりません。その状況で、果たして正規化にご利益があるのでしょうか？
+ハイパーパラメータは前回と同じ、30エポック、学習率 $0.5$、ミニバッチの大きさは $10$、を使う
+ことにします。しかし、正規化パラメータは変更する必要があります。なぜなら、
+訓練データの大きさを $n=1,000$ から $n=50,000$ に変更したため、そのことが重み減衰因子 $1 -
+\frac{\eta \lambda}{n}$ を変えているためです。もし $\lambda =0.1$ を使い続けたならば、
+重み減衰はずっと抑えられて、正規化の効果もずっと小さなものになるでしょう。
+訓練データの大きさの違いを埋め合わせるため、$\lambda=5.0$ を使うことにします。
+</p><p>
+<!--
+    Okay, let's train our network, stopping first to re-initialize the
 weights:
+-->
+さあ、今一度重みを初期化してから、ニューラルネットワークを訓練しましょう：
 <div class="highlight"><pre>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">large_weight_initializer</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">training_data</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">evaluation_data</span><span class="o">=</span><span class="n">test_data</span><span class="p">,</span> <span class="n">lmbda</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">monitor_evaluation_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">monitor_training_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
-
-We obtain the results:</p><p><center><img src="images/regularized_full.png" width="520px"></center></p><p>There's lots of good news here.  First, our classification accuracy on
+<!--We obtain the results:
+-->
+その結果はこちら：
+</p><p><center><img src="images/regularized_full.png" width="520px"></center>
+</p><p>
+    <!--
+    There's lots of good news here.  First, our classification accuracy on
 the test data is up, from $95.49$ percent when running unregularized,
 to $96.49$ percent.  That's a big improvement.  Second, we can see
 that the gap between results on the training and test data is much
 narrower than before, running at under a percent.  That's still a
 significant gap, but we've obviously made substantial progress
-reducing overfitting.</p><p>Finally, let's see what test classification accuracy we get when we
+reducing overfitting.
+-->
+良い知らせがあります。それもたくさん。第一に、試験データに対する分類精度が、
+正規化する前の $95.49$ パーセントから $96.49$ パーセントに上昇しています。
+これは大きな改善です。第二に、訓練データと試験データに対する結果の差が、
+正規化する前と比べてずっと小さくなっていることが見て取れます。その差は今や $1$ パーセントにも
+満たない小さなものです。これでもはっきりとした差は残っていますが、
+過適合を改善するという意味ではかなりの進歩です。
+</p><p>
+<!--
+    Finally, let's see what test classification accuracy we get when we
 use 100 hidden neurons and a regularization parameter of $\lambda =
 5.0$. I won't go through a detailed analysis of overfitting here, this
 is purely for fun, just to see how high an accuracy we can get when we
 use our new tricks: the cross-entropy cost function and L2
-regularization.</p><p><div class="highlight"><pre>
+regularization.
+-->
+最後に、隠れニューロンを100個にして正規化パラメータを $\lambda=5.0$ のままにした時、
+試験データの分類精度がどうなるか見てみましょう。ここでは、過適合に関する詳細な分析は行いません。
+ただのお楽しみとして、クロスエントロピーコスト関数とL2正規化という2つの新しい手法が
+どれだけの精度をもたらすのか見てみるのが、ここでの目的です。
+</p><p>
+    <div class="highlight"><pre>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network2</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">cost</span><span class="o">=</span><span class="n">network2</span><span class="o">.</span><span class="n">CrossEntropyCost</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">large_weight_initializer</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">training_data</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">lmbda</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">evaluation_data</span><span class="o">=</span><span class="n">validation_data</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">monitor_evaluation_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
-</p><p>The final result is a classification accuracy of $97.92$ percent on
+</p><p>
+<!--
+    The final result is a classification accuracy of $97.92$ percent on
 the validation data.  That's a big jump from the 30 hidden neuron
 case.  In fact, tuning just a little more, to run for 60 epochs at
 $\eta = 0.1$ and $\lambda = 5.0$ we break the $98$ percent barrier,
 achieving $98.04$ percent classification accuracy on the validation
-data.  Not bad for what turns out to be 152 lines of code!</p><p>I've described regularization as a way to reduce overfitting and to
+data.  Not bad for what turns out to be 152 lines of code!
+-->
+最終的に得られる分類精度は、検証データに対して $97.92$ パーセントです。
+これは隠れニューロンが30個だった時と比べると大きな飛躍です。実は、もう少しだけチューニングして、
+$\eta=0.1$ と $\lambda=5.0$ にセットして60エポック走らせると、
+検証データに対する分類精度が $98$ パーセントの壁を超えて、
+$98.04$ パーセントという結果を実現します。たった152行のコードにしては悪くない仕事ですね！
+</p><p>
+    <!--
+    I've described regularization as a way to reduce overfitting and to
 increase classification accuracies.  In fact, that's not the only
 benefit.  Empirically, when doing multiple runs of our MNIST networks,
 but with different (random) weight initializations, I've found that
@@ -1631,7 +1983,19 @@ the unregularized runs will occasionally get "stuck", apparently
 caught in local minima of the cost function.  The result is that
 different runs sometimes provide quite different results.  By
 contrast, the regularized runs have provided much more easily
-replicable results.</p><p>Why is this going on?  Heuristically, if the cost function is
+replicable results.
+-->
+ここまで私は、正規化を過適合を防ぎ分類精度を向上させるための手法として説明してきました。
+実は、正規化のご利益はそれだけではありません。
+ここで作成したMNISTを分類するニューラルネットワークを、
+重みの初期値をランダムに変えながら繰り返し走らせてみましょう。
+実際にやってみて私が気づいたのは、正規化しないと時折「引っかかる」ことです。
+つまり、コスト関数の極小に捕らえられているようなのです。
+結果として、異なる初期値から始めると時々かなり異なる結果に行き着くことになります。
+対照的に、正規化した場合にはより簡単に再現可能な結果が得られます。
+</p><p>
+    <!--
+    Why is this going on?  Heuristically, if the cost function is
 unregularized, then the length of the weight vector is likely to grow,
 all other things being equal.  Over time this can lead to the weight
 vector being very large indeed.  This can cause the weight vector to
@@ -1639,8 +2003,26 @@ get stuck pointing in more or less the same direction, since changes
 due to gradient descent only make tiny changes to the direction, when
 the length is long.  I believe this phenomenon is making it hard for
 our learning algorithm to properly explore the weight space, and
-consequently harder to find good minima of the cost function.</p><p>
-<h4><a name="why_does_regularization_help_reduce_overfitting"></a><a href="#why_does_regularization_help_reduce_overfitting">Why does regularization help reduce overfitting?</a></h4></p><p>We've seen empirically that regularization helps reduce overfitting.
+consequently harder to find good minima of the cost function.
+-->
+なぜこのようなことが起こるのでしょうか？ヒューリスティックには、
+もしコスト関数が正規化されていないと、重みベクトルの長さは大きくなりがちです。
+時間が経つにつれ、実際に重みベクトルはかなり大きくなりえます。
+重みベクトルが長い時、勾配降下法はその動径方向に向かいやすく、
+重みベクトルの向きを変える方向にはわずかにしか動きません。このため、
+一旦重みベクトルが長くなってしまうと、重みベクトルが同じ方向を向いて
+動かなくなってしまう可能性があります。この現象が原因で、
+私たちが使っている学習アルゴリズムでは重み空間を十分に探索することができず、
+結果的にコスト関数の良い最小値を見つけるのが困難になっているのではないかと、
+私は考えています。
+</p><p>
+<!--
+<h4><a name="why_does_regularization_help_reduce_overfitting"></a><a href="#why_does_regularization_help_reduce_overfitting">Why does regularization help reduce overfitting?</a></h4>
+-->
+<h4><a name="why_does_regularization_help_reduce_overfitting"></a><a href="#why_does_regularization_help_reduce_overfitting">なぜ正規化で過適合が軽減されるのか？</a></h4>
+</p><p>
+    <!--
+    We've seen empirically that regularization helps reduce overfitting.
 That's encouraging but, unfortunately, it's not obvious why
 regularization helps!  A standard story people tell to explain what's
 going on is along the following lines: smaller weights are, in some
@@ -1649,9 +2031,19 @@ explanation for the data, and should thus be preferred.  That's a
 pretty terse story, though, and contains several elements that perhaps
 seem dubious or mystifying.  Let's unpack the story and examine it
 critically.  To do that, let's suppose we have a simple data set for
-which we wish to build a model:</p><p><div
+which we wish to build a model:-->
+実際に正規化を実装してみることで、確かに正規化によって過適合が軽減されることを見てきました。
+この結果には勇気づけられますが、残念ながら、なぜ正規化が過適合を軽減してくれるのか明白とは言えません。
+この点についてしばしばなされる説明は次のようなものです。「重みがより小さいということは、ある意味で、
+複雑さがより小さいことを意味し、それゆえ、より単純で強力にデータを説明してくれるのだ。」
+ただ、この説明はずいぶん簡潔で、曖昧で誤魔化されているようにも思えます。
+ですから、この説明を批判的に検証してみましょう。
+そのために、次のような単純なデータセットを用意して、これを説明するモデルの構築してみましょう：
+</p><p><div
 id="simple_model"></div> <script type="text/javascript" src="js/simple_data.js">
- </script> </p><p>Implicitly, we're studying some real-world phenomenon here, with $x$
+ </script> </p><p>
+ <!--
+     Implicitly, we're studying some real-world phenomenon here, with $x$
 and $y$ representing real-world data.  Our goal is to build a model
 which lets us predict $y$ as a function of $x$.  We could try using
 neural networks to build such a model, but I'm going to do something
@@ -1668,19 +2060,58 @@ exactly.  Here's the graph of that polynomial*<span class="marginnote">
   of the polynomial in the <a href="js/polynomial_model.js">source code
     for the graph</a> if you're curious.  It's the function <tt>p(x)</tt>
   defined starting on line 14 of the program which produces the
-  graph.</span>:</p><p><div id="polynomial_fit"></div> <script
-type="text/javascript" src="js/polynomial_model.js"></script></p><p>That provides an exact fit.  But we can also get a good fit using the
-linear model $y = 2x$:</p><p><div id="linear_fit"></div> <script
-type="text/javascript" src="js/linear_model.js"></script> </p><p>Which of these is the better model?  Which is more likely to be true?
+  graph.</span>:
+-->
+私たちはここで、暗にある現実の現象を調べています。そして、$x$ と $y$ は現実のデータを表しています。
+ここでの目標は、$x$ の関数として $y$ を予言するモデルの構築です。
+そのためにニューラルネットワークを用いることも可能ではありますが、
+今はもっと単純なことを考えます：$y$ を $x$ の多項式としてモデル化してみます。
+ニューラルネットワークの代わりに多項式を利用するのは、
+多項式は何が起こっているのか特に見やすいためです。
+そこで、まずは多項式で起こっていることを理解してから、
+それをニューラルネットワークに翻訳しようと思います。
+今、上のグラフには10個のデータ点があるので、
+これらの点を全て通過する9次多項式 $y = a_0 x^9 + a_1 x^8 + \ldots + a_9$ がただ一つに定まります。
+これがその多項式のグラフです*<span class="marginnote">
+*ここでは多項式の係数を明示しませんが、例えば Numpy に含まれる <tt>polyfit</tt> 等の
+ルーチンを使って簡単に係数を計算できます。
+もし興味があれば、多項式の正確な形は<a href="js/polynomial_model.js">グラフのソースコード</a>で
+見ることが出来ます。グラフを生成するプログラムの14行目から定義されている関数 <tt>p(x)</tt> です。</span>：
+</p><p><div id="polynomial_fit"></div> <script
+type="text/javascript" src="js/polynomial_model.js"></script>
+</p><p>
+    <!---
+    That provides an exact fit.  But we can also get a good fit using the
+linear model $y = 2x$:-->
+この多項式はデータ点を正確にフィッティングしています。
+しかし、これらのデータ点は $y = 2x$ という直線を使っても良くフィッティングできます：
+</p><p><div id="linear_fit"></div> <script
+type="text/javascript" src="js/linear_model.js"></script>
+</p><p>
+<!--    Which of these is the better model?  Which is more likely to be true?
 And which model is more likely to generalize well to other examples of
-the same underlying real-world phenomenon?</p><p>These are difficult questions.  In fact, we can't determine with
+the same underlying real-world phenomenon?-->
+この2つのうち、どちらがより良いモデルであると言えるでしょうか？
+どちらがよりもっともらしく、真実に近いのでしょうか？
+そして、同じ現実の現象の他の例に対して、どちらのモデルがより良く汎化できるでしょうか？
+</p><p><!--
+    These are difficult questions.  In fact, we can't determine with
 certainty the answer to any of the above questions, without much more
 information about the underlying real-world phenomenon.  But let's
 consider two possibilities: (1) the $9$th order polynomial is, in
 fact, the model which truly describes the real-world phenomenon, and
 the model will therefore generalize perfectly; (2) the correct model
 is $y = 2x$, but there's a little additional noise due to, say,
-measurement error, and that's why the model isn't an exact fit.</p><p>It's not <em>a priori</em> possible to say which of these two
+measurement error, and that's why the model isn't an exact fit.-->
+これらは難しい質問です。実は、どの質問に対しても、確証を持って答えることは出来ません。
+そうするには、背後にある現実の現象に関する情報がもっと必要です。
+しかし、2つの可能性を考えてみましょう：(1) 実は9次多項式が本当に現実の現象を記述するモデルになっていて、
+したがって他の例に対しても完璧に汎化できる可能性、そして
+ (2) 正しいモデルは $y=2x$ なのだが、例えば測定の誤差などに起因するノイズが乗っているため、
+ モデルがデータ点を完全にはフィットしていない可能性、です。
+</p><p>
+    <!--
+    It's not <em>a priori</em> possible to say which of these two
 possibilities is correct.  (Or, indeed, if some third possibility
 holds).  Logically, either could be true.  And it's not a trivial
 difference.  It's true that on the data provided there's only a small
@@ -1689,7 +2120,18 @@ value of $y$ corresponding to some large value of $x$, much larger
 than any shown on the graph above.  If we try to do that there will be
 a dramatic difference between the predictions of the two models, as
 the $9$th order polynomial model comes to be dominated by the $x^9$
-term, while the linear model remains, well, linear.</p><p>One point of view is to say that in science we should go with the
+term, while the linear model remains, well, linear.-->
+どちらが正解だと言い切る根拠はありません（あるいは、どちらでもない、
+第3の可能性もありうるかもしれません）。論理的には、どちらでもありうるのです。
+にも関わらず、両者の違いは決して些細なものではありません。
+確かに、データ点の与えられている領域では2つのモデルの予言には小さな違いしかありません。
+しかし、もしも上のグラフで示されているよりももっとずっと大きな $x$ に対して $y$ を予言したいとしたら、
+どうでしょうか。その時には、両者の予言の間にはとてつもない違いが生じるでしょう。
+なぜならば、9次多項式では $x^9$ の項が支配的になりますが、
+線形モデルは、なんというか、線形のままですから。
+</p><p>
+<!--
+    One point of view is to say that in science we should go with the
 simpler explanation, unless compelled not to.  When we find a simple
 model that seems to explain many data points we are tempted to shout
 "Eureka!"  After all, it seems unlikely that a simple explanation
@@ -1703,7 +2145,24 @@ simplicity had occurred by chance, and so we suspect that $y = 2x+{\rm
 noise. And so while the 9th order model works perfectly for these
 particular data points, the model will fail to generalize to other
 data points, and the noisy linear model will have greater predictive
-power.</p><p>Let's see what this point of view means for neural networks.  Suppose
+power.
+-->
+一つの立場は、どうしても複雑なモデルを採用しなければならない特段の事情がない限り、
+科学においてはより単純な説明を採用するのが望ましいという考え方です。
+多くのデータ点を説明できる簡単なモデルが見つかった時には、「エウレカ！」と叫びたい
+衝動に駆られるでしょう。なんといっても、単純な説明とデータが単なる偶然の一致を見せるとは、
+考えにくいように思われます。むしろ、そのモデルは現象の背後にある何らかの真理を言い当てている
+と信じたくなるでしょう。今考えている例では、$y=2x+\text{(ノイズ)}$ というモデルは
+$y=a_0x^9 + a_1 x^8 + \ldots$ よりずっとシンプルに見えます。
+そんな単純さが偶然に現れたのだとすると驚きです。だからこそ、
+私たちは $y=2x+\text{(ノイズ)}$ が背後にある何らかの真理を表していると期待するのです。
+この立場に基づくと、9次多項式モデルは局所的なノイズの効果を学習しているに過ぎません。
+だから、9次多項式モデルは与えられたデータ点を完璧に説明はするけれども、
+他のデータ点に対して汎化はできないでしょう。そして、ノイズ付き線形モデルが
+より強力な予言能力を持つでしょう。
+</p><p>
+<!--
+    Let's see what this point of view means for neural networks.  Suppose
 our network mostly has small weights, as will tend to happen in a
 regularized network.  The smallness of the weights means that the
 behaviour of the network won't change too much if we change a few
@@ -1721,13 +2180,41 @@ constrained to build relatively simple models based on patterns seen
 often in the training data, and are resistant to learning
 peculiarities of the noise in the training data.  The hope is that
 this will force our networks to do real learning about the phenemonon
-at hand, and to generalize better from what they learn.</p><p>With that said, this idea of preferring simpler explanation should
+at hand, and to generalize better from what they learn.
+-->
+この立場がニューラルネットワークにおいて何を意味するのか見てみましょう。
+正規化されたニューラルネットワークで期待されるように、
+ニューラルネットワークの大部分では小さな重みを持つと仮定しましょう。
+重みが小さいということは、ここそこでランダムな入力を変化させても
+ニューラルネットワークの振る舞いが大きくは変わらないことを意味します。
+そのため、正規化されたニューラルネットワークでは、
+データに含まれる局所的なノイズの効果を学習しづらくなっています。
+その代わり、正規化されたニューラルネットワークは訓練データの中で繰り返し見られる
+データの特徴に反応するのです。対照的に、大きな重みを持つニューラルネットワークは、
+入力の小さな変化に敏感に反応してその振る舞いを大きく変えてしまいます。
+そのため、正規化されていないニューラルネットワークは、大きな重みを使って、
+訓練データのノイズに関する情報をたくさん含んだ複雑なモデルを学習してしまうのです。
+要するに、正規化されたニューラルネットワークは訓練データに頻繁に現れるパターンに基づいた
+比較的シンプルなモデルを構築します。そして、訓練データが持つノイズの特異性を学ぶことに対して
+耐性を持つのです。このため、ニューラルネットワークがノイズではなく現象そのものに対する真の学習をして、
+それをより良く汎化できるのではないかと、希望が持てます。
+</p><p>
+<!--
+    With that said, this idea of preferring simpler explanation should
 make you nervous.  People sometimes refer to this idea as "Occam's
 Razor", and will zealously apply it as though it has the status of
 some general scientific principle.  But, of course, it's not a general
 scientific principle.  There is no <em>a priori</em> logical reason to
 prefer simple explanations over more complex explanations.  Indeed,
-sometimes the more complex explanation turns out to be correct.</p><p>Let me describe two examples where more complex explanations have
+sometimes the more complex explanation turns out to be correct.
+-->
+ここまで説明したところで、よりシンプルなモデルが好ましいという考え方に不安を感じるかもしれません。
+この考えはしばしば「オッカムの剃刀」と呼ばれ、何か一般的な科学の原理であるかのように扱われます。
+しかし、もちろん、これは一般的な科学の原理ではありません。
+複雑なモデルよりも単純なモデルを好むべき、ア・プリオリな論理的理由は無いのです。
+実際、より複雑な説明が正しいという場合もあるのです。
+</p><p>
+<!--    Let me describe two examples where more complex explanations have
 turned out to be correct.  In the 1940s the physicist Marcel Schein
 announced the discovery of a new particle of nature.  The company he
 worked for, General Electric, was ecstatic, and publicised the
@@ -1751,7 +2238,32 @@ particle is no more*<span class="marginnote">
 *The story is related by the physicist
   Richard Feynman in an
   <a href="http://www.aip.org/history/ohilist/5020_4.html">interview</a>
-  with the historian Charles Weiner.</span>.</p><p>As a second example, in 1859 the astronomer Urbain Le Verrier observed
+  with the historian Charles Weiner.</span>.
+-->
+結果的には複雑な説明の方が正しかったという例を2つ紹介しましょう。
+1940年台に物理学者のマルツェル・シャインは新粒子を発見したと主張しました。
+彼が働いていたゼネラル・エレクトリック社はすっかり盛り上がって、
+その発見を広く宣伝しました。しかし、物理学者のハンス・ベーテは懐疑的でした。
+ベーテはシャインの元を訪れ、シャインの新粒子の飛跡が残るプレートを調べました。
+シャインは次々にプレートを見せましたが、
+ベーテはそれぞれのプレートにデータとして採用すべきでない理由を見出しました。
+最後に、シャインは問題なさそうに見えるプレートを差し出しました。
+ベーテは、それが統計的なまぐれ当たりに過ぎないのではないかと言いました。
+シャイン：「そうかもしれないが、その確率はあなたの公式によると5分の1しかありません。」
+ベーテ：「しかし、もう既に5つのプレートを見ました。」
+そこでシャインは次のように言いました：「しかし、あなたは一つ一つのプレート、
+一つ一つの写真に対して異なる理論で批判をしました。
+ところが、それらが新粒子であるというたった一つの仮説は、全てのプレートを説明します。」
+ベーテは次のように答えました：「あなたと私のたった一つの違いは、
+あなたの説明は間違っているが、私の説明は全てが正しいということです。
+あなたのただ一つの説明は間違いですが、私の複数の説明は正しいのです。」
+後の研究により、ベーテが正しかったことが確かめられました*<span class="marginnote">
+*この話は、物理学者のリチャード・ファインマンが歴史家のチャールズ・ワイナーとの
+<a href="http://www.aip.org/history/ohilist/5020_4.html">インタビュー</a>
+の中で紹介したものです。</span>。
+</p><p>
+    <!--
+    As a second example, in 1859 the astronomer Urbain Le Verrier observed
 that the orbit of the planet Mercury doesn't have quite the shape that
 Newton's theory of gravitation says it should have.  It was a tiny,
 tiny deviation from Newton's theory, and several of the explanations
@@ -1769,12 +2281,41 @@ Einstein's theory accurately predicts several phenomena which aren't
 predicted by Newtonian gravity at all. But these impressive qualities
 weren't entirely obvious in the early days.  If one had judged merely
 on the grounds of simplicity, then some modified form of Newton's
-theory would arguably have been more attractive.</p><p>There are three morals to draw from these stories.  First, it can be
+theory would arguably have been more attractive.
+-->
+2つ目の例として水星の軌道にまつわる話を紹介します。
+天文学者のユルバン・ルヴェリエは1859年に水星の軌道がニュートンの重力理論による
+予測と一致しないことを発見しました。そのズレは本当に、本当に僅かなもので、
+当時よく見られた説明は、つまるところ、ニュートンの重力理論はだいたい正しく、
+しかし僅かな修正が必要であるというものでした。
+1916年に、アインシュタインはそのズレが彼の一般相対性理論を使うととてもよく
+説明できることを示しました。ところが、一般相対性理論はニュートンの重力理論と
+根本的に異なっており、ずっと複雑な数学に基づいていました。
+このようにとても複雑な一般相対性理論ですが、今日ではアインシュタインの説明が
+広く受け入れられています。そして、ニュートンの理論は修正されたものも含めて間違っていると
+考えられています。これは一つには、アインシュタインの理論がニュートンの理論では
+説明が困難な他の多くの現象を説明できるためです。そしてさらに、
+ニュートンの重力では全くもって予言できない現象を正確に予言できるのです。
+しかし、これらの印象的な性質は、初期の頃から明らかであったわけではありません。
+もし単純さのみに基づいて判断していたら、おそらくいずれかの修正されたニュートン理論が
+もっと魅力的に映ったことでしょう。
+</p><p>
+    <!--There are three morals to draw from these stories.  First, it can be
 quite a subtle business deciding which of two explanations is truly
 "simpler".  Second, even if we can make such a judgement, simplicity
 is a guide that must be used with great caution!  Third, the true test
 of a model is not simplicity, but rather how well it does in
-predicting new phenomena, in new regimes of behaviour.</p><p>With that said, and keeping the need for caution in mind, it's an
+predicting new phenomena, in new regimes of behaviour.
+-->
+これらの逸話から3つの教訓が得られます。
+第1に、2つのモデルのどちらが真に「より単純」かを決めるのは、
+非常に微妙な問題であること。第2に、もしそのような判断を下すことができたとしても、
+単純さが正しさの指標になりうるかどうかは注意深く検討する必要があること。
+第3に、モデルを測る本当の尺度は単純さではなく、
+未知の領域で新しい現象をどれほど良く予言できるかという点であることです。
+
+</p><p><!--
+    With that said, and keeping the need for caution in mind, it's an
 empirical fact that regularized neural networks usually generalize
 better than unregularized networks.  And so through the remainder of
 the book we will make frequent use of regularization.  I've included
@@ -1786,7 +2327,21 @@ them to see which works better, and attept to understand why different
 approaches work better or worse.  And so you can view regularization
 as something of a kludge.  While it often helps, we don't have an
 entirely satisfactory systematic understanding of what's going on,
-merely incomplete heuristics and rules of thumb.</p><p>There's a deeper set of issues here, issues which go to the heart of
+merely incomplete heuristics and rules of thumb.
+-->
+これらの注意を頭の片隅においておいて、経験的な事実として、
+正規化したニューラルネットワークは通常、正規化されていないニューラルネットワークよりも
+よく汎化するのだと言っておきます。なので、この本の残りの部分では頻繁に
+正規化を利用します。私が上でいくつかの逸話を紹介したのは、
+正規化によってニューラルネットワークの汎化が助けられることについて、
+完全に納得できる理論的な説明が存在しないことを伝えるためなのです。
+実は、研究者は新しい正規化の手法を試しては、それらを比較してどちらがより良いか調べ、
+その理由を理解しようと試みています。ですから、正規化は今の段階ではある種の
+その場しのぎであるとみなすこともできます。
+正規化は仕事の助けになりますが、正規化によって実際に何が起こっているのかについて、
+完全に満足の行く系統的な理解は無く、不完全なヒューリスティックと経験則しかないのです。
+</p><p><!--
+    There's a deeper set of issues here, issues which go to the heart of
 science.  It's the question of how we generalize.  Regularization may
 give us a computional magic wand that helps our networks generalize
 better, but it doesn't give us a principled understanding of how
@@ -1800,7 +2355,23 @@ generalization works, nor of what the best approach is*<span class="marginnote">
   induction has been given a modern machine learning form in the
   no-free lunch theorem
   (<a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&arnumber=585893">link</a>)
-  of David Wolpert and William Macready (1997).</span>.</p><p>This is particularly galling because in everyday life, we humans
+  of David Wolpert and William Macready (1997).</span>.-->
+ここには科学の核心に関わる、さらに深い論点があります。
+それは、私たちが経験的な理解をどう汎化するのかという問いです。
+正規化は上手く計算するための魔法のようなもので、
+それは確かにニューラルネットワークが汎化するのを助けますが、
+どのように汎化しているのかという原理に関する理解も、
+何が最良のアプローチなのかという答えも教えてはくれないのです*<span class="marginnote">
+*これらの論点は、スコットランド人の哲学者、デイビッド・ヒュームによって
+<a href="http://www.gutenberg.org/ebooks/9662">"An Enquiry Concerning Human Understanding"</a> (1748)
+ の中で議論された、<a href="http://en.wikipedia.org/wiki/Problem_of_induction">帰納法の問題</a>に
+遡ります。帰納法の問題は、現代の機械学習においては、
+デイビッド・ウォルパートとウィリアム・マクレディーによるノーフリーランチ定理として現れます。
+(<a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&arnumber=585893">リンク</a>)
+</span>。
+</p><p>
+<!--
+    This is particularly galling because in everyday life, we humans
 generalize phenomenally well.  Shown just a few images of an elephant
 a child will quickly learn to recognize other elephants.  Of course,
 they may occasionally make mistakes, perhaps confusing a rhinoceros
@@ -1812,7 +2383,23 @@ brains are, in some sense, regularizing amazingly well!  How do we do
 it?  At this point we don't know.  I expect that in years to come we
 will develop more powerful techniques for regularization in artificial
 neural networks, techniques that will ultimately enable neural nets to
-generalize well even from small data sets.</p><p>In fact, our networks already generalize better than one might <em>a
+generalize well even from small data sets.
+-->
+このことが一際悩ましく思えるのは、私たち人間が日常的に驚くほどうまく汎化するからです。
+象の画像をほんの数枚見ただけで、子供はすぐに他の象を認識し始めるでしょう。
+もちろん、時には間違えもするでしょうし、サイを象と混同するかもしれません。
+それでも多くの場合に非常に正確でしょう。つまり、ここに一つのシステム、
+すなわち人間の脳があって、それは莫大な数のパラメータを持ちます。
+そしてそれは、たった数枚の訓練画像を見せられるだけで、
+このシステムは他の画像に対して汎化しはじめるのです。
+私たちの脳はある意味で、非常に上手く正規化されているのです！
+どうすれば私たちにもニューラルネットワークで同じことができるでしょうか？
+現時点では分かりません。向こう数年のうちに、人工的なニューラルネットワークを
+正規化するより強力な手法が開発されて、
+究極的にはわずかな訓練データから良く汎化できるようになると期待します。
+</p><p>
+    <!--
+    In fact, our networks already generalize better than one might <em>a
   priori</em> expect.  A network with 100 hidden neurons has nearly 80,000
 parameters.  We have only 50,000 images in our training data.  It's
 like trying to fit an 80,000th degree polynomial to 50,000 data
@@ -1829,7 +2416,24 @@ multilayer nets has a `self-regularization' effect".  This is
 exceptionally fortunate, but it's also somewhat disquieting that we
 don't understand why it's the case.  In the meantime, we will adopt
 the pragmatic approach and use regularization whenever we can.  Our
-neural networks will be the better for it.</p><p>Let me conclude this section by returning to a detail which I left
+neural networks will be the better for it.
+-->
+実は、これまで実装してきたニューラルネットワークは、
+既に<em>ア・プリオリ</em>に期待されるよりも良く汎化しています。
+100個の隠れニューロンを持つニューラルネットワークには、80,000個近いパラメータがあります。
+訓練データには50,000枚の画像しかありません。いわば、80,000次多項式で50,000個のデータ点を
+フィットしようとしているようなものです。本来なら、このニューラルネットワークはひどく
+過適合を起こしても当然なわけです。にも関わらず、これまで見てきたように非常に良く汎化するのです。
+なぜこんなことが起こるのでしょうか？これはよく理解されているわけではありません。
+「多層ニューラルネットワークにおける勾配降下学習のダイナミクスには
+『自己正規化』効果がある」という仮説はあります*<span class="marginnote">
+*出典は <a href="http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf">Gradient-Based
+    Learning Applied to Document Recognition</a>, by Yann LeCun,
+ Léon Bottou, Yoshua Bengio, and Patrick Haffner
+ (1998) です。</span>。
+</p><p>
+    <!--
+    Let me conclude this section by returning to a detail which I left
 unexplained earlier: the fact that L2 regularization <em>doesn't</em>
 constrain the biases.  Of course, it would be easy to modify the
 regularization procedure to regularize the biases.  Empirically, doing
@@ -1842,7 +2446,28 @@ our network to learn the noise in our training data.  At the same
 time, allowing large biases gives our networks more flexibility in
 behaviour - in particular, large biases make it easier for neurons
 to saturate, which is sometimes desirable.  For these reasons we don't
-usually include bias terms when regularizing.</p><p><h4><a name="other_techniques_for_regularization"></a><a href="#other_techniques_for_regularization">Other techniques for regularization</a></h4></p><p>There are many regularization techniques other that L2 regularization.
+usually include bias terms when regularizing.
+-->
+この節の終わりに、ここまで説明せずに来た詳細に戻ってきましょう：
+なぜL2正規化でバイアスを制限し<em>ない</em>のでしょうか？
+もちろん、バイアスを正規化するように正規化の手順を修正するのは簡単です。
+経験的には、そうしても結果が大きく変わらないので、
+バイアスを正規化するかどうかは単なる慣例であるということも出来ます。
+しかし、次の事実には言及しておく価値があるでしょう。
+それは、バイアスが大きくなっても、重みが大きくなった時のように
+入力に対するニューロンの感受性が高まるわけではない、という事実です。
+だから、大きなバイアスのために訓練データのノイズを学習してしまうのではないかと
+心配する必要は無いわけです。同時に、大きなバイアスを許すことで、
+ニューラルネットワークはより柔軟に振る舞えるようになります。
+特に、大きなバイアスを許すことでニューロンの出力が容易に飽和できるようになります。
+時にこの性質が望ましい場合があります。
+これらの理由から、普通はバイアス項を正規化に含めません。
+</p><p>
+<!--<h4><a name="other_techniques_for_regularization"></a><a href="#other_techniques_for_regularization">Other techniques for regularization</a></h4>-->
+<h4><a name="other_techniques_for_regularization"></a><a href="#other_techniques_for_regularization">その他の正規化手法</a></h4>
+</p><p>
+<!--
+There are many regularization techniques other that L2 regularization.
 In fact, so many techniques have been developed that I can't possibly
 summarize them all.  In this section I briefly describe three other
 approaches to reducing overfitting: L1 regularization, dropout, and
@@ -1850,21 +2475,55 @@ artificially increasing the training set size.  We won't go into
 nearly as much depth studying these techniques as we did earlier.
 Instead, the purpose is to get familiar with the main ideas, and to
 appreciate something of the diversity of regularization techniques
-available.</p><p><strong>L1 regularization:</strong> In this approach we modify the
+available.
+-->
+正規化の手法はL2正規化以外にもたくさんあります。
+実は、余りにたくさんありすぎて、その全てを要約することはできそうもありません。
+この節では、3つの手法、L1正規化、ドロップアウト、そして人工的な学習データの伸張、
+に的を絞って手短に紹介します。ここではL2正規化についてしてきたような詳細な説明はしません。
+その代わり、ここでの目的は主要なアイデアに親しんでもらうことと、
+正規化手法の多様性を認識してもらうことです。
+</p><p>
+<!--
+<strong>L1 regularization:</strong> In this approach we modify the
 unregularized cost function by adding the sum of the absolute values
-of the weights:</p><p><a class="displaced_anchor" name="eqtn88"></a>\begin{eqnarray}  C = C_0 + \frac{\lambda}{n} \sum_w |w|.
-\tag{88}\end{eqnarray} </p><p>Intuitively, this is similar to L2 regularization, penalizing large
+of the weights:-->
+<strong>L1正規化：</strong> このアプローチでは、
+正規化する前のコスト関数に重みの絶対値の和を足します：
+</p><p><a class="displaced_anchor" name="eqtn88"></a>\begin{eqnarray}  C = C_0 + \frac{\lambda}{n} \sum_w |w|.
+\tag{88}\end{eqnarray} </p><p>
+<!--
+Intuitively, this is similar to L2 regularization, penalizing large
 weights, and tending to make the network prefer small weights.  Of
 course, the L1 regularization term isn't the same as the L2
 regularization term, and so we shouldn't expect to get exactly the
 same behaviour.  Let's try to understand how the behaviour of a
 network trained using L1 regularization differs from a network trained
-using L2 regularization.</p><p>To do that, we'll look at the partial derivatives of the cost
+using L2 regularization.
+-->
+直感的には、大きな重みを不利にし、ニューラルネットワークが小さな重みを好むように仕向けるという意味で、
+L2正規化と似ています。もちろん、L1正規化項はL2正規化項と同じではないので、
+両者が全く同じ振る舞いをするわけでもありません。
+L1正規化して訓練したニューラルネットワークの振る舞いがL2正規化の場合とどう違うのか見てみましょう。
+</p><p>
+<!--
+To do that, we'll look at the partial derivatives of the cost
 function.  Differentiating <span id="margin_81306900706_reveal" class="equation_link">(88)</span><span id="margin_81306900706" class="marginequation" style="display: none;"><a href="chap3.html#eqtn88" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}  C = C_0 + \frac{\lambda}{n} \sum_w |w| \nonumber\end{eqnarray}</a></span><script>$('#margin_81306900706_reveal').click(function() {$('#margin_81306900706').toggle('slow', function() {});});</script> we obtain:
 <a class="displaced_anchor" name="eqtn89"></a>\begin{eqnarray}  \frac{\partial C}{\partial
     w} = \frac{\partial C_0}{\partial w} + \frac{\lambda}{n} \, {\rm
     sgn}(w),
-\tag{89}\end{eqnarray}</p><p>where ${\rm sgn}(w)$ is the sign of $w$, that is, $+1$ if $w$ is
+    \tag{89}\end{eqnarray}
+    -->
+そのために、まずはコスト関数の偏微分を調べましょう。
+式<span id="margin_81306900706_reveal" class="equation_link">(88)</span><span id="margin_81306900706" class="marginequation" style="display: none;"><a href="chap3.html#eqtn88" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}  C = C_0 + \frac{\lambda}{n} \sum_w |w| \nonumber\end{eqnarray}</a></span><script>$('#margin_81306900706_reveal').click(function() {$('#margin_81306900706').toggle('slow', function() {});});</script>
+を微分して、次の表式が得られます：
+<a class="displaced_anchor" name="eqtn89"></a>\begin{eqnarray}  \frac{\partial C}{\partial
+    w} = \frac{\partial C_0}{\partial w} + \frac{\lambda}{n} \, {\rm
+    sgn}(w).
+    \tag{89}\end{eqnarray}
+</p><p>
+<!--
+    where ${\rm sgn}(w)$ is the sign of $w$, that is, $+1$ if $w$ is
 positive, and $-1$ if $w$ is negative.  Using this expression, we can
 easily modify backpropagation to do stochastic gradient descent using
 L1 regularization.  The resulting update rule for an L1 regularized
@@ -1872,7 +2531,18 @@ network is
 <a class="displaced_anchor" name="eqtn90"></a>\begin{eqnarray}  w \rightarrow w' =
   w-\frac{\eta \lambda}{n} \mbox{sgn}(w) - \eta \frac{\partial
     C_0}{\partial w},
-\tag{90}\end{eqnarray} </p><p>where, as per usual, we can estimate $\partial C_0 / \partial w$ using
+    \tag{90}\end{eqnarray}
+    -->
+ここで、${\rm sgn}(w)$ は $w$ の符号、つまり、$w$ が正なら $+1$ で負なら $-1$ です。
+この表式を使うと、L1正規化を使った確率的勾配降下法を実行するように逆伝播法を修正できます。
+そうやって求めたL1正規化の下での更新規則は、
+<a class="displaced_anchor" name="eqtn90"></a>\begin{eqnarray}  w \rightarrow w' =
+  w-\frac{\eta \lambda}{n} \mbox{sgn}(w) - \eta \frac{\partial
+    C_0}{\partial w}
+    \tag{90}\end{eqnarray}
+    </p><p>
+   <!--
+    where, as per usual, we can estimate $\partial C_0 / \partial w$ using
 a mini-batch average, if we wish.  Compare that to the update rule for
 L2 regularization (c.f. Equation <span id="margin_398765654565_reveal" class="equation_link">(86)</span><span id="margin_398765654565" class="marginequation" style="display: none;"><a href="chap3.html#eqtn86" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
   w \rightarrow \left(1-\frac{\eta \lambda}{n}\right) w -\frac{\eta}{m}
@@ -1893,7 +2563,28 @@ small, L1 regularization shrinks the weight much more than L2
 regularization.  The net result is that L1 regularization tends to
 concentrate the weight of the network in a relatively small number of
 high-importance connections, while the other weights are driven toward
-zero.</p><p>I've glossed over an issue in the above discussion, which is that the
+zero.
+-->
+です。ここでいつも通り、$\partial C_0 / \partial w$ をミニバッチ平均によって評価することができます。
+これをL2正規化を用いた更新規則と比べてみましょう：
+(c.f. 式 <span id="margin_398765654565_reveal" class="equation_link">(86)</span><span id="margin_398765654565" class="marginequation" style="display: none;"><a href="chap3.html#eqtn86" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  w \rightarrow \left(1-\frac{\eta \lambda}{n}\right) w -\frac{\eta}{m}
+  \sum_x \frac{\partial C_x}{\partial w},  \nonumber\end{eqnarray}</a></span><script>$('#margin_398765654565_reveal').click(function() {$('#margin_398765654565').toggle('slow', function() {});});</script>),
+<a class="displaced_anchor" name="eqtn91"></a>\begin{eqnarray}
+  w \rightarrow w' = w\left(1 - \frac{\eta \lambda}{n} \right)
+  - \eta \frac{\partial C_0}{\partial w}.
+\tag{91}\end{eqnarray}
+どちらの表式でも、正規化の効果は重みを縮小することだとわかります。
+この点は、どちらの正規化も大きな重みを不利にするという直感と整合します。
+しかし、縮小の仕方が異なります。L1正規化は、重みを0の方向に一定の大きさだけ縮小します。
+L2正規化では、重みは $w$ に比例する量だけ縮小します。そのため、
+特定の重みが大きな絶対値 $|w|$ を取っている時に、L1正規化はL2正規化と比べるとほんのわずかにしか $w$ の値を変化させません。
+反対に、ある重みが小さな絶対値 $|w|$ を持っている時には、L2正規化よりもずっと大きく $w$ の値を変化させます。
+全体としては、L1正規化をした後のニューラルネットワークでは、一部の比較的少数の重要なリンクに重みに集中し、
+他の重みは0の方に追いやられることになります。
+</p><p>
+<!--
+I've glossed over an issue in the above discussion, which is that the
 partial derivative $\partial C / \partial w$ isn't defined when $w =
 0$.  The reason is that the function $|w|$ has a sharp "corner" at
 $w = 0$, and so isn't differentiable at that point.  That's okay,
@@ -1908,13 +2599,46 @@ and <span id="margin_321890282168_reveal" class="equation_link">(90)</span><span
   w-\frac{\eta \lambda}{n} \mbox{sgn}(w) - \eta \frac{\partial
     C_0}{\partial w} \nonumber\end{eqnarray}</a></span><script>$('#margin_321890282168_reveal').click(function() {$('#margin_321890282168').toggle('slow', function() {});});</script> with the convention that $\mbox{sgn}(0) = 0$.
 That gives a nice, compact rule for doing stochastic gradient descent
-with L1 regularization.</p><p><strong>Dropout:</strong> Dropout is a radically different technique for
+with L1 regularization.
+-->
+ここまでの議論で、偏微分 $\partial C / \partial w$ が $w=0$ で定義されないことについて
+敢えて触れずに来ました。関数 $|w|$ は $w=0$ に尖った「角」があるので、
+この点で微分不可能なのです。とはいえ、実はこのことは問題ありません。
+もし $w=0$ なら、その点で通常の（正規化していない）規則を使って確率的勾配降下法を行えば良いのです。
+この方法なら問題無いでしょう。というのも、直感的には正規化の効果が重みを縮小することなら、
+$w=0$ では明らかにこれ以上縮小のしようが無いからです。より正確には、
+式  <span id="margin_253754174974_reveal" class="equation_link">(89)</span><span id="margin_253754174974" class="marginequation" style="display: none;"><a href="chap3.html#eqtn89" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}  \frac{\partial C}{\partial
+    w} = \frac{\partial C_0}{\partial w} + \frac{\lambda}{n} \, {\rm
+    sgn}(w) \nonumber\end{eqnarray}</a></span><script>$('#margin_253754174974_reveal').click(function() {$('#margin_253754174974').toggle('slow', function() {});});</script>
+と <span id="margin_321890282168_reveal" class="equation_link">(90)</span><span id="margin_321890282168" class="marginequation" style="display: none;"><a href="chap3.html#eqtn90" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}  w \rightarrow w' =
+  w-\frac{\eta \lambda}{n} \mbox{sgn}(w) - \eta \frac{\partial
+    C_0}{\partial w} \nonumber\end{eqnarray}</a></span><script>$('#margin_321890282168_reveal').click(function() {$('#margin_321890282168').toggle('slow', function() {});});</script>
+の中で、$\mbox{sgn}(0) = 0$ という定義を採用します。
+そうすることで、L1正規化して確率的勾配降下法を実行するコンパクトな規則が出来上がります。
+</p><p>
+<!--
+    <strong>Dropout:</strong> Dropout is a radically different technique for
 regularization.  Unlike L1 and L2 regularization, dropout doesn't rely
 on modifying the cost function.  Instead, in dropout we modify the
 network itself.  Let me describe the basic mechanics of how dropout
-works, before getting into why it works, and what the results are.</p><p>Suppose we're trying to train a network:</p><p><center>
+works, before getting into why it works, and what the results are.
+-->
+<strong>ドロップアウト：</strong>
+ドロップアウトは、これまで紹介してきたものとは全く違う正規化の手法です。
+L1正規化やL2正規化と違って、ドロップアウトでは元のコスト関数をそのまま使います。
+その代わり、ドロップアウトではニューラルネットワークそのものを修正します。
+まずはドロップアウトの基本的な仕組みを説明してから、
+なぜドロップアウトで上手くいくのか、そしてどのような結果をもたらすのかを説明します。
+</p><p>
+<!--
+    Suppose we're trying to train a network:
+-->
+あるニューラルネットワークを訓練しようとしていると仮定しましょう：
+</p><p><center>
 <img src="images/tikz30.png"/>
-</center></p><p>In particular, suppose we have a training input $x$ and corresponding
+</center></p><p>
+<!--
+    In particular, suppose we have a training input $x$ and corresponding
 desired output $y$.  Ordinarily, we'd train by forward-propagating $x$
 through the network, and then backpropagating to determine the
 contribution to the gradient.  With dropout, this process is modified.
@@ -1922,20 +2646,52 @@ We start by randomly (and temporarily) deleting half the hidden
 neurons in the network, while leaving the input and output neurons
 untouched.  After doing this, we'll end up with a network along the
 following lines.  Note that the dropout neurons, i.e., the neurons
-which have been temporarily deleted, are still ghosted in:</p><p><center>
+which have been temporarily deleted, are still ghosted in:
+-->
+特に、訓練入力 $x$ とそれに対応する正解の出力 $y$ を知っているとします。
+通常、ニューラルネットワークを訓練するためにまず $x$ を順伝播させて、
+次に勾配を求めるために逆伝播を行います。ドロップアウトではこのプロセスを修正します。
+まず、ランダムに（そして一時的に）ニューラルネットワークの隠れニューロンを半分削除します。
+このとき入力・出力ニューロンは削除せずにそのままにしておきます。
+すると、下に示したようなニューラルネットワークが得られます。
+ここで、抜け落ちた（ドロップアウトした）ニューロン、つまり一時的に削除された
+ニューロンは、点線で残してあることに注意してください：
+</p><p><center>
 <img src="images/tikz31.png"/>
-</center></p><p>We forward-propagate the input $x$ through the modified network, and
+</center></p><p>
+<!--
+    We forward-propagate the input $x$ through the modified network, and
 then backpropagate the result, also through the modified network.
 After doing this over a mini-batch of examples, we update the
 appropriate weights and biases.  We then repeat the process, first
 restoring the dropout neurons, then choosing a new random subset of
 hidden neurons to delete, estimating the gradient for a different
-mini-batch, and updating the weights and biases in the network.</p><p></p><p></p><p></p><p></p><p>By repeating this process over and over, our network will learn a set
+mini-batch, and updating the weights and biases in the network.
+-->
+その後、入力 $x$ を修正されたニューラルネットワークで順伝播させ、
+次にその結果を再び修正後のニューラルネットワークで逆伝搬させます。
+ミニバッチに含まれる全ての例についてこれを実行した後、
+削除されずに残っている重みとバイアスを更新します。
+そしてこの過程を繰り返します。つまり、まずドロップアウトしたニューロンを戻し、
+削除するニューロンを再びランダムに選び直し、新しいミニバッチを用いて勾配を評価し、
+ニューラルネットワークの重みとバイアスを更新します。
+</p><p>
+<!--
+    By repeating this process over and over, our network will learn a set
 of weights and biases.  Of course, those weights and biases will have
 been learnt under conditions in which half the hidden neurons were
 dropped out.  When we actually run the full network that means that
 twice as many hidden neurons will be active.  To compensate for that,
-we halve the weights outgoing from the hidden neurons.</p><p>This dropout procedure may seem strange and <em>ad hoc</em>.  Why would
+we halve the weights outgoing from the hidden neurons.
+-->
+これを繰り返すことで、ニューラルネットワークは重みとバイアスを学習します。
+もちろん、ここで得られた重みやバイアスは、
+隠れニューロンの半分がドロップアウトしているという条件の元で学習した結果です。
+実際にニューラルネットワークの全体を動かすと、2倍のニューロンが有効になります。
+この点を補うために、隠れニューロンから出て行く重みを半分にします。
+</p><p>
+<!--
+    This dropout procedure may seem strange and <em>ad hoc</em>.  Why would
 we expect it to help with regularization?  To explain what's going on,
 I'd like you to briefly stop thinking about dropout, and instead
 imagine training neural networks in the standard way (no dropout).  In
@@ -1950,12 +2706,43 @@ The other two networks are probably just making a mistake.  This kind
 of averaging scheme is often found to be a powerful (though expensive)
 way of reducing overfitting.  The reason is that the different
 networks may overfit in different ways, and averaging may help
-eliminate that kind of overfitting.</p><p>What's this got to do with dropout?  Heuristically, when we dropout
+eliminate that kind of overfitting.
+-->
+このドロップアウトの手続きは奇妙でアドホックに思えるかもしれません。
+なぜこれが正規化を助けるのでしょうか？何が起こっているのか説明するために、
+一旦ドロップアウトについて考えるのをやめて、ドロップアウト無しに
+通常の方法でニューラルネットワークを訓練することを想像してみてください。
+特に、複数のニューラルネットワークを同じ訓練データで訓練する
+状況を考えてみましょう。もちろん、それぞれのニューラルネットワークは
+全く同じものではありませんから、
+結果として訓練した後のニューラルネットワークから得られる出力も
+ニューラルネットワークごと異なるかもしれません。
+そうなった時には、何らかの平均化や多数決のような手法を用いることで
+どの出力を採用するか決定できるでしょう。例えば、5つのニューラルネットワークを
+訓練して、そのうち3つが数字の画像を "3" に分類したとすると、その時は
+おそらく実際に "3" なのでしょう。残り2つのニューラルネットワークは
+単に間違えてしまっただけだと思われます。この種の平均化の手法は、
+しばしば過適合を軽減する強力な（しかし負担も大きい）手法です。
+異なるニューラルネットワークは異なる過適合のしかたをすることがあるので、
+平均化がこの種の過適合を防ぐ助けになるのです。
+</p><p>
+<!--
+    What's this got to do with dropout?  Heuristically, when we dropout
 different sets of neurons, it's rather like we're training different
 neural networks.  And so the dropout procedure is like averaging the
 effects of a very large number of different networks.  The different
 networks will overfit in different ways, and so, hopefully, the net
-effect of dropout will be to reduce overfitting.</p><p><a name="dropout_explanation"></a></p><p>A related heuristic explanation for dropout is given in one of the
+effect of dropout will be to reduce overfitting.
+-->
+これとドロップアウトがどう関係するというのでしょうか？直感的には、
+異なるニューロンの組み合わせをドロップアウトしてから訓練するのは、
+異なるニューラルネットワークを訓練しているようなものです。
+だから、ドロップアウトの手続きは、大量の異なるニューラルネットワークの結果を
+平均化しているようなものであると見なせます。異なるニューラルネットワークは
+違った過適合のしかたをするでしょうから、上手くいけば全体としては過適合が軽減されるでしょう。
+</p><p><a name="dropout_explanation"></a></p><p>
+<!--
+    A related heuristic explanation for dropout is given in one of the
 earliest papers to use the
 technique*<span class="marginnote">
 *<a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">ImageNet
@@ -1970,7 +2757,24 @@ predictions, then we can think of dropout as a way of making sure that
 the model is robust to the loss of any individual piece of evidence.
 In this, it's somewhat similar to L1 and L2 regularization, which tend
 to reduce weights, and thus make the network more robust to losing any
-individual connection in the network.</p><p>Of course, the true measure of dropout is that it has been very
+individual connection in the network.
+-->
+これと関連するヒューリスティックな説明は、この手法を用いた最初期の論文で与えられています<span class="marginnote">
+*<a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">ImageNet
+    Classification with Deep Convolutional Neural Networks</a>, by Alex
+  Krizhevsky, Ilya Sutskever, and Geoffrey Hinton (2012).</span>：
+「この手法はニューロン間の複雑な相互適合を軽減します。というのも、
+訓練に際してニューロンは特定の他のニューロンを頼りにすることができないからです。
+したがって、あるニューロンは、ランダムに選ばれた他のニューロンと一緒にされても役に立つような、
+データが持つより強固な特徴を学ぶように強制されるのです。」
+ニューラルネットワークのことを何らかの予言をするモデルだと見なすなら、
+ドロップアウトは入力される情報の欠落に対して強いモデルを作る方法だと言うことができるでしょう。
+この点において、何となくL1正規化やL2正規化と似ているとも言えます。
+これらの手法は、重みを小さくすることで、ニューロン間の接続を失うことに対して
+ニューラルネットワークを強くしていると言えるからです。
+</p><p>
+<!--
+    Of course, the true measure of dropout is that it has been very
 successful in improving the performance of neural networks.  The
 original
 paper*<span class="marginnote">
@@ -1991,7 +2795,30 @@ regularization.  Similarly impressive results have been obtained for
 many other tasks, including problems in image and speech recognition,
 and natural language processing.  Dropout has been especially useful
 in training large, deep networks, where the problem of overfitting is
-often acute.</p><p><strong>Artificially expanding the training data:</strong> We saw earlier that
+often acute.
+-->
+もちろん、ドロップアウトの実力を測る真の尺度は、それがニューラルネットワークの
+パフォーマンス改善に大きな成功を収めてきたという点です。
+この手法を導入した原論文*<span class="marginnote">
+*<a href="http://arxiv.org/pdf/1207.0580.pdf">Improving
+    neural networks by preventing co-adaptation of feature detectors</a>
+  by Geoffrey Hinton, Nitish Srivastava, Alex Krizhevsky, Ilya
+  Sutskever, and Ruslan Salakhutdinov (2012). この論文では、
+このドロップアウトに関する短い紹介文ではあえて触れずに来た
+多くの繊細な点についても議論しています。</span>
+では、様々な異なるタスクにこの手法を適用しています。
+私たちにとっては、彼らがドロップアウトをMNISTの分類問題に適用していることが
+特に興味深いところです。彼らはシンプルなフィードフォワードニューラルネットワークを使って、
+私たちがやってきたのと同じようなことをしています。
+論文には、その時点で達成されていた試験データに対する最高の分類精度が $98.4$ パーセントであると
+書いてあります。彼らはドロップアウトと修正されたL2正規化を組み合わせて、
+それを $98.7$ パーセントに改善しました。同様に印象的な結果が画像や音声認識、自然言語処理
+などたくさんの他のタスクに関しても得られています。
+ドロップアウトは過適合の問題が深刻になる巨大で多層のニューラルネットワークを訓練するときに、
+特に有用になります。
+</p><p>
+<!--
+    <strong>Artificially expanding the training data:</strong> We saw earlier that
 our MNIST classification accuracy dropped down to percentages in the
 mid-80s when we used only 1,000 training images.  It's not surprising
 that this is the case, since less training data means our network will
@@ -2009,27 +2836,83 @@ down $\lambda$ proportionally when smaller training sets are
 used*<span class="marginnote">
 *This and the next two graph are produced with the
   program
-  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/more_data.py">more_data.py</a>.</span>.</p><p><center><img src="images/more_data.png" width="520px"></center></p><p>As you can see, the classification accuracies improve considerably as
+  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/more_data.py">more_data.py</a>.</span>.
+-->
+<strong>人工的な学習データの伸張:</strong> 前に確かめたように、訓練画像が1,000枚しか無いと
+MNISTの分類精度は80パーセント中盤にまで減少してしまいます。このこと自体は驚くべきことではありません。
+訓練データが少ない分、ニューラルネットワークが学ぶ手書き文字のバリエーションも少なくなるからです。
+では、30個の隠れニューロンを持つニューラルネットワークを異なるサイズの訓練データセットで
+訓練したら、分類精度はどのように変化するでしょうか。ここでは、ミニバッチの大きさを10、
+学習率を $\eta = 0.5$、正規化パラメータを $\lambda=5.0$ とし、コスト関数にはクロスエントロピーを
+使うことにします。訓練データセットの全体を使うときには訓練を30エポック回します。
+訓練データを小さくするのに反比例するように、エポック数を大きくすることにします。
+重み減衰因子が訓練データセットの大きさに依らず一定になるように、全訓練データを用いるときには
+ $\lambda = 5.0$ とし、小さい訓練データセットを使うときには
+そのサイズに比例して $\lambda$ を小さくすることにします*<span class="marginnote">
+*これと次のグラフはプログラム
+  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/more_data.py">more_data.py</a> が生成したものです。</span>。
+</p><p><center><img src="images/more_data.png" width="520px"></center></p><p>
+<!--
+    As you can see, the classification accuracies improve considerably as
 we use more training data.  Presumably this improvement would continue
 still further if more data was available.  Of course, looking at the
 graph above it does appear that we're getting near saturation.
 Suppose, however, that we redo the graph with the training set size
-plotted logarithmically:</p><p><center><img src="images/more_data_log.png" width="520px"></center></p><p>It seems clear that the graph is still going up toward the end.  This
+plotted logarithmically:
+-->
+見て分かるように、より多くの訓練データを使うことで分類精度はかなり改善されます。
+おそらく、訓練データをさらに増やすことでこの改善はまだまだ続くでしょう。
+上のグラフを見るとほとんど飽和しているようにも見えますが、
+横軸を訓練データサイズの対数にしてプロットし直すと、次のグラフが得られます：
+</p><p><center><img src="images/more_data_log.png" width="520px"></center></p><p>
+<!--
+    It seems clear that the graph is still going up toward the end.  This
 suggests that if we used vastly more training data - say, millions
 or even billions of handwriting samples, instead of just 50,000 -
 then we'd likely get considerably better performance, even from this
-very small network.</p><p>Obtaining more training data is a great idea. Unfortunately, it can be
+very small network.
+-->
+こうしてみると、終わりに向けてまだグラフが上昇しているのが明らかになります。
+もしもっと莫大な数の訓練データを使えたら、例えば、100万も10億も手書きの数字を集められたら、
+このとても小さなニューラルネットワークでもかなり良いパフォーマンスを発揮するでしょう。
+</p><p>
+<!--
+    Obtaining more training data is a great idea. Unfortunately, it can be
 expensive, and so is not always possible in practice.  However,
 there's another idea which can work nearly as well, and that's to
 artificially expand the training data.  Suppose, for example, that we
-take an MNIST training image of a five,</p><p></p><p><center><img src="images/more_data_5.png" width="120px"></center></p><p>and rotate it by a small amount, let's say 15 degrees:</p><p><center><img src="images/more_data_rotated_5.png" width="120px"></center></p><p>It's still recognizably the same digit.  And yet at the pixel level
+take an MNIST training image of a five,
+-->
+訓練データをもっと集めようというのは素晴らしいアイデアです。ただ残念なことに、
+それはとても負担が大きく、現実的にはいつでも実行できることではありません。
+しかし、訓練データを集めるのと同じくらい効果的な別の方法があります。
+例えば、MNISTの訓練画像から「5」の画像を一枚取り出してみましょう。
+</p><p></p><p><center><img src="images/more_data_5.png" width="120px"></center></p><p>
+<!--
+and rotate it by a small amount, let's say 15 degrees:
+-->
+そして、この画像を少しだけ、例えば15度回転させてみます：
+</p><p><center><img src="images/more_data_rotated_5.png" width="120px"></center></p><p>
+<!--
+    It's still recognizably the same digit.  And yet at the pixel level
 it's quite different to any image currently in the MNIST training
 data.  It's conceivable that adding this image to the training data
 might help our network learn more about how to classify digits.
 What's more, obviously we're not limited to adding just this one
 image.  We can expand our training data by making <em>many</em> small
 rotations of <em>all</em> the MNIST training images, and then using the
-expanded training data to improve our network's performance.</p><p>This idea is very powerful and has been widely used.  Let's look at
+expanded training data to improve our network's performance.
+-->
+私たちが見れば、まだこの画像が同じ数字を表していると分かります。それでも、ピクセル単位で見ると、
+MNISTに含まれるどの画像ともかなり異なります。この画像を訓練データに加えれば、
+これからニューラルネットワークは数字の分類についてより多く学ぶだろうことは想像に難くありません。
+さらに、訓練データに加えて良いのはこの1枚だけではありません。
+<em>全ての</em>MNIST訓練画像について<em>たくさんの</em>小さな回転を施して、
+元の訓練データを拡張することができます。
+そしてこの拡張された訓練データを使ってニューラルネットワークのパフォーマンスを改善できるのです。
+</p><p>
+<!--
+    This idea is very powerful and has been widely used.  Let's look at
 some of the results from a
 paper*<span class="marginnote">
 *<a href="http://dx.doi.org/10.1109/ICDAR.2003.1227801">Best
@@ -2050,7 +2933,29 @@ intended to emulate the random oscillations found in hand muscles.  By
 using the elastic distortions to expand the data they achieved an even
 higher accuracy, 99.3 percent.  Effectively, they were broadening the
 experience of their network by exposing it to the sort of variations
-that are found in real handwriting.</p><p>Variations on this idea can be used to improve peformance on many
+that are found in real handwriting.
+-->
+このアイデアは非常に強力で広く使われています。ある論文*<span class="marginnote">
+*<a href="http://dx.doi.org/10.1109/ICDAR.2003.1227801">Best
+    Practices for Convolutional Neural Networks Applied to Visual
+    Document Analysis</a>, by Patrice Simard, Dave Steinkraus, and John
+  Platt (2003).</span>から幾つかの結果を紹介しましょう。この論文では、
+訓練データを拡張する方法の幾つかの変種をMNISTに適用しています。
+彼らが考えたニューラルネットワークの構造は、私たちが使ってきたものと似た
+フィードフォワードニューラルネットワークで、800個の隠れニューロンを持ち
+コスト関数にはクロスエントロピーを使っています。
+通常のMNIST訓練データでニューラルネットワークを訓練した時には、
+彼らは試験データに対して98.4%の分類精度を達成しました。しかし、次に訓練データを
+上で説明したような回転に加えて、平行移動と歪みで拡張しました。
+拡張された訓練データでニューラルネットワークを訓練すると、98.9% の分類精度を達成しました。
+彼らはさらに、彼らが「弾性歪み」と呼んだ変形を使って実験しました。これは
+手の筋肉で起こるランダムな振動を模倣する、特別な変形です。訓練データの拡張に弾性歪みを使うことで、
+さらに改善して99.3%という分類精度を達成しました。
+彼らが行ったことは、実際の手書き文字に見られるバラつきに触れさせることで
+ニューラルネットワークに実質的により多くの手書き文字を経験させていたと言えます。
+</p><p>
+<!--
+    Variations on this idea can be used to improve peformance on many
 learning tasks, not just handwriting recognition.  The general
 principle is to expand the training data by applying operations that
 reflect real-world variation.  It's not difficult to think of ways of
@@ -2064,14 +2969,45 @@ we can expand the training data.  These techniques are not always used
 noise, it may well be more efficient to clean up the input to the
 network by first applying a noise reduction filter.  Still, it's worth
 keeping the idea of expanding the training data in mind, and looking
-for opportunities to apply it.</p><p><h4><a name="exercise_195778"></a><a href="#exercise_195778">Exercise</a></h4><ul>
+for opportunities to apply it.
+-->
+このアイデアの仲間は、手書き文字認識に限らず多くの機械学習のタスクで
+パフォーマンスを改善するために使うことができます。基本的な原理は、現実的なデータに見られる
+バラつきを反映するような操作を訓練データに行い、訓練データを拡張するということです。
+これをどう実行するか考えるのは難しいことではありません。
+例えば、音声認識を行うニューラルネットワークを作っているとしましょう。
+私たち人間は、背後に雑音があっても会話を認識できます。ですから、雑音を加えてデータを拡張できます。
+また、人間は会話の速度が早くても遅くても、会話を認識できます。
+したがってこれも訓練データを拡張する一つの方法です。これらの手法はいつも使われるわけではありません。
+例えば、訓練データにノイズを加えて拡張する代わりに、まずノイズ軽減フィルターを通して綺麗にした
+データをニューラルネットワークに入力することにした方が効率的だとしても不思議ではありません。
+それでも、訓練データを拡張するという選択肢を頭の片隅においておき、
+それを実行する機会を伺うのは、良い心がけです。
+</p><p>
+<!--
+    <h4><a name="exercise_195778"></a><a href="#exercise_195778">Exercise</a></h4><ul>
 <li> As discussed above, one way of expanding the MNIST training data
   is to use small rotations of training images.  What's a problem that
   might occur if we allow arbitrarily large rotations of training
   images?
-</ul></p><p><strong>An aside on big data and what it means to compare
+</ul>
+-->
+<h4><a name="exercise_195778"></a><a href="#exercise_195778">演習</a></h4><ul>
+<li> 上で議論したように、訓練画像を少し回転させるのはMNISTの訓練データを拡張する一つの方法です。
+この時、任意の回転角を許すとどのような問題が起こるでしょうか？
+</ul>
+</p><p>
+<!--
+    <strong>An aside on big data and what it means to compare
   classification accuracies:</strong> Let's look again at how our neural
-network's accuracy varies with training set size:</p><p><center><img src="images/more_data_log.png" width="520px"></center></p><p>Suppose that instead of using a neural network we use some other
+network's accuracy varies with training set size:
+-->
+<strong>ビッグデータと分類精度比較に関する余談：</strong>
+ニューラルネットワークの分類精度が訓練データセットの大きさによってどう変化するのか
+もう一度見てみましょう：
+</p><p><center><img src="images/more_data_log.png" width="520px"></center></p><p>
+<!--
+    Suppose that instead of using a neural network we use some other
 machine learning technique to classify digits.  For instance, let's
 try using the support vector machines (SVM) which we met briefly back
 in <a href="chap1.html#SVM">Chapter 1</a>.  As was the case in Chapter 1,
@@ -2083,7 +3019,23 @@ plotted the neural net results as well, to make comparison
 easy*<span class="marginnote">
 *This graph was produced with the program
   <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/more_data.py">more_data.py</a>
-  (as were the last few graphs).</span>:</p><p><center><img src="images/more_data_comparison.png" width="520px"></center></p><p>Probably the first thing that strikes you about this graph is that our
+  (as were the last few graphs).</span>:
+-->
+ここで、ニューラルネットワークの代わりに、何か他の機械学習手法で数字を分類することを
+考えてみましょう。例えば、<a href="chap1.html#SVM">Chapter 1</a>で手短に紹介した
+サポートベクターマシン（SVM）を使ってみましょう。SVMに馴染みがなくても心配は不要です。
+ここでの議論にはその詳細を理解している必要はありません。SVMを自分で実装する代わりに、
+<a href="http://scikit-learn.org/stable/">scikit-learn ライブラリ</a>で提供されている
+SVMをここでは利用します。SVMのパフォーマンスが訓練データセットの大きさに関して
+どう変化するのかを示したのが下の図です。比較のために、ニューラルネットワークの結果も
+合わせてプロットしました*<span class="marginnote">
+*このグラフは、（これまでのいくつかのグラフと同様に）プログラム
+  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/more_data.py">more_data.py</a> で生成したものです。</span>：
+</p><p>
+<center><img src="images/more_data_comparison.png" width="520px"></center>
+</p><p>
+<!--
+    Probably the first thing that strikes you about this graph is that our
 neural network outperforms the SVM for every training set size.
 That's nice, although you shouldn't read too much into it, since I
 just used the out-of-the-box settings from scikit-learn's SVM, while
@@ -2093,7 +3045,22 @@ our SVM using 50,000 images then it actually has better performance
 (94.48 percent accuracy) than our neural network does when trained
 using 5,000 images (93.24 percent accuracy).  In other words, more
 training data can sometimes compensate for differences in the machine
-learning algorithm used.</p><p>Something even more interesting can occur.  Suppose we're trying to
+learning algorithm used.
+-->
+たぶんこのグラフを見てまず皆さんが驚くのは、ニューラルネットワークが
+どんな大きさの訓練データセットについてもSVMを大きく上回る結果を上げていることでしょう。
+これは素晴らしいことではありますが、過大評価してもいけません。
+というのも、私たちはニューラルネットワークのパフォーマンス改善のために様々な
+チューニングを施してきましたが、ここで使ったSVMについてはscikit-learnで提供されている
+設定をそのまま使ったものだからです。このグラフに関するもっと微妙で、しかし興味深い事実は、
+50,000枚の訓練画像を使って訓練したSVMが94.48パーセントの分類精度を達成しており、
+これは5,000枚の訓練画像で訓練されたニューラルネットワークの分類精度93.24パーセントよりも
+高いパフォーマンスを発揮しているという点です。言い換えるなら、
+時として、より多くの訓練データを使うことで、使用している機械学習アルゴリズムの差は
+埋められるということです。
+</p><p>
+<!--
+    Something even more interesting can occur.  Suppose we're trying to
 solve a problem using two machine learning algorithms, algorithm A and
 algorithm B.  It sometimes happens that algorithm A will outperform
 algorithm B with one set of training data, while algorithm B will
@@ -2105,7 +3072,23 @@ but it does happen*<span class="marginnote">
     very large corpora for natural language disambiguation</a>, by
   Michele Banko and Eric Brill (2001).</span>.  The correct response to the
 question "Is algorithm A better than algorithm B?" is really: "What
-training data set are you using?"</p><p>All this is a caution to keep in mind, both when doing development,
+training data set are you using?"
+-->
+時にはより一層面白いことが起こります。ある問題をアルゴリズムAとアルゴリズムBという
+2つの機械学習アルゴリズムを使って解こうとしているとしましょう。時々、
+ある訓練データセットではアルゴリズムAが勝ち、異なる訓練データセットではアルゴリズムBが
+勝つ、ということが起こります。上のグラフではそのようなことは起きていません。
+もしそうなら、2つのグラフが交差するはずです。しかし実際に、そのようなことは起こりうるのです*<span class="marginnote">
+*次の論文の中でその顕著な例が与えられています：
+  <a href="http://dx.doi.org/10.3115/1073012.1073017">Scaling to very
+    very large corpora for natural language disambiguation</a>, by
+  Michele Banko and Eric Brill (2001).</span>。したがって、
+「アルゴリズムAはアルゴリズムBよりも優れていますか？」と質問された時、正しい返事のし方は
+「使っているデータセットは何ですか？」になります。
+データセットが指定されない限り、パフォーマンスの比較はできないのです。
+</p><p>
+<!--
+    All this is a caution to keep in mind, both when doing development,
 and when reading research papers.  Many papers focus on finding new
 tricks to wring out improved performance on standard benchmark data
 sets.  "Our whiz-bang technique gave us an improvement of X percent
@@ -2122,7 +3105,26 @@ message to take away, especially in practical applications, is that
 what we want is both better algorithms <em>and</em> better training
 data.  It's fine to look for better algorithms, but make sure you're
 not focusing on better algorithms to the exclusion of easy wins
-getting more or better training data.</p><p><h4><a name="problem_953063"></a><a href="#problem_953063">Problem</a></h4><ul>
+getting more or better training data.
+-->
+これらの注意は、開発を行う時にも研究論文を読む時にも心に留めておくべきです。
+多くの論文では、標準的なベンチマークとなるデータセットに対するパフォーマンスを改善する
+新しい手法やコツを探すことに注力しています。「我々の素晴らしい手法は、標準的なベンチマークX
+に対してYパーセントの改善をもたらしました」という主張の形式は、研究論文で見られる標準的ものです。
+このような主張はしばしばそれ自体が本当に興味深いものですが、
+使用した特定の訓練データセットにおいてのみ適用できるものだと理解しなければなりません。
+もしこの世界とは別に、ベンチマークのデータセットを作成した人がより多くの研究資金を獲得できる
+世界があったら何が起こっているでしょうか？研究者たちはより多くの訓練データを集めるために
+より多くのお金を掛けるかもしれません。すると、「素晴らしい手法」がもたらした「改善」が、
+より大きな訓練データセットでは消滅してしまう、なんてことも、全くもってありうることなのです。
+言い換えると、元々主張した「改善」は、歴史の偶然に過ぎないのかもしれません。
+ここから学ぶべき教訓は、特に実際の応用においては、より良いアルゴリズム<em>と</em>より良い
+訓練データがどちらも必要なのです。より良いアルゴリズムを追求するのは構いませんが、
+より多くの訓練データを集めることでより簡単に目標を達成できる可能性を見落として、
+アルゴリズム探しに注力する愚は避けなければなりません。
+</p><p>
+<!--
+    <h4><a name="problem_953063"></a><a href="#problem_953063">Problem</a></h4><ul>
 <li><strong>(Research problem)</strong> How do our machine learning algorithms
   perform in the limit of very large data sets?  For any given
   algorithm it's natural to attempt to define a notion of asymptotic
@@ -2134,13 +3136,38 @@ getting more or better training data.</p><p><h4><a name="problem_953063"></a><a 
   performance.  Can you find a principled justification for fitting to
   some particular class of curves?  If so, compare the asymptotic
   performance of several different machine learning algorithms.
-</ul></p><p><strong>Summing up:</strong> We've now completed our dive into overfitting and
+</ul>
+-->
+<h4><a name="problem_953063"></a><a href="#problem_953063">問題</a></h4><ul>
+<li><strong>(研究課題)</strong> 機械学習アルゴリズムは訓練データセットを
+大きくする極限でどう振る舞うのでしょうか？どのようなアルゴリズムに対しても、
+漸近的パフォーマンスの概念を大きな訓練データの極限で定義してみるのは自然なことです。
+この問題に対する手っ取り早い方針としては、上に示したようなグラフを適当な近似曲線で
+フィッティングして、それを無限大まで外挿してみることです。このようなアプローチに
+対しては、近似曲線の選び方によって異なる漸近的パフォーマンスにたどり着いてしまう
+という批判があるでしょう。特定の種類の近似曲線を使うことに対して、原理的な
+正当化は可能ですか？もしそうなら、いくつかの異なる機械学習アルゴリズムに対して、
+漸近的パフォーマンスの比較を行ってください。
+</ul>
+</p><p>
+<!--
+    <strong>Summing up:</strong> We've now completed our dive into overfitting and
 regularization.  Of course, we'll return again to the issue.  As I've
 mentioned several times, overfitting is a major problem in neural
 networks, especially as computers get more powerful, and we have the
 ability to train larger networks.  As a result there's a pressing need
 to develop powerful regularization techniques to reduce overfitting,
-and this is an extremely active area of current work.</p><p><h3><a name="weight_initialization"></a><a href="#weight_initialization">Weight initialization</a></h3></p><p>When we create our neural networks, we have to make choices for the
+and this is an extremely active area of current work.
+-->
+<strong>まとめ：</strong> ここまで過適合と正規化について集中的に考察してきました。
+これについては一旦ここでお終いにして次のトピックに移りますが、
+これらの問題については再び戻ってくることになります。
+何度も述べたように、コンピュータの性能が向上し、より大きなニューラルネットワークの
+訓練が可能になるにつれ、ニューラルネットワークにおける過適合の問題も重要性を増しています。
+結果として、過適合を軽減するより強力な正規化手法の開発が急務となっており、
+現在も極めて活発な研究分野をなしています。
+</p><p>
+<h3><a name="weight_initialization"></a><a href="#weight_initialization">Weight initialization</a></h3></p><p>When we create our neural networks, we have to make choices for the
 initial weights and biases.  Up to now, we've beeen choosing them
 according to a prescription which I discussed only briefly
 <a href="chap1.html#weight_initialization">back in Chapter 1</a>.  Just to
