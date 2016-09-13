@@ -3520,8 +3520,13 @@ L2正規化することで、時々自動的に新しい方法で重みを初期
 この節でグラフに示した例では、これら全ての条件が満たされていることを議論してください。
 </ul>
 </p><p>
+<!--
 <h3><a name="handwriting_recognition_revisited_the_code"></a><a href="#handwriting_recognition_revisited_the_code">Handwriting recognition revisited: the code</a></h3>
-</p><p>Let's implement the ideas we've discussed in this chapter.  We'll
+-->
+<h3><a name="handwriting_recognition_revisited_the_code"></a><a href="#handwriting_recognition_revisited_the_code">手書き文字認識再訪：コード</a></h3>
+</p><p>
+<!--
+    Let's implement the ideas we've discussed in this chapter.  We'll
 develop a new program,
 <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/src/network2.py"><tt>network2.py</tt></a>,
 which is an improved version of the program
@@ -3531,11 +3536,29 @@ we developed in
   1</a>.  If you haven't looked at <tt>network.py</tt> in a while then you
 may find it helpful to spend a few minutes quickly reading over the
 earlier discussion.  It's only 74 lines of code, and is easily
-understood. </p><p>As was the case in <tt>network.py</tt>, the star of <tt>network2.py</tt>
+understood.
+-->
+この章で議論してきたアイデアを実装しましょう。新しいプログラム <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/src/network2.py"><tt>network2.py</tt></a>
+を開発します。これは<a href="chap1.html#implementing_our_network_to_classify_digits">Chapter
+  1</a>で作成した
+  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/src/network.py"><tt>network.py</tt></a>
+を修正したバージョンです。もし <tt>network.py</tt> の内容を覚えていなければ、
+ここで軽く復習しておくと後の助けになるでしょう。たった74行のコードですし、
+簡単に理解できます。
+</p><p>
+<!--
+    As was the case in <tt>network.py</tt>, the star of <tt>network2.py</tt>
 is the <tt>Network</tt> class, which we use to represent our neural
 networks.  We initialize an instance of <tt>Network</tt> with a list of
 <tt>sizes</tt> for the respective layers in the network, and a choice
-for the <tt>cost</tt> to use, defaulting to the cross-entropy:</p><p><div class="highlight"><pre><span class="k">class</span> <span class="nc">Network</span><span class="p">():</span>
+for the <tt>cost</tt> to use, defaulting to the cross-entropy:
+-->
+<tt>network.py</tt> と同様に、<tt>network2.py</tt> での中心選手も <tt>Network</tt> クラスです。
+このクラスはニューラルネットワークを表しています。
+<tt>Network</tt> のインスタンスを初期化するには、各層のニューロン数 <tt>sizes</tt> と
+コスト関数を指定する <tt>cost</tt> を指定します。コスト関数にはデフォルトでクロスエントロピー
+が指定されています：
+</p><p><div class="highlight"><pre><span class="k">class</span> <span class="nc">Network</span><span class="p">():</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sizes</span><span class="p">,</span> <span class="n">cost</span><span class="o">=</span><span class="n">CrossEntropyCost</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_layers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sizes</span><span class="p">)</span>
@@ -3543,40 +3566,81 @@ for the <tt>cost</tt> to use, defaulting to the cross-entropy:</p><p><div class=
         <span class="bp">self</span><span class="o">.</span><span class="n">default_weight_initializer</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cost</span><span class="o">=</span><span class="n">cost</span>
 </pre></div>
-</p><p>The first couple of lines of the <tt>__init__</tt> method are the same
+</p><p>
+<!--
+    The first couple of lines of the <tt>__init__</tt> method are the same
 as in <tt>network.py</tt>, and are pretty self-explanatory.  But the
 next two lines are new, and we need to understand what they're doing
-in detail.</p><p>Let's start by examining the <tt>default_weight_initializer</tt>
+in detail.
+-->
+<tt>__init__</tt> メソッド冒頭の2行は <tt>network.py</tt> と同じですし、
+見れば何をしているのか分かるでしょう。しかし続く2行は新しく、
+その挙動を詳細に理解する必要があります。
+</p><p>
+<!--
+    Let's start by examining the <tt>default_weight_initializer</tt>
 method. This makes use of our <a href="#weight_initialization">new and
   improved approach</a> to weight initialization.  As we've seen, in that
 approach the weights input to a neuron are initialized as Gaussian
 random variables with mean 0 and standard deviation $1$ divided by the
 square root of the number of connections input to the neuron.  Also in
 this method we'll initialize the biases, using Gaussian random
-variables with mean $0$ and standard deviation $1$.  Here's the code:</p><p><div class="highlight"><pre>    <span class="k">def</span> <span class="nf">default_weight_initializer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+variables with mean $0$ and standard deviation $1$.  Here's the code:
+-->
+まずは <tt>default_weight_initializer</tt> を見てみましょう。
+このメソッドでは<a href="#weight_initialization">改善された手法</a>で重みを初期化します。
+あるニューロンに入力する重みの数を $n_{\rm in}$ とすると、
+新しい手法ではそのニューロンに入力する重みを平均 $0$ で標準偏差 $1/\sqrt{n_{\rm in}}$ の
+ガウス分布で初期化します。また、バイアスについては平均 $0$ で標準偏差が $1$ のガウス分布で
+初期化します。そのコードは以下の通りです：
+</p><p><div class="highlight"><pre>    <span class="k">def</span> <span class="nf">default_weight_initializer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">biases</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizes</span><span class="p">[</span><span class="mi">1</span><span class="p">:]]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
                         <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizes</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizes</span><span class="p">[</span><span class="mi">1</span><span class="p">:])]</span>
 </pre></div>
-</p><p>To understand the code, it may help to recall that <tt>np</tt> is the
+</p><p>
+<!--
+    To understand the code, it may help to recall that <tt>np</tt> is the
 Numpy library for doing linear algebra.  We'll <tt>import</tt> Numpy at
 the beginning of our program.  Also, notice that we don't initialize
 any biases for the first layer of neurons.  We avoid doing this
 because the first layer is an input layer, and so any biases would not
-be used.  We did exactly the same thing in <tt>network.py</tt>.</p><p>Complementing the <tt>default_weight_initializer</tt> we'll also include
+be used.  We did exactly the same thing in <tt>network.py</tt>.
+-->
+このコードを理解するために、まず <tt>np</tt> が線形代数計算を行う Numpy ライブラリーである
+ことを思い出しましょう。Numpy はプログラムの冒頭で <tt>import</tt> しています。
+第1層は入力層なので、この層ではバイアスを初期化していません。
+これは <tt>network.py</tt> で行ったことと同じです。
+</p><p>
+<!--
+    Complementing the <tt>default_weight_initializer</tt> we'll also include
 a <tt>large_weight_initializer</tt> method.  This method initializes the
 weights and biases using the old approach from Chapter 1, with both
 weights and biases initialized as Gaussian random variables with mean
 $0$ and standard deviation $1$.  The code is, of course, only a tiny
-bit different from the <tt>default_weight_initializer</tt>:</p><p><div class="highlight"><pre>    <span class="k">def</span> <span class="nf">large_weight_initializer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+bit different from the <tt>default_weight_initializer</tt>:
+-->
+補足として、プログラムには <tt>large_weight_initializer</tt> メソッドも含まれています。
+このメソッドは、重みとバイアスをChapter 1で使った古い方法、つまり平均 $0$ で標準偏差 $1$ の
+ガウス分布で初期化します。コードは、<tt>default_weight_initializer</tt> とほんの僅かに違うだけです：
+</p><p><div class="highlight"><pre>    <span class="k">def</span> <span class="nf">large_weight_initializer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">biases</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizes</span><span class="p">[</span><span class="mi">1</span><span class="p">:]]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
                         <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizes</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizes</span><span class="p">[</span><span class="mi">1</span><span class="p">:])]</span>
 </pre></div>
-</p><p>I've included the <tt>large_weight_initializer</tt> method mostly as a
+</p><p>
+<!--
+    I've included the <tt>large_weight_initializer</tt> method mostly as a
 convenience to make it easier to compare the results in this chapter
 to those in Chapter 1. I can't think of many practical situations
-where I would recommend using it!</p><p>The second new thing in <tt>Network</tt>'s <tt>__init__</tt> method is
+where I would recommend using it!
+-->
+<tt>large_weight_initializer</tt> メソッドを入れたのは、主にこの章の結果とChapter 1の
+結果を簡単に比較できるようにするためです。
+実際問題として古い方法を使うべき状況はほとんど思いつきません！
+</p><p>
+<!--
+    The second new thing in <tt>Network</tt>'s <tt>__init__</tt> method is
 that we now initialize a <tt>cost</tt> attribute.  To understand how
 that works, let's look at the class we use to represent the
 cross-entropy cost*<span class="marginnote">
@@ -3586,7 +3650,19 @@ cross-entropy cost*<span class="marginnote">
   you're curious about details, all <tt>@staticmethod</tt> does is tell
   the Python interpreter that the method which follows doesn't depend
   on the object in any way.  That's why <tt>self</tt> isn't passed as a
-  parameter to the <tt>fn</tt> and <tt>delta</tt> methods.</span>:</p><p><div class="highlight"><pre><span class="k">class</span> <span class="nc">CrossEntropyCost</span><span class="p">:</span>
+  parameter to the <tt>fn</tt> and <tt>delta</tt> methods.</span>:
+-->
+<tt>Network</tt> クラスの <tt>__init__</tt> メソッドに関する第2の変更点は、
+<tt>cost</tt> 属性を初期化する点です。この動作を理解するために、
+クロスエントロピーコスト関数を表すクラスを見てみましょう*<span class="marginnote">
+*もしPythonの静的メソッドに馴染みがなければ、<tt>@staticmethod</tt> デコレータは
+気にせず、<tt>fn</tt> や <tt>delta</tt> を普通のメソッドだと考えて差し支えありません。
+関心がある読者のために書いておくと、<tt>@staticmethod</tt> を付けることで、
+そのメソッドはそれが属しているブジェクトに依存していないことを表しています。
+<tt>fn</tt> や <tt>delta</tt>メソッドが第1引数に <tt>self</tt> を受け取っていないのは
+そのためです。
+</span>：
+</p><p><div class="highlight"><pre><span class="k">class</span> <span class="nc">CrossEntropyCost</span><span class="p">:</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">fn</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -3596,7 +3672,9 @@ cross-entropy cost*<span class="marginnote">
     <span class="k">def</span> <span class="nf">delta</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">a</span><span class="o">-</span><span class="n">y</span><span class="p">)</span>
 </pre></div>
-</p><p>Let's break this down.  The first thing to observe is that even though
+</p><p>
+<!--
+    Let's break this down.  The first thing to observe is that even though
 the cross-entropy is, mathematically speaking, a function, we've
 implemented it as a Python class, not a Python function.  Why have I
 made that choice?  The reason is that the cost plays two different
@@ -3614,14 +3692,40 @@ error depends on the choice of cost function: different cost function,
 different form for the output error.  For the cross-entropy the output
 error is, as we saw in Equation <span id="margin_33201621799_reveal" class="equation_link">(66)</span><span id="margin_33201621799" class="marginequation" style="display: none;"><a href="chap3.html#eqtn66" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
     \delta^L = a^L-y.
-   \nonumber\end{eqnarray}</a></span><script>$('#margin_33201621799_reveal').click(function() {$('#margin_33201621799').toggle('slow', function() {});});</script>,</p><p><a class="displaced_anchor" name="eqtn92"></a>\begin{eqnarray}
+   \nonumber\end{eqnarray}</a></span><script>$('#margin_33201621799_reveal').click(function() {$('#margin_33201621799').toggle('slow', function() {});});</script>,
+-->
+中身を詳しく見ていきましょう。まず気づいてほしいのは、クロスエントロピー自体は
+数学的にいえば「関数」ですが、Pythonのクラスとして実装されている点です。
+この実装を選んだのは、コスト関数がニューラルネットワークで2つの異なる役割を持つからです。
+その1つ目は、出力活性 $a$ が正解の出力 $y$ にどのくらい似ているかの指標の役割です。
+この役割は <tt>CrossEntropyCost.fn</tt> メソッドに実装されています。
+（脇道に逸れますが、<tt>CrossEntropyCost.fn</tt> の中で呼ばれている <tt>np.nan_to_num</tt> は
+ゼロに非常に近い数値の対数をNumpyで正しく扱うために必要です。）もう一つの役割を
+理解するために、<a href="chap2.html#the_four_fundamental_equations_behind_backpropagation">Chapter
+  2</a>で議論した逆伝播法を思い出しましょう。
+逆伝播を行うには、ニューラルネットワークの出力誤差 $\delta^L$ を計算する必要があります。
+そして、出力誤差の形は選んだコスト関数ごとに異なります。クロスエントロピーの場合、
+出力誤差は式<span id="margin_33201621799_reveal" class="equation_link">(66)</span><span id="margin_33201621799" class="marginequation" style="display: none;"><a href="chap3.html#eqtn66" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+    \delta^L = a^L-y.
+   \nonumber\end{eqnarray}</a></span><script>$('#margin_33201621799_reveal').click(function() {$('#margin_33201621799').toggle('slow', function() {});});</script> で示した表式です：
+</p><p>
+<a class="displaced_anchor" name="eqtn92"></a>\begin{eqnarray}
   \delta^L = a^L-y.
 \tag{92}\end{eqnarray}
+<!--
 For this reason we define a second method,
 <tt>CrossEntropyCost.delta</tt>, whose purpose is to tell our network
 how to compute the output error.  And then we bundle these two methods
 up into a single class containing everything our networks need to know
-about the cost function.</p><p>In a similar way, <tt>network2.py</tt> also contains a class to
+about the cost function.
+-->
+このため、第二のメソッド、<tt>CrossEntropyCost.delta</tt> を定義しました。
+このメソッドは出力誤差を計算します。この2つは
+ニューラルネットワークがコスト関数について知るべきことの全てですから、
+2つのメソッドを一つのクラスにまとめたのです。
+</p><p>
+<!--
+    In a similar way, <tt>network2.py</tt> also contains a class to
 represent the quadratic cost function.  This is included for
 comparison with the results of Chapter 1, since going forward we'll
 mostly use the cross entropy.  The code is just below.  The
@@ -3631,7 +3735,17 @@ desired output, <tt>y</tt>.  The value returned by
 <tt>QuadraticCost.delta</tt> is based on the
 expression <span id="margin_667945012404_reveal" class="equation_link">(30)</span><span id="margin_667945012404" class="marginequation" style="display: none;"><a href="chap2.html#eqtn30" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
   \delta^L = (a^L-y) \odot \sigma'(z^L) \nonumber\end{eqnarray}</a></span><script>$('#margin_667945012404_reveal').click(function() {$('#margin_667945012404').toggle('slow', function() {});});</script> for the output error for the
-quadratic cost, which we derived back in Chapter 2.</p><p><div class="highlight"><pre><span class="k">class</span> <span class="nc">QuadraticCost</span><span class="p">:</span>
+quadratic cost, which we derived back in Chapter 2.
+-->
+同様に、<tt>network2.py</tt> は2乗コスト関数を表すクラスも含んでいます。
+これはChapter 1の結果と比較するためだけに入っており、今後の議論ではほとんど
+クロスエントロピーのみを用います。コードは下に示しました。<tt>QuadraticCost.fn</tt> メソッドは
+実際の出力 <tt>a</tt> と正解出力 <tt>y</tt> から2乗誤差を計算します。
+<tt>QuadraticCost.delta</tt> から返される値は、Chapter 2で導出した2乗コスト関数の
+出力誤差 <span id="margin_667945012404_reveal" class="equation_link">(30)</span><span id="margin_667945012404" class="marginequation" style="display: none;"><a href="chap2.html#eqtn30" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  \delta^L = (a^L-y) \odot \sigma'(z^L) \nonumber\end{eqnarray}</a></span><script>$('#margin_667945012404_reveal').click(function() {$('#margin_667945012404').toggle('slow', function() {});});</script>
+にもとづいています。
+</p><p><div class="highlight"><pre><span class="k">class</span> <span class="nc">QuadraticCost</span><span class="p">:</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">fn</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -3641,7 +3755,9 @@ quadratic cost, which we derived back in Chapter 2.</p><p><div class="highlight"
     <span class="k">def</span> <span class="nf">delta</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">a</span><span class="o">-</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigmoid_prime_vec</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
 </pre></div>
-</p><p>We've now understood the main differences between <tt>network2.py</tt>
+</p><p>
+<!--
+We've now understood the main differences between <tt>network2.py</tt>
 and <tt>network.py</tt>.  It's all pretty simple stuff.  There are a
 number of smaller changes, which I'll discuss below, including the
 implementation of L2 regularization.  Before getting to that, let's
@@ -3651,7 +3767,18 @@ structure, and in particular reading the documentation strings, so you
 understand what each piece of the program is doing.  Of course, you're
 also welcome to delve as deeply as you wish!  If you get lost, you may
 wish to continue reading the prose below, and return to the code
-later.  Anyway, here's the code:</p><p><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;network2.py</span>
+later.  Anyway, here's the code:
+-->
+これで <tt>network2.py</tt> と <tt>network.py</tt> の主な違いは理解しました。
+どれも簡単なことです。以下で議論するように、
+L2正規化の実装など小さな変更点はたくさんあります。それらに取り掛かる前に、
+<tt>network2.py</tt> の完全なコードを見てみましょう。
+コード全体を細かく読んでいく必要はありません。その代わり、全体の構造を掴むようにしましょう。
+特に、ドキュメント文字列を読むのはプログラムの各部が何をしているのか理解する
+助けになるでしょう。もちろん、お望みなら深く掘り下げたら良いでしょう。
+コードの読解に困ったら、下の文章を読んでからコードに戻ってても良いでしょう。
+ともかく、まずはコードを示します：
+</p><p><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;network2.py</span>
 <span class="sd">~~~~~~~~~~~~~~</span>
 
 <span class="sd">An improved version of network.py, implementing the stochastic</span>
@@ -3988,7 +4115,9 @@ later.  Anyway, here's the code:</p><p><div class="highlight"><pre><span class="
 
 <span class="n">sigmoid_prime_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">sigmoid_prime</span><span class="p">)</span>
 </pre></div>
-</p><p>One of the more interesting changes in the code is to include L2
+</p><p>
+<!--
+    One of the more interesting changes in the code is to include L2
 regularization.  Although this is a major conceptual change, it's so
 trivial to implement that it's easy to miss in the code.  For the most
 part it just involves passing the parameter <tt>lmbda</tt> to various
@@ -3996,18 +4125,46 @@ methods, notably the <tt>Network.SGD</tt> method.  The real work is done
 in a single line of the program, the fourth-last line of the
 <tt>Network.update_mini_batch</tt> method.  That's where we modify the
 gradient descent update rule to include weight decay.  But although
-the modification is tiny, it has a big impact on results!</p><p>This is, by the way, common when implementing new techniques in neural
+the modification is tiny, it has a big impact on results!
+-->
+最も興味深い変更点の一つは、L2正規化を実装した点です。これは概念的には大きな変更ですが、
+その実装はコードを読んでも見逃してしまうほど些細なことです。この点に関わる変更の大部分は、
+様々なメソッド、特に <tt>Network.SGD</tt> に、パラメータ <tt>lmbda</tt> を渡すことです。
+そして本質的な変更は1行のプログラム、<tt>Network.update_mini_batch</tt> メソッドの
+終わりから4行目です。その部分で、重み減衰するように勾配下降法の更新規則を修正しています。
+しかし、その修正はわずかでも、結果へは大きな影響を与えるのです！
+</p><p>
+<!--
+    This is, by the way, common when implementing new techniques in neural
 networks.  We've spent thousands of words discussing regularization.
 It's conceptually quite subtle and difficult to understand.  And yet
 it was trivial to add to our program!  It occurs surprisingly often
 that sophisticated techniques can be implemented with small changes to
-code.</p><p>Another small but important change to our code is the addition of
+code.
+-->
+ところで、このようなことはニューラルネットワークで新しい技術を実装する時に
+しばしば起こります。正規化を議論するのに大変長い文章を費やしました。
+正規化は概念的にはとても微妙で理解するのも難しいものです。それでも、
+プログラムに実装するのはとても簡単なことなのです。
+洗練された高度な手法が、コードの僅かな変更で実装できてしまうことは、
+驚くほど頻繁に起こります。
+</p><p>
+<!--
+    Another small but important change to our code is the addition of
 several optional flags to the stochastic gradient descent method,
 <tt>Network.SGD</tt>.  These flags make it possible to monitor the cost
 and accuracy either on the <tt>training_data</tt> or on a set of
 <tt>evaluation_data</tt> which can be passed to <tt>Network.SGD</tt>.
 We've used these flags often earlier in the chapter, but let me give
-an example of how it works, just to remind you:</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">mnist_loader</span>
+an example of how it works, just to remind you:
+-->
+他の小さくても重要な変更点は、確率的勾配下降法を実行するメソッド <tt>Network.SGD</tt> に
+いくつかのオプションフラグを追加したことです。これらのフラグは、
+<tt>training_data</tt> か <tt>evaluation_data</tt> でのコストと精度をモニターする
+ために用いられます。コストと精度を計算するデータ集合は <tt>Network.SGD</tt> に渡すことができます。
+この章の中でもこれらのフラグを何度も使ってきましたが、思い出してもらうために、
+今一度使い方の例を示しておきます：
+</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">mnist_loader</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">training_data</span><span class="p">,</span> <span class="n">validation_data</span><span class="p">,</span> <span class="n">test_data</span> <span class="o">=</span> \
 <span class="o">...</span> <span class="n">mnist_loader</span><span class="o">.</span><span class="n">load_data_wrapper</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">network2</span>
@@ -4020,7 +4177,9 @@ an example of how it works, just to remind you:</p><p><div class="highlight"><pr
 <span class="o">...</span> <span class="n">monitor_training_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">monitor_training_cost</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
-</p><p>Here, we're setting the <tt>evaluation_data</tt> to be the
+</p><p>
+<!--
+    Here, we're setting the <tt>evaluation_data</tt> to be the
 <tt>validation_data</tt>.  But we could also have monitored performance
 on the <tt>test_data</tt> or any other data set.  We also have four
 flags telling us to monitor the cost and accuracy on both the
@@ -4029,7 +4188,17 @@ flags telling us to monitor the cost and accuracy on both the
 monitor our <tt>Network</tt>'s performance.  Furthermore,
 <tt>network2.py</tt>'s <tt>Network.SGD</tt> method returns a four-element
 tuple representing the results of the monitoring.  We can use this as
-follows:</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">evaluation_cost</span><span class="p">,</span> <span class="n">evaluation_accuracy</span><span class="p">,</span>
+follows:
+-->
+ここでは、<tt>evaluation_data</tt> に <tt>validation_data</tt> をセットしていますが、
+パフォーマンスのモニターには <tt>test_data</tt> を使うこともできますし、他のデータセットを使うこともできます。
+その他に4つのフラグをセットして、コストと精度を <tt>evaluation_data</tt> と
+<tt>training_data</tt> の両方でモニターするよう設定しています。これらのフラグは
+デフォルトで <tt>False</tt> ですが、ここでは <tt>True</tt> にセットして
+<tt>Network</tt> のパフォーマンスをモニターしています。さらに、<tt>network2.py</tt> の
+<tt>Network.SGD</tt> メソッドは、モニタリングの結果を表す4要素のタプルを返します。
+これは次のように利用します：
+</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">evaluation_cost</span><span class="p">,</span> <span class="n">evaluation_accuracy</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">training_cost</span><span class="p">,</span> <span class="n">training_accuracy</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">training_data</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">lmbda</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">evaluation_data</span><span class="o">=</span><span class="n">validation_data</span><span class="p">,</span>
@@ -4038,14 +4207,27 @@ follows:</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <
 <span class="o">...</span> <span class="n">monitor_training_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">monitor_training_cost</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
-</p><p>So, for example, <tt>evaluation_cost</tt> will be a 30-element list
+</p><p>
+<!--
+    So, for example, <tt>evaluation_cost</tt> will be a 30-element list
 containing the cost on the evaluation data at the end of each epoch.
 This sort of information is extremely useful in understanding a
 network's behaviour.  It can, for example, be used to draw graphs
 showing how the network learns over time.  Indeed, that's exactly how
 I constructed all the graphs earlier in the chapter.  Note, however,
 that if any of the monitoring flags are not set, then the
-corresponding element in the tuple will be the empty list.</p><p>Other additions to the code include a <tt>Network.save</tt> method, to
+corresponding element in the tuple will be the empty list.
+-->
+ですから、例えば、<tt>evaluation_cost</tt> は30個の要素を持つリストで、
+それぞれの要素は各エポック終了後の <tt>evaluation_data</tt> に対するコストです。
+この種の情報はニューラルネットワークの振る舞いを理解する上で非常に有用です。
+例えば、時間とともに学習が進行する様子をグラフに描く時に使えます。
+実際、この章で示したグラフはこのようにして描いたものなのです。
+ただし、もしモニタリングのフラグが設定されていなければ、
+対応するタプルの要素は空リストになることに注意してください。
+</p><p>
+<!--
+    Other additions to the code include a <tt>Network.save</tt> method, to
 save <tt>Network</tt> objects to disk, and a function to <tt>load</tt>
 them back in again later.  Note that the saving and loading is done
 using JSON, not Python's <tt>pickle</tt> or <tt>cPickle</tt> modules,
@@ -4058,14 +4240,51 @@ change we'd most likely change the attributes defined in the
 <tt>Network.__init__</tt> method.  If we've simply pickled the objects
 that would cause our <tt>load</tt> function to fail.  Using JSON to do
 the serialization explicitly makes it easy to ensure that old
-<tt>Network</tt>s will still <tt>load</tt>.</p><p>There are many other minor changes in the code for <tt>network2.py</tt>,
+<tt>Network</tt>s will still <tt>load</tt>.
+-->
+この他に追加した機能としては、<tt>Network</tt> オブジェクトをディスクに保存する
+<tt>Network.save</tt> メソッドと、保存した <tt>Network</tt> オブジェクトを
+後から読み込む <tt>load</tt> 関数があります。
+保存と読み込みは、Pythonで標準的に使われる <tt>pickle</tt> や <tt>cPickle</tt> ではなく、
+JSONを使って行っています。JSONを使うほうが <tt>pickle</tt> や <tt>cPickle</tt> に比べて
+多くのコードを必要とします。JSONを使った理由は、将来 <tt>Network</tt> クラスを修正する
+可能性があるからです。例えば、シグモイドニューロンではなく他のニューロンを使うように
+<tt>Network</tt> を修正するとしましょう。この変更を実装するために、
+<tt>Network.__init__</tt> メソッドで定義する属性を変更することになるでしょう。
+すると、単純に <tt>pickle</tt> を用いてしまうと <tt>load</tt> 関数は失敗してしまいます。
+JSONを使いシリアル化を明示的に行うことで、
+古い <tt>Network</tt> クラスをより簡単に確実に読み込むことができます。
+</p><p>
+<!--
+    There are many other minor changes in the code for <tt>network2.py</tt>,
 but they're all simple variations on <tt>network.py</tt>.  The net
 result is to expand our 74-line program to a far more capable 152
-lines.</p><p><h4><a name="problems_236423"></a><a href="#problems_236423">Problems</a></h4><ul>
-<li> Modify the code above to implement L1 regularization, and use L1
+lines.
+-->
+他にも <tt>network2.py</tt> のコードにはたくさんの小さな変更があります。
+しかし、それらは全て <tt>network.py</tt> からの単純な変化に過ぎません。
+全体としては、74行のプログラムをより強力な152行に拡大する結果になりました。
+</p><p>
+<!--
+<h4><a name="problems_236423"></a><a href="#problems_236423">Problems</a></h4>
+-->
+<h4><a name="problems_236423"></a><a href="#problems_236423">問題</a></h4>
+<ul>
+<li>
+<!--
+Modify the code above to implement L1 regularization, and use L1
   regularization to classify MNIST digits using a $30$ hidden neuron
   network.  Can you find a regularization parameter that enables you
-  to do better than running unregularized?</p><p><li> Take a look at the <tt>Network.cost_derivative</tt> method in
+  to do better than running unregularized?
+-->
+上のコードを修正して、L1正規化を実装してください。
+また、30個の隠れニューロンを持つニューラルネットワークで、
+L1正規化を使ってMNISTの手書き数字の分類を行ってください。
+正規化を行わない場合よりも精度が良くなる正規化パラメータは見つかりますか？
+</p><p>
+<li>
+<!--
+    Take a look at the <tt>Network.cost_derivative</tt> method in
   <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/src/network.py"><tt>network.py</tt></a>.
   That method was written for the quadratic cost.  How would you
   rewrite the method for the cross-entropy cost?  Can you think of a
@@ -4074,7 +4293,17 @@ lines.</p><p><h4><a name="problems_236423"></a><a href="#problems_236423">Proble
   <tt>Network.cost_derivative</tt> method entirely, instead
   incorporating its functionality into the
   <tt>CrossEntropyCost.delta</tt> method.  How does this solve the
-  problem you've just identified?</p><p></ul></p><p><h3><a name="how_to_choose_a_neural_network's_hyper-parameters"></a><a href="#how_to_choose_a_neural_network's_hyper-parameters">How to choose a neural network's hyper-parameters?</a></h3></p><p>Up until now I haven't explained how I've been choosing values for
+  problem you've just identified?
+-->
+<a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/src/network.py"><tt>network.py</tt></a> の <tt>Network.cost_derivative</tt> メソッドを見てください。
+このメソッドは2乗コスト関数用に書かれています。
+これをクロスエントロピーコスト関数用に書き直すにはどうしたら良いでしょうか？
+また、<tt>Network.cost_derivative</tt> メソッドのクロスエントロピー版で生じる問題を指摘してください。
+<tt>network2.py</tt> では、<tt>Network.cost_derivative</tt> メソッドを完全に
+無くしてしまい、代わりにその機能を <tt>CrossEntropyCost.delta</tt> メソッドに
+実装しました。こうすることで、先に指摘した問題がどう解決されますか？
+</p><p></ul>
+</p><p><h3><a name="how_to_choose_a_neural_network's_hyper-parameters"></a><a href="#how_to_choose_a_neural_network's_hyper-parameters">How to choose a neural network's hyper-parameters?</a></h3></p><p>Up until now I haven't explained how I've been choosing values for
 hyper-parameters such as the learning rate, $\eta$, the regularization
 parameter, $\lambda$, and so on.  I've just been supplying values
 which work pretty well.  In practice, when you're using neural nets to
