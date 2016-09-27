@@ -4303,7 +4303,14 @@ L1正規化を使ってMNISTの手書き数字の分類を行ってください�
 無くしてしまい、代わりにその機能を <tt>CrossEntropyCost.delta</tt> メソッドに
 実装しました。こうすることで、先に指摘した問題がどう解決されますか？
 </p><p></ul>
-</p><p><h3><a name="how_to_choose_a_neural_network's_hyper-parameters"></a><a href="#how_to_choose_a_neural_network's_hyper-parameters">How to choose a neural network's hyper-parameters?</a></h3></p><p>Up until now I haven't explained how I've been choosing values for
+</p><p>
+<!--
+<h3><a name="how_to_choose_a_neural_network's_hyper-parameters"></a><a href="#how_to_choose_a_neural_network's_hyper-parameters">How to choose a neural network's hyper-parameters?</a></h3>
+-->
+<h3><a name="how_to_choose_a_neural_network's_hyper-parameters"></a><a href="#how_to_choose_a_neural_network's_hyper-parameters">ニューラルネットワークのハイパーパラメータをどう選ぶか?</a></h3>
+</p><p>
+<!--
+    Up until now I haven't explained how I've been choosing values for
 hyper-parameters such as the learning rate, $\eta$, the regularization
 parameter, $\lambda$, and so on.  I've just been supplying values
 which work pretty well.  In practice, when you're using neural nets to
@@ -4315,7 +4322,19 @@ our first experiments we choose many of the hyper-parameters in the
 same way as was done earlier this chapter: 30 hidden neurons, a
 mini-batch size of 10, training for 30 epochs using the cross-entropy.
 But we choose a learning rate $\eta = 10.0$ and regularization
-parameter $\lambda = 1000.0$.  Here's what I saw on one such run:</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">mnist_loader</span>
+parameter $\lambda = 1000.0$.  Here's what I saw on one such run:
+-->
+ここまでは、学習率 $\eta$ や正規化パラメータ $\lambda$ 等のハイパーパラメータを
+私がどのように決めたのか説明せず、ニューラルネットワークが上手く働くよう私が
+事前に決めた値を使ってきました。実際問題として、ニューラルネットワークを使って何かの
+課題に取り組むにあたって、良いハイパーパラメータを見つけるのは困難な場合があります。
+例えば、MNISTの手書き数字分類問題を今ここで初めて知って、
+適切なハイパーパラメータの値を知らずにこれに取り掛かることを想像してみてください。
+その際に最初の実験から、多くのハイパーパラメータについてこの章で使ってきた値、
+30個の隠れニューロン、大きさ10のミニバッチ、そしてクロスエントロピーを使った30エポックの訓練を
+運良く選んだとしましょう。しかし学習率については $\eta=10.0$、そして正規化パラメータは
+$\lambda = 1000.0$ を選んだとします。すると次のような結果が得られます：
+</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">mnist_loader</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">training_data</span><span class="p">,</span> <span class="n">validation_data</span><span class="p">,</span> <span class="n">test_data</span> <span class="o">=</span> \
 <span class="o">...</span> <span class="n">mnist_loader</span><span class="o">.</span><span class="n">load_data_wrapper</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">network2</span>
@@ -4342,8 +4361,16 @@ parameter $\lambda = 1000.0$.  Here's what I saw on one such run:</p><p><div cla
 <span class="n">Epoch</span> <span class="mi">29</span> <span class="n">training</span> <span class="n">complete</span>
 <span class="n">Accuracy</span> <span class="n">on</span> <span class="n">evaluation</span> <span class="n">data</span><span class="p">:</span> <span class="mi">967</span> <span class="o">/</span> <span class="mi">10000</span>
 </pre></div>
-</p><p>Our classification accuracies are no better than chance!  Our network
-is acting as a random noise generator!</p><p>"Well, that's easy to fix," you might say, "just decrease the
+</p><p>
+<!--
+    Our classification accuracies are no better than chance!  Our network
+is acting as a random noise generator!
+-->
+なんと分類精度は全くの当てずっぽうと同等です！
+ニューラルネットワークはサイコロのようなものになってしまいました！
+</p><p>
+<!--
+    "Well, that's easy to fix," you might say, "just decrease the
 learning rate and regularization hyper-parameters".  Unfortunately,
 you don't <em>a priori</em> know those are the hyper-parameters you need
 to adjust.  Maybe the real problem is that our 30 hidden neuron
@@ -4360,7 +4387,28 @@ large, or uses a lot of training data, since you may train for hours
 or days or weeks, only to get no result.  If the situation persists,
 it damages your confidence.  Maybe neural networks are the wrong
 approach to your problem?  Maybe you should quit your job and take up
-beekeeping?</p><p>In this section I explain some heuristics which can be used to set the
+beekeeping?
+-->
+こんな風に考える読者がいるかもしれません。「ふむ、こんなのは簡単に直せるよ。
+学習率と正規化ハイパーパラメータを小さくすれば良いんだろう」。
+しかしちょっと待ってください。そう言えるのは上手く働くハイパーパラメータを
+事前に知っていたからであって、学習率と正規化パラメータを調整すれば上手くいくことを
+ア・プリオリには知らないのです。もしかすると、隠れニューロンの数が30個では
+他のハイパーパラメータをいかに調整しても上手くいかないのかもしれません。
+もしかすると少なくとも100個、いや300個は隠れニューロンが必要なのでは？
+あるいは隠れ層が複数必要なのでは？いや出力のエンコーディングが問題なのかもしれませんよ？
+本当は学習が進行しているけれども、もっと多くのエポックが必要という可能性はありませんか？
+ミニバッチの大きさが小さすぎませんか？2乗コスト関数にしてみてはどうでしょう？
+重みの初期化方法を変えてみるのは？等など。広すぎるハイパーパラメータの空間で
+途方に暮れてしまいそうです。巨大なニューラルネットワークを扱っていたり
+巨大な訓練データを使ったりしている時には特に苛立たしい問題です。何しろ、
+訓練するのに何時間も何日も、もしかすると何週間も掛かるのに、
+何の結果も得られないこともあるのですから。
+このような状況が続けば自信を無くすかもしれません。
+もうこんな仕事は辞めて田舎で畑仕事でも始めたほうがマシに思えるかもしれません。
+</p><p>
+<!--
+    In this section I explain some heuristics which can be used to set the
 hyper-parameters in a neural network.  The goal is to help you develop
 a workflow that enables you to do a pretty good job setting
 hyper-parameters.  Of course, I won't cover everything about
@@ -4369,12 +4417,35 @@ any case, a problem that is ever completely solved, nor is there
 universal agreement amongst practitioners on the right strategies to
 use.  There's always one more trick you can try to eke out a bit more
 performance from your network.  But the heuristics in this section
-should get you started.</p><p><strong>Broad strategy:</strong> When using neural networks to attack a new
+should get you started.
+-->
+この節では、ニューラルネットワークのハイパーパラメータを定める発見的な方法を
+いくつか紹介します。目標は、ハイパーパラメータを上手に決めるためのワークフローを
+読者が確立する手助けをすることです。もちろん、ハイパーパラメータの最適化について
+全てをカバーするわけではありません。何しろとても大きな問題です。
+そして、完全に解決されている問題ではないし、ニューラルネットワークを使う人々の間で
+普遍的に共有されている合意も無いのです。
+ニューラルネットワークのパフォーマンスをほんの少し向上させるために、
+常に一つ、何かできることがあるはずです。この節で紹介する発見的な方法は、
+その取っ掛かりを与えてくれるでしょう。
+</p><p>
+<!--frontier-->
+    <strong>Broad strategy:</strong> When using neural networks to attack a new
 problem the first challenge is to get <em>any</em> non-trivial learning,
 i.e., for the network to achieve results better than chance.  This can
 be surprisingly difficult, especially when confronting a new class of
 problem.  Let's look at some strategies you can use if you're having
-this kind of trouble.</p><p>Suppose, for example, that you're attacking MNIST for the first time.
+this kind of trouble.
+
+<strong>:</strong> ニューラルネットワークを使って新しい問題に取り組む時、
+第1の関門は<em>何でも良いので</em>とにかく何か学習をすることです。
+言い換えると、ニューラルネットワークでデタラメよりはマシな結果を達成することが第1歩です。
+ものすごく低いハードルに思えるかもしれませんが、実際にはそれが驚くほど難しい場合もあります。
+特に、新しい種類の問題に取り組む時には、この取っ掛かりから困難な場合があります。
+まずはこの種の困難に遭った時に採りうる戦略を見てみましょう。
+</p><p>
+<!--
+    Suppose, for example, that you're attacking MNIST for the first time.
 You start out enthusiastic, but are a little discouraged when your
 first network fails completely, as in the example above.  The way to
 go is to strip the problem down.  Get rid of all the training and
@@ -4383,12 +4454,36 @@ a network to distinguish 0s from 1s.  Not only is that an inherently
 easier problem than distinguishing all ten digits, it also reduces the
 amount of training data by 80 percent, speeding up training by a
 factor of 5.  That enables much more rapid experimentation, and so
-gives you more rapid insight into how to build a good network.</p><p>You can further speed up experimentation by stripping your network
+gives you more rapid insight into how to build a good network.
+-->
+例えば、あなたがMNISTに初めて取り組むとしましょう。勢い勇んで取り掛かったものの、
+ニューラルネットワークで得た最初の結果が先程見たような散々なもので、
+少々落ち込んでいます。この状況を何とかするには、まず生じている問題を特定することです。
+手始めに、訓練データと検証データから0と1以外の画像を全て取り除きましょう。
+そして、ニューラルネットワークが0と1を区別できるように訓練してみましょう。
+この0と1を区別するという新しい問題は、元々の10種類の数字を区別する問題より簡単であるのみならず、
+訓練データの量を80%減らすことになるので、訓練が5倍速くなります。
+こうすることで問題を特定するための実験を素早く実行することが可能になりますし、
+良いニューラルネットワークを構築するにはどうしたら良いのか、素早い見立てが可能になります。
+</p><p>
+<!--
+    You can further speed up experimentation by stripping your network
 down to the simplest network likely to do meaningful learning.  If you
 believe a <tt>[784, 10]</tt> network can likely do better-than-chance
 classification of MNIST digits, then begin your experimentation with
 such a network.  It'll be much faster than training a
-<tt>[784, 30, 10]</tt> network, and you can build back up to the latter.</p><p>You can get another speed up in experimentation by increasing the
+<tt>[784, 30, 10]</tt> network, and you can build back up to the latter.
+-->
+さらに素早く実験を行うには、まともに学習が可能であると期待できる範囲で、
+ニューラルネットワークをできるだけ単純化することができます。
+もし各層のニューロン数が <tt>[784, 10]</tt> のニューラルネットワークが
+MNISTの手書き数字分類問題に対して乱数よりはまともな正答率を達成できると考えるなら、
+実験の出発点としてこのようなニューラルネットワークから実験を採用するのが良いでしょう。
+ニューロン数が <tt>[784, 30, 10]</tt> のニューラルネットワークよりはずっと速く学習するでしょうから、
+実験も速く進むでしょう。
+</p><p>
+<!--
+    You can get another speed up in experimentation by increasing the
 frequency of monitoring.  In <tt>network2.py</tt> we monitor performance
 at the end of each training epoch.  With 50,000 images per epoch, that
 means waiting quite a while - about a minute, on my laptop, when
@@ -4409,7 +4504,30 @@ illustration, we'll strip down our training data to just the first
 1,000 MNIST training images.  Let's try it and see what happens.  (To
 keep the code below simple I haven't implemented the idea of using
 only 0 and 1 images.  Of course, that can be done with just a little
-more work.)</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network2</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+more work.)
+-->
+実験をさらにスピードアップするには、モニタリングの頻度を上げるという方法があります。
+<tt>network2.py</tt> では、訓練の各エポックが終了した時点でパフォーマンスを測定しました。
+一つのエポックに50,000枚の画像が含まれるので、ニューラルネットワークの学習状況について
+情報を得るのに随分と時間が掛かります。例えば、私のノートPCで各層のニューロン数が
+ <tt>[784, 30, 10]</tt> のニューラルネットワークを訓練すると、
+学習状況についてフィードバックを受けるまで約1分掛かります。
+もちろん、1分というのは決して長時間ではありませんが、
+大量のハイパーパラメータを決めたい時にはそれでも厄介です。
+何百、何千通りものハイパーパラメータを試そうと思うと、随分と大きな負担です。
+もっと頻繁に、例えば訓練画像1,000枚ごとに検証精度を監視することで、
+より素早いフィードバックが得られます。さらに、
+10,000枚の画像を全て使う代わりに100枚の検証画像から精度を推定することで、
+より速くパフォーマンスを測定することが可能です。
+大切なのは、まともな学習に必要なだけの訓練画像をニューラルネットワークに与えることと、
+そこそこに良いパフォーマンスの推定を得ることなのです。もちろん、
+<tt>network2.py</tt> は現時点でこういうモニタリングを行ってはいませんが、
+ここでは実例として、MNISTの訓練データを1,000枚に減らしてみます。
+動かしてみて何が起こるか見てみましょう。
+(単純にするために、0と1の画像だけを使うというアイデアは実装していません。
+もちろん、あと少し工夫すればそれを実装することも可能です。)
+</p><p>
+<div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network2</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">training_data</span><span class="p">[:</span><span class="mi">1000</span><span class="p">],</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="n">lmbda</span> <span class="o">=</span> <span class="mf">1000.0</span><span class="p">,</span> \
 <span class="o">...</span> <span class="n">evaluation_data</span><span class="o">=</span><span class="n">validation_data</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> \
 <span class="o">...</span> <span class="n">monitor_evaluation_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -4423,15 +4541,31 @@ more work.)</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span
 <span class="n">Accuracy</span> <span class="n">on</span> <span class="n">evaluation</span> <span class="n">data</span><span class="p">:</span> <span class="mi">10</span> <span class="o">/</span> <span class="mi">100</span>
 <span class="o">...</span>
 </pre></div>
-</p><p>We're still getting pure noise!  But there's a big win: we're now
+</p><p>
+<!--
+    We're still getting pure noise!  But there's a big win: we're now
 getting feedback every second, rather than once a minute or so.  That
 means you can more quickly experiment with other choices of
 hyper-parameter, or even conduct experiments trialling many different
-choices of hyper-parameter nearly simultaneously.</p><p>In the above example I left $\lambda$ as $\lambda = 1000.0$, as we
+choices of hyper-parameter nearly simultaneously.
+-->
+まだ出てくるのは純粋なノイズです！
+でも一つ大きな進歩があります：今やフィードバックを得るのに1分も待つ必要がなく、
+1秒毎に情報が得られます。これなら、ハイパーパラメータを変えて実験を繰り返すのも容易ですし、
+あるいは様々な異なるハイパーパラメータをほぼ同時に試してみることさえも可能でしょう。
+</p><p>
+<!--
+    In the above example I left $\lambda$ as $\lambda = 1000.0$, as we
 used earlier.  But since we changed the number of training examples we
 should really change $\lambda$ to keep the weight decay the same.
 That means changing $\lambda$ to $20.0$.  If we do that then this is
-what happens:</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network2</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+what happens:
+-->
+上の例では、$\lambda$ を以前に使った $\lambda = 1000.0$ のままにしておきました。
+しかし、訓練データの数を変えたのだから、重み減衰の割合を一定に保つために $\lambda$ も
+変更するべきです。この場合は、$\lambda = 20.0$ にすると前と重み減衰の因子が前と同じになります。
+以下がその結果です：
+</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network2</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">training_data</span><span class="p">[:</span><span class="mi">1000</span><span class="p">],</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="n">lmbda</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">,</span> \
 <span class="o">...</span> <span class="n">evaluation_data</span><span class="o">=</span><span class="n">validation_data</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> \
 <span class="o">...</span> <span class="n">monitor_evaluation_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -4448,13 +4582,24 @@ what happens:</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</sp
 <span class="n">Accuracy</span> <span class="n">on</span> <span class="n">evaluation</span> <span class="n">data</span><span class="p">:</span> <span class="mi">18</span> <span class="o">/</span> <span class="mi">100</span>
 <span class="o">...</span>
 </pre></div>
-</p><p>Ahah!  We have a signal.  Not a terribly good signal, but a signal
+</p><p>
+<!--
+    Ahah!  We have a signal.  Not a terribly good signal, but a signal
 nonetheless.  That's something we can build on, modifying the
 hyper-parameters to try to get further improvement.  Maybe we guess
 that our learning rate needs to be higher.  (As you perhaps realize,
 that's a silly guess, for reasons we'll discuss shortly, but please
 bear with me.)  So to test our guess we try dialling $\eta$ up to
-$100.0$:</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network2</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+$100.0$:
+-->
+なんと、今度はシグナルが出ました！とても良い結果とは言えませんが、
+ともかく偶然よりは良い結果です。
+これは、さらなる改善を得るためにハイパーパラメータを修正していく際の出発点になります。
+学習率をもっと大きくするべきだと推測するかもしれません。
+（恐らく皆さんも気づいているように、これは愚かな推測です。
+その理由についてはすぐに議論しますが、しばらくは我慢してください。）
+そこでその推測を検証するために、$\eta$ の値を $100.0$ まで上げてみましょう：
+</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network2</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">training_data</span><span class="p">[:</span><span class="mi">1000</span><span class="p">],</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span> <span class="n">lmbda</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">,</span> \
 <span class="o">...</span> <span class="n">evaluation_data</span><span class="o">=</span><span class="n">validation_data</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> \
 <span class="o">...</span> <span class="n">monitor_evaluation_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -4472,9 +4617,15 @@ $100.0$:</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <
 
 <span class="o">...</span>
 </pre></div>
-</p><p>That's no good!  It suggests that our guess was wrong, and the problem
+</p><p>
+<!--
+    That's no good!  It suggests that our guess was wrong, and the problem
 wasn't that the learning rate was too low.  So instead we try dialling
-$\eta$ down to $\eta = 1.0$:</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network2</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+$\eta$ down to $\eta = 1.0$:
+-->
+これはひどい！この結果は、学習率が小さすぎるという推測が間違っていたことを示唆します。
+そこで反対に、$\eta$ を $1.0$ まで小さくしてみましょう：
+</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network2</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">training_data</span><span class="p">[:</span><span class="mi">1000</span><span class="p">],</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">lmbda</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">,</span> \
 <span class="o">...</span> <span class="n">evaluation_data</span><span class="o">=</span><span class="n">validation_data</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> \
 <span class="o">...</span> <span class="n">monitor_evaluation_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -4492,7 +4643,9 @@ $\eta$ down to $\eta = 1.0$:</p><p><div class="highlight"><pre><span class="o">&
 
 <span class="o">...</span>
 </pre></div>
-</p><p>That's better!  And so we can continue, individually adjusting each
+</p><p>
+<!--
+    That's better!  And so we can continue, individually adjusting each
 hyper-parameter, gradually improving performance.  Once we've explored
 to find an improved value for $\eta$, then we move on to find a good
 value for $\lambda$.  Then experiment with a more complex
@@ -4503,7 +4656,21 @@ on, at each stage evaluating performance using our held-out validation
 data, and using those evaluations to find better and better
 hyper-parameters.  As we do so, it typically takes longer to witness
 the impact due to modifications of the hyper-parameters, and so we can
-gradually decrease the frequency of monitoring.</p><p>This all looks very promising as a broad strategy.  However, I want to
+gradually decrease the frequency of monitoring.
+-->
+こちらの方が良いですね！このように続けていって、ハイパーパラメータを一つずつ調整して、
+パフォーマンスを徐々に改善していきます。学習率 $\eta$ の値を改善できたら、
+次に正規化パラメータ $\lambda$ の改善に進みます。
+それができたら、次はより複雑な構造のニューラルネットワーク、例えば隠れニューロンを10個持つ
+ニューラルネットワークで実験しましょう。前と同じように $\eta$ と $\lambda$ を調整します。
+次に隠れニューロンを20個に増やして、他のハイパーパラメータも調整しましょう。
+以下同様に、各段階で検証データの一部を使ったパフォーマンスの測定を行い、
+その結果を参考にしながらより良いハイパーパラメータを見つけていきます。
+これを続けていくうちに、しばしばハイパーパラメータを修正した効果が現れるのに
+時間が掛かるようになるので、モニタリングの頻度を徐々に下げることができます。
+</p><p>
+<!--
+    This all looks very promising as a broad strategy.  However, I want to
 return to that initial stage of finding hyper-parameters that enable a
 network to learn anything at all.  In fact, even the above discussion
 conveys too positive an outlook.  It can be immensely frustrating to
@@ -4516,13 +4683,38 @@ will merely slow you down.  In fact, it speeds things up, since you
 much more quickly find a network with a meaningful signal.  Once
 you've got such a signal, you can often get rapid improvements by
 tweaking the hyper-parameters.  As with many things in life, getting
-started can be the hardest thing to do.</p><p>Okay, that's the broad strategy.  Let's now look at some specific
+started can be the hardest thing to do.
+-->
+これは一般的でとても有望な戦略に見えます。
+しかし、実際のところ、上の議論でさえ見通しが楽観的すぎるのです。
+何も学習しないニューラルネットワークをいじるのは、どうしようもなく骨の折れる作業です。
+何日もハイパーパラメータの調整を行って、それでも無意味な結果しか得られないことだってあります。
+ですから、改めて強調したいのですが、初期の段階では、実験をしたらできるだけ素早く
+フィードバックが得られるようにしておくことがとても重要なのです。
+最初に問題やニューラルネットワークの構造を単純化してしまうと、
+当初の目的から遠ざかってしまうように思えるかもしれません。
+しかし、こうすることでニューラルネットワークが意味のある学習をするまでに掛かる時間はずっと短縮されるし、
+一旦意味のあるシグナルが得られれば、ハイパーパラメータを調整することで
+ニューラルネットワークの性能はしばしば急速に向上していきます。
+一番最初の取っ掛かりが、最も苦労するところなのです。
+</p><p>
+<!--
+    Okay, that's the broad strategy.  Let's now look at some specific
 recommendations for setting hyper-parameters.  I will focus on the
 learning rate, $\eta$, the L2 regularization parameter, $\lambda$, and
 the mini-batch size.  However, many of the remarks apply also to other
 hyper-parameters, including those associated to network architecture,
 other forms of regularization, and some hyper-parameters we'll meet
-later in the book, such as the momentum co-efficient.</p><p><strong>Learning rate:</strong> Suppose we run three MNIST networks with three
+later in the book, such as the momentum co-efficient.
+-->
+ここまでは一般的な話をしてきました。ここからは、ハイパーパラメータの決め方について、
+私が勧める具体的な手順をいくつか見てみましょう。以下では、学習率 $\eta$、
+L2正規化パラメータ $\lambda$、そしてミニバッチのサイズの決め方を議論します。
+しかし、ここで述べることの多くは、
+ニューラルネットワークのアーキテクチャや他の正規化法に関わるハイパーパラメータ、
+あるいはモーメンタム係数などこの本で後に議論するハイパーパラメータ等にも当て余ります。
+</p><p>
+<strong>Learning rate:</strong> Suppose we run three MNIST networks with three
 different learning rates, $\eta = 0.025$, $\eta = 0.25$ and $\eta =
 2.5$, respectively.  We'll set the other hyper-parameters as for the
 experiments in earlier sections, running over 30 epochs, with a
@@ -4531,7 +4723,9 @@ using the full $50,000$ training images.  Here's a graph showing the
 behaviour of the training cost as we train*<span class="marginnote">
 *The graph was
   generated by
-  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/multiple_eta.py">multiple_eta.py</a>.</span>:</p><p><center><img src="images/multiple_eta.png" width="520px"></center></p><p>With $\eta = 0.025$ the cost decreases smoothly until the final epoch.
+  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/multiple_eta.py">multiple_eta.py</a>.</span>:</p><p><center><img src="images/multiple_eta.png" width="520px"></center>
+</p><p>
+    With $\eta = 0.025$ the cost decreases smoothly until the final epoch.
 With $\eta = 0.25$ the cost initially decreases, but after about $20$
 epochs it is near saturation, and thereafter most of the changes are
 merely small and apparently random oscillations.  Finally, with $\eta
@@ -4540,7 +4734,9 @@ understand the reason for the oscillations, recall that stochastic
 gradient descent is supposed to step us gradually down into a valley
 of the cost function,</p><p><center>
 <img src="images/tikz33.png"/>
-</center></p><p>However, if $\eta$ is too large then the steps will be so large that
+</center>
+</p><p>
+However, if $\eta$ is too large then the steps will be so large that
 they may actually overshoot the minimum, causing the algorithm to
 climb up out of the valley instead.  That's likely*<span class="marginnote">
 *This
@@ -4565,7 +4761,9 @@ gradient descent.  An even better approach would be to start with
 $\eta = 0.25$, train for $20$ epochs, and then switch to $\eta =
 0.025$.  We'll discuss such variable learning rate schedules later.
 For now, though, let's stick to figuring out how to find a single good
-value for the learning rate, $\eta$.</p><p></p><p>With this picture in mind, we can set $\eta$ as follows.  First, we
+value for the learning rate, $\eta$.
+</p><p>
+    With this picture in mind, we can set $\eta$ as follows.  First, we
 estimate the threshold value for $\eta$ at which the cost on the
 training data immediately begins decreasing, instead of oscillating or
 increasing.  This estimate doesn't need to be too accurate.  You can
@@ -4582,12 +4780,14 @@ may optionally refine your estimate, to pick out the largest value of
 $\eta$ at which the cost decreases during the first few epochs, say
 $\eta = 0.5$ or $\eta = 0.2$ (there's no need for this to be
 super-accurate).  This gives us an estimate for the threshold value of
-$\eta$.</p><p></p><p>Obviously, the actual value of $\eta$ that you use should be no larger
+$\eta$.</p><p>
+    Obviously, the actual value of $\eta$ that you use should be no larger
 than the threshold value.  In fact, if the value of $\eta$ is to
 remain useable over many epochs then you likely want to use a value
 for $\eta$ that is smaller, say, a factor of two below the threshold.
 Such a choice will typically allow you to train for many epochs,
-without causing too much of a slowdown in learning.</p><p></p><p>In the case of the MNIST data, following this strategy leads to an
+without causing too much of a slowdown in learning.</p><p>
+    In the case of the MNIST data, following this strategy leads to an
 estimate of $0.1$ for the order of magnitude of the threshold value of
 $\eta$.  After some more refinement, we obtain a threshold value $\eta
 = 0.5$.  Following the prescription above, this suggests using $\eta =
