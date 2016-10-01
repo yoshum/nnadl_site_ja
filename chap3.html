@@ -5017,19 +5017,41 @@ modifying <tt>network2.py</tt> to implement early stopping:
 理想的には、検証データに対する分類精度を上げることと訓練時間を短縮することを
 上手くバランスさせるような規則であるべきです。そのような規則を <tt>network2.py</tt> に
 追加した上で実験を3回行い、検証精度と訓練エポック数を10エポック・ルールと比較してください。
-</p><p><strong>Learning rate schedule:</strong> We've been holding the learning rate
+</p><p>
+<!--
+<strong>Learning rate schedule:</strong> We've been holding the learning rate
 $\eta$ constant.  However, it's often advantageous to vary the
 learning rate.  Early on during the learning process it's likely that
 the weights are badly wrong.  And so it's best to use a large learning
 rate that causes the weights to change quickly.  Later, we can reduce
 the learning rate as we make more fine-tuned adjustments to our
-weights.</p><p>How should we set our learning rate schedule?  Many approaches are
+weights.
+-->
+<strong>学習率のスケジューリング：</strong>
+これまでは訓練の間、学習率 $\eta$ を定数に固定してきました。
+しかし、しばしば学習率を変化させることが有効です。
+学習過程の初期には、重みがひどく間違った値を取っているでしょうから、
+大きな学習率を用いて学習の進みを早めるのが良いでしょう。その後、学習率を小さくしていくことで、
+重みをより精密に調整することができます。
+</p><p>
+<!--
+    How should we set our learning rate schedule?  Many approaches are
 possible.  One natural approach is to use the same basic idea as early
 stopping.  The idea is to hold the learning rate constant until the
 validation accuracy starts to get worse.  Then decrease the learning
 rate by some amount, say a factor of two or ten.  We repeat this many
 times, until, say, the learning rate is a factor of 1,024 (or 1,000)
-times lower than the initial value.  Then we terminate.</p><p></p><p>A variable learning schedule can improve performance, but it also
+times lower than the initial value.  Then we terminate.
+-->
+学習率を訓練中に変更する具体的な手順、学習率のスケジューリングには、様々なものが考えられます。
+一つの自然なアプローチは、早期打ち切りと同様の発想に基づくものです。
+それは、まずは学習率を固定しておき、検証精度が悪くなり始めると、
+学習率を例えば半分や10分の1程度に減らすというものです。
+これを学習率が、例えば初期値の1,024分の1（あるいは1,000分の1）になるまで
+繰り返してから学習を終了します。
+</p><p>
+<!--
+    A variable learning schedule can improve performance, but it also
 opens up a world of possible choices for the learning schedule.  Those
 choices can be a headache - you can spend forever trying to optimize
 your learning schedule.  For first experiments my suggestion is to use
@@ -5043,12 +5065,36 @@ learning schedule, along the lines I've described*<span class="marginnote">
   <a href="http://arxiv.org/abs/1003.0358">Deep, Big, Simple Neural Nets
     Excel on Handwritten Digit Recognition</a>, by Dan Claudiu
   Cireșan, Ueli Meier, Luca Maria Gambardella, and
-  Jürgen Schmidhuber (2010).</span>.</p><p><h4><a name="exercise_336628"></a><a href="#exercise_336628">Exercise</a></h4><ul>
+  Jürgen Schmidhuber (2010).</span>.
+-->
+学習率のスケジューリングはパフォーマンスを改善しますが、
+学習率のスケジューリングを決定するという新たな自由度をもたらします。
+この選択が頭痛の種になりえます。学習率のスケジューリングを決めるために
+無限の時間を掛けて試行錯誤することも可能でしょう。ですから、最初の実験に対する私の提案は、
+ただ一つ、定数の学習率を用いることです。それで良い第1近似が得られるでしょう。
+その後、ニューラルネットワークの発揮しうる最高のパフォーマンスを実現したいと考えるなら、
+上で述べたような学習率のスケジューリングを試すと良いでしょう*<span class="marginnote">
+*MNIST問題に取り組む際に学習率を変化させるご利益を示した最近の読みやすい論文として、
+<a href="http://arxiv.org/abs/1003.0358">Deep, Big, Simple Neural Nets
+  Excel on Handwritten Digit Recognition</a>, by Dan Claudiu
+Cireșan, Ueli Meier, Luca Maria Gambardella, and
+Jürgen Schmidhuber (2010) を勧めます。</span>。
+</p><p>
+<!--
+<h4><a name="exercise_336628"></a><a href="#exercise_336628">Exercise</a></h4><ul>
 <li> Modify <tt>network2.py</tt> so that it implements a learning
   schedule that: halves the learning rate each time the validation
   accuracy satisfies the no-improvement-in-$10$ rule; and terminates
   when the learning rate has dropped to $1/128$ of its original value.
-</ul></p><p><strong>The regularization parameter, $\lambda$:</strong> I suggest starting
+  -->
+<h4><a name="exercise_336628"></a><a href="#exercise_336628">Exercise</a></h4><ul>
+<li> <tt>network2.py</tt> を修正して、次のような学習率のスケジューリングを実装してください：
+検証精度が10エポック・ルールを満たすごとに学習率を半分にし、学習率が初期値の $1/128$ に
+なった段階で訓練を終了させてください。
+</ul>
+</p><p>
+<!--
+<strong>The regularization parameter, $\lambda$:</strong> I suggest starting
 initially with no regularization ($\lambda = 0.0$), and determining a
 value for $\eta$, as above.  Using that choice of $\eta$, we can then
 use the validation data to select a good value for $\lambda$.  Start
@@ -5060,13 +5106,37 @@ by trialling $\lambda = 1.0$*<span class="marginnote">
 increase or decrease by factors of $10$, as needed to improve
 performance on the validation data.  Once you've found a good order of
 magnitude, you can fine tune your value of $\lambda$.  That done, you
-should return and re-optimize $\eta$ again.</p><p><h4><a name="exercise_30392"></a><a href="#exercise_30392">Exercise</a></h4><ul>
+should return and re-optimize $\eta$ again.
+-->
+<strong>正規化パラメータ $\lambda$：</strong>
+まずは正規化無し（$\lambda=0.0$）で、上述のように学習率 $\eta$ を最適化しましょう。
+そこで決めた $\eta$ を使って、$\lambda$ の良い値を選びます。その時は、$\lambda=1.0$*
+<span class="marginnote">
+*初期値として $\lambda=1.0$ を使うべき原理的な理由があるわけではありません。
+$\lambda$ の探索をどこから始めるべきか、原理的な議論を知っている人がいたら、
+教えていただけるとありがたく思います(mn@michaelnielsen.org)。</span> から
+始めて、検証データに対する分類精度が改善するように $\lambda$ を10倍、あるいは10分の1倍していきます。
+一旦 $\lambda$ の良い大きさがどのくらいの桁にあるのか分かったら、
+さらに細かく $\lambda$ の値を調整しても良いでしょう。
+それが終わったら、再び $\eta$ を最適化し直しましょう。
+</p><p>
+<!--
+<h4><a name="exercise_30392"></a><a href="#exercise_30392">Exercise</a></h4><ul>
 <li> It's tempting to use gradient descent to try to learn good
   values for hyper-parameters such as $\lambda$ and $\eta$.  Can you
   think of an obstacle to using gradient descent to determine
   $\lambda$?  Can can you think of an obstacle to using gradient
   descent to determine $\eta$?
-</ul></p><p><strong>How I selected hyper-parameters earlier in this book:</strong> If you
+</ul>
+-->
+<h4><a name="exercise_30392"></a><a href="#exercise_30392">演習</a></h4><ul>
+<li>
+$\lambda$ や $\eta$ などのハイパーパラメータの良い値を決めるために、
+勾配下降法を使いたくなるかもしれません。
+勾配下降法を使った $\lambda$ の決定にはどのような障害があるでしょうか？
+また、$\eta$ の決定に勾配下降法を使うことについてはどうでしょうか？
+</ul>
+</p><p><strong>How I selected hyper-parameters earlier in this book:</strong> If you
 use the recommendations in this section you'll find that you get
 values for $\eta$ and $\lambda$ which don't always exactly match the
 values I've used earlier in the book.  The reason is that the book has
