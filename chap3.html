@@ -4901,7 +4901,9 @@ which criterion you use.
 とは言え、あくまでもこれは私の個人的な美的趣味の問題です。
 検証データに対する分類精度が改善するなら、学習の初期段階に訓練コストは減少するでしょうから、
 実際上は検証データの分類精度と訓練コストのどちらを基準としても大した差は生じないと考えられます。
-</p><p><strong>Use early stopping to determine the number of training
+</p><p>
+<!--<strong>
+Use early stopping to determine the number of training
   epochs:</strong> As we discused earlier in the chapter, early stopping means
 that at the end of each epoch we should compute the classification
 accuracy on the validation data.  When that stops improving,
@@ -4913,7 +4915,21 @@ Furthermore, early stopping also automatically prevents us from
 overfitting.  This is, of course, a good thing, although in the early
 stages of experimentation it can be helpful to turn off early
 stopping, so you can see any signs of overfitting, and use it to
-inform your approach to regularization.</p><p>To implement early stopping we need to say more precisely what it
+inform your approach to regularization.
+-->
+<strong>訓練エポック数を決める手段としての早期打ち切り：</strong>
+この章で前に議論したように、早期打ち切りとは各エポックが終了するたびに検証データに対する
+分類精度を計算し、その改善が止まったら訓練を打ち切るという処方です。
+こうすることで、とても簡単にエポック数を定めることができます。
+この処方が特に便利なのは、訓練エポック数がその他のハイパーパラメータに対してどう依存するのか
+気にする必要が無い点です。他のハイパーパラメータを変えると必要なエポック数も変わりますが、
+その効果は自動的に取り込まれます。その上、早期打ち切りは自動的に過適合を防ぎます。
+これはもちろん良いことです。
+ただし、実験の初期の段階では、あえて早期打ち切りを行わない方が良い場合もあります。
+早期打ち切りを止めることで過適合を起こし、その様子を調べることで正規化の指針を得るのです。
+</p><p>
+<!--
+To implement early stopping we need to say more precisely what it
 means that the classification accuracy has stopped improving.  As
 we've seen, the accuracy can jump around quite a bit, even when the
 overall trend is to improve.  If we stop the first time the accuracy
@@ -4924,7 +4940,21 @@ for example, that we're doing MNIST.  Then we might elect to terminate
 if the classification accuracy hasn't improved during the last ten
 epochs.  This ensures that we don't stop too soon, in response to bad
 luck in training, but also that we're not waiting around forever for
-an improvement that never comes.</p><p>This no-improvement-in-ten rule is good for initial exploration of
+an improvement that never comes.
+-->
+早期打ち切りを実装するには、まずは「分類精度の改善が止まる」という一文が意味するところを
+より正確に述べておく必要があります。既に見たように、分類精度が全体的に改善の傾向にあっても、
+エポックを重ねるごとに改善し続けるわけではなく上がったり下がったりを繰り返すこともあります。
+もし分類精度が始めて減少した時点で訓練をやめてしまうなら、
+ほぼ間違いなく改善の余地を残してしまうことになるでしょう。
+もっと良いやり方は、分類精度の最高値がしばらく更新されなかった時点で打ち切ることです。
+例えば、MNISTの問題を考えましょう。そこで、分類精度が過去10エポックに渡って改善しなかった
+時点で訓練を打ち切ることにするとどうでしょう。こうしておけば、訓練中の不運のために
+早すぎる打ち切りを行ってしまうことは無いでしょうし、
+全く改善の得られないまま永久に待ち続ける心配も無いでしょう。
+</p><p>
+<!--
+    This no-improvement-in-ten rule is good for initial exploration of
 MNIST.  However, networks can sometimes plateau near a particular
 classification accuracy for quite some time, only to then begin
 improving again.  If you're trying to get really good performance, the
@@ -4939,19 +4969,55 @@ get pretty good results.  Similarly, for problems other than MNIST,
 the no-improvement-in-ten rule may be much too aggressive or not
 nearly aggressive enough, depending on the details of the problem.
 However, with a little experimentation it's usually easy to find a
-pretty good strategy for early stopping.</p><p>We haven't used early stopping in our MNIST experiments to date.  The
+pretty good strategy for early stopping.
+-->
+この「10エポック・ルール」はMNIST問題の取っ掛かりに用いるには良いでしょう。
+しかし、ニューラルネットワークでは時折、長期間に渡って分類精度が停滞した後に
+再び改善を始める場合があります。もし本当に良いパフォーマンスを目指すなら、
+10エポック・ルールでは忍耐が足りないかもしれません。
+その場合の私の提案は、初期の実験で10エポック・ルールを採用し、
+ニューラルネットワークの訓練状況が明らかになるに従い徐々に改善を待つ期間を長くしていくことです。
+20エポック・ルール、50エポック・ルール、というように。
+この戦略はもちろん、最適化の必要な新たなハイパーパラメータを生み出してしまいます！
+しかし実際には、多くの場合このハイパーパラメータを決めるのは難しくありません。
+MNIST以外の問題に対しても同様に、10エポック・ルールが早すぎるかそうでもないかは
+問題の詳細に依存することですが、普通は少し実験をしてみれば早期打ち切りの良い戦略が
+簡単に見つかるものです。
+</p><p>
+<!--
+    We haven't used early stopping in our MNIST experiments to date.  The
 reason is that we've been doing a lot of comparisons between different
 approaches to learning.  For such comparisons it's helpful to use the
 same number of epochs in each case.  However, it's well worth
-modifying <tt>network2.py</tt> to implement early stopping:</p><p><h4><a name="problem_831601"></a><a href="#problem_831601">Problem</a></h4><ul>
+modifying <tt>network2.py</tt> to implement early stopping:
+-->
+これまで示したコードでは、MNIST問題の実験で早期打ち切りを用いていません。
+その理由は、多くの異なる学習手法を試して比較してきたからです。このような比較では、
+それぞれの場合で同数のエポックを使うのが便利でしょう。
+しかし、読者の皆さんは是非自分で <tt>network2.py</tt> を修正して早期打ち切りを実装してみてください：
+</p><p>
+<!--
+<h4><a name="problem_831601"></a><a href="#problem_831601">Problem</a></h4><ul>
 <li> Modify <tt>network2.py</tt> so that it implements early stopping
   using a no-improvement-in-$n$ epochs strategy, where $n$ is a
-  parameter that can be set.</p><p><li> Can you think of a rule for early stopping <em>other</em> than
+  parameter that can be set.
+  -->
+<h4><a name="problem_831601"></a><a href="#problem_831601">問題</a></h4><ul>
+<li> <tt>network2.py</tt> を修正して「$n$エポック・ルール」を使った早期打ち切りを
+実装してください。ここで、$n$ は指定できるパラメータとします。
+</p><p><!--
+<li> Can you think of a rule for early stopping <em>other</em> than
   no-improvement-in-$n$?  Ideally, the rule should compromise between
   getting high validation accuracies and not training too long.  Add
   your rule to <tt>network2.py</tt>, and run three experiments comparing
   the validation accuracies and number of epochs of training to
-  no-improvement-in-$10$.</p><p></ul></p><p><strong>Learning rate schedule:</strong> We've been holding the learning rate
+  no-improvement-in-$10$.</p><p></ul>
+-->
+<li>「$n$エポック・ルール」以外に早期打ち切りの方法を挙げてみましょう。
+理想的には、検証データに対する分類精度を上げることと訓練時間を短縮することを
+上手くバランスさせるような規則であるべきです。そのような規則を <tt>network2.py</tt> に
+追加した上で実験を3回行い、検証精度と訓練エポック数を10エポック・ルールと比較してください。
+</p><p><strong>Learning rate schedule:</strong> We've been holding the learning rate
 $\eta$ constant.  However, it's often advantageous to vary the
 learning rate.  Early on during the learning process it's likely that
 the weights are badly wrong.  And so it's best to use a large learning
