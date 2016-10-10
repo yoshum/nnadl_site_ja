@@ -5395,6 +5395,7 @@ James BergstraとYoshua Bengioによる2012年の論文*<span class="marginnote"
 この論文のコードは<a href="https://github.com/jaberg/hyperopt">公開されており</a>、
 他の研究者にも利用されいくつかの成功を収めています。
 </p><p>
+<!--
 <strong>Summing up:</strong> Following the rules-of-thumb I've described won't
 give you the absolute best possible results from your neural network.
 But it will likely give you a good start and a basis for further
@@ -5408,7 +5409,24 @@ in good values.  Above all, keep in mind that the heuristics I've
 described are rules of thumb, not rules cast in stone.  You should be
 on the lookout for signs that things aren't working, and be willing to
 experiment.  In particular, this means carefully monitoring your
-network's behaviour, especially the validation accuracy.</p><p>The difficult of choosing hyper-parameters is exacerbated by the fact
+network's behaviour, especially the validation accuracy.
+-->
+<strong>まとめ：</strong>
+ここで大雑把に説明してきたやり方に従っても、ニューラルネットワークが持つ最大限の性能を
+発揮できることが保証されているわけではありません。とは言え、さらなる改善を前に
+十分良い出発点に立つことはできるはずです。特に、ここでの説明はハイパーパラメータごとに
+ほぼ独立して行ってきましたが、実際にはハイパーパラメータ同士の関係も問題になります。
+例えば、まず $\eta$ の最適化を行ってから $\lambda$ の最適化に取り掛かると、
+$\eta$ が再び最適からは程遠い状態になってしまう、なんてことも起こりえます。
+実際上は、両者を行ったり来たりしながら徐々に良い値に近づいていくのが上手いやり方です。
+そして何より、ここまで説明してきたことはあくまで経験則であって、
+金科玉条の類ではないことを心に留めておいてください。
+ここに書いたやり方に従っているときも、常に上手くいっていないところが無いか気を配り、
+その兆しがあれば自分で実験してみることが大切です。
+これは、ニューラルネットワークの振る舞い、特に検証精度を注意深くチェックすることを意味します。
+</p><p>
+<!--
+    The difficult of choosing hyper-parameters is exacerbated by the fact
 that the lore about how to choose hyper-parameters is widely spread,
 across many research papers and software programs, and often is only
 available inside the heads of individual practitioners.  There are
@@ -5439,7 +5457,34 @@ nets*<span class="marginnote">
   Grégoire Montavon, Geneviève Orr, and Klaus-Robert
     Müller.</span>.  The book is expensive, but many of the articles have
 been placed online by their respective authors with, one presumes, the
-blessing of the publisher, and may be located using a search engine.</p><p>One thing that becomes clear as you read these articles and,
+blessing of the publisher, and may be located using a search engine.
+-->
+さらに厄介なのは、ハイパーパラメータの選び方のコツがあらゆるところに散らばっている点です。
+たくさんの研究論文やプログラムの中に散らばっていますし、個々の技術者の頭の中にしか無いコツも
+少なくありません。本当にたくさんの論文が様々な（そして時に互いに矛盾する）方法を勧めています。
+しかし、中には僅かながら特に役立つ論文があり、雑多な情報の中からエッセンスをまとめてくれています。
+Yoshua Bengioによる2012年の論文*<span class="marginnote">
+*<a href="http://arxiv.org/abs/1206.5533">Practical
+    recommendations for gradient-based training of deep
+    architectures</a>, by Yoshua Bengio (2012).</span>には、逆伝播法や勾配下降法を用いた
+（多層）ニューラルネットワークの学習について実践的なアドバイスが記されています。
+Benigoは、より系統的なハイパーパラメータの決め方など、多くの事項について
+この本よりもずっと詳細に議論しています。他におすすめしたい論文は、Yann LeCun, Léon Bottou, Genevieve Orr,
+そしてKlaus-Robert Müllerによる1998年の論文*<span class="marginnote">
+*<a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf">Efficient
+    BackProp</a>, by Yann LeCun, Léon Bottou,
+  Genevieve Orr and Klaus-Robert Müller (1998)</span>です。
+どちらの論文も、ニューラルネットワークで用いられる様々な技法を集めた、
+非常に有用な2012年の本*<span class="marginnote">
+*<a href="http://www.springer.com/computer/theoretical+computer+science/book/978-3-642-35288-1">Neural
+    Networks: Tricks of the Trade</a>, edited by
+  Grégoire Montavon, Geneviève Orr, and Klaus-Robert
+    Müller.</span>に収められています。
+この本は高価ですが、恐らく出版社のご厚意で、多くの論文は各著者のウェブサイトで公開されており、
+検索エンジンを使って探し出せます。
+</p><p>
+<!--
+    One thing that becomes clear as you read these articles and,
 especially, as you engage in your own experiments, is that
 hyper-parameter optimization is not a problem that is ever completely
 solved.  There's always another trick you can try to improve
@@ -5450,7 +5495,19 @@ one never really finishes optimizing, one only abandons the network to
 posterity.  So your goal should be to develop a workflow that enables
 you to quickly do a pretty good job on the optimization, while leaving
 you the flexibility to try more detailed optimizations, if that's
-important.</p><p>The challenge of setting hyper-parameters has led some people to
+important.
+-->
+これらの文献を読んで、自分自身でも実験を行ってみると、ハイパーパラメータの最適化は
+完全解決のない試みであることがはっきりしてくるでしょう。
+ある手法を試みれば、そのパフォーマンスを改善できる別の手法が常に見つかるものです。
+作家の間には、執筆は決して終わることは無く、ただ放り出してしまうだけなのだ、という格言があります。
+ニューラルネットワークの最適化についても同じことが言えます：ハイパーパラメータの空間は
+あまりに広いので最適化に終わりはなく、どこかで放り出してしまうしか無いのです。
+ですから、十分に良い最適化を手際よく行う作業工程を確立し、
+必要なときにだけより詳細な最適化を行う柔軟性を残すことを目指すべきです。
+</p><p>
+<!--
+    The challenge of setting hyper-parameters has led some people to
 complain that neural networks require a lot of work when compared with
 other machine learning techniques.  I've heard many variations on the
 following complaint: "Yes, a well-tuned neural network may get the
@@ -5464,7 +5521,21 @@ whether machine learning can help solve the problem at all.  On the
 other hand, if getting optimal performance is important, then you may
 need to try approaches that require more specialist knowledge.  While
 it would be nice if machine learning were always easy, there is no
-  <em>a priori</em> reason it should be trivially simple.</p><p>
+  <em>a priori</em> reason it should be trivially simple.
+-->
+ニューラルネットワークを他の機械学習手法と比較して、
+ハイパーパラメータを決めることの困難について文句を言う人も居ます。
+例えば、おおよそ次のような文句はたくさん聞きました：「確かに、良くチューニングされた
+ニューラルネットワークはこの問題に対して最高のパフォーマンスを発揮するかもしれない。
+一方で、ランダムフォレストを（あるいはSVMを、あるいは$\ldots$、何でも好きな手法を入れてください）
+試してみることもできる。そしてその手法でも上手く行くだろう。
+ニューラルネットワークに取り組んでいる時間なんて無いよ。」もちろん、実用上は
+簡単に利用できる技術があるのは良いことです。何か新しい問題に取り掛かる時、
+そして機械学習が役に立つかさえ明らかでは無いような状況では、特にそう言えます。
+一方で、最適なパフォーマンスを得ることが重要なら、より高度な知識を必要とするアプローチを
+試してみることも必要でしょう。機械学習がいつでも簡単に使えるなら嬉しい限りですが、
+そのように期待すべきア・プリオリな理由もないのです。
+</p><p>
 
 <!--  <h3><a name="other_techniques"></a><a href="#other_techniques">Other techniques</a></h3>-->
   <h3><a name="other_techniques"></a><a href="#other_techniques">その他の手法</a></h3>
