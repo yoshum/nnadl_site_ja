@@ -5136,7 +5136,9 @@ $\lambda$ や $\eta$ などのハイパーパラメータの良い値を決め�
 勾配下降法を使った $\lambda$ の決定にはどのような障害があるでしょうか？
 また、$\eta$ の決定に勾配下降法を使うことについてはどうでしょうか？
 </ul>
-</p><p><strong>How I selected hyper-parameters earlier in this book:</strong> If you
+</p><p>
+<!--
+<strong>How I selected hyper-parameters earlier in this book:</strong> If you
 use the recommendations in this section you'll find that you get
 values for $\eta$ and $\lambda$ which don't always exactly match the
 values I've used earlier in the book.  The reason is that the book has
@@ -5150,16 +5152,48 @@ usually tried to keep hyper-parameters constant across the approaches
 being compared (or to scale them in an appropriate way).  Of course,
 there's no reason for the same hyper-parameters to be optimal for all
 the different approaches to learning, so the hyper-parameters I've
-used are something of a compromise.</p><p>As an alternative to this compromise, I could have tried to optimize
+used are something of a compromise.
+-->
+<strong>私がこの本で使ったハイパーパラメータの選び方：</strong>
+この節で紹介してきた手順に従うと、この本でこれまで使ってきた $\eta$ や $\lambda$ の値と
+必ずしも一致しない値が得られるでしょう。そうなる理由は、本書の中では説明の都合という制約のために、
+いつも最適なハイパーパラメータを使うことができなかったためです。
+これまで見てきた学習手法の比較を思い返してみましょう。
+例えば、2乗コスト関数とクロスエントロピーコスト関数の比較、
+重みの初期化に関する新旧2つのアプローチの比較、正規化の有無の比較、等など。
+このような比較を意味あるものにするために、異なるアプローチで同じハイパーパラメータ
+（あるいは適切にスケールしたハイパーパラメータ）を使うように心掛けました。
+当然、採用する学習手法によってハイパーパラメータの最適値は異なるのが普通です。
+ですから、異なる手法を同じハイパーパラメータで比較するには、最適値をある程度諦めることになります。
+</p><p>
+<!--
+    As an alternative to this compromise, I could have tried to optimize
 the heck out of the hyper-parameters for every single approach to
 learning.  In principle that'd be a better, fairer approach, since
 then we'd see the best from every approach to learning.  However,
 we've made dozens of comparisons along these lines, and in practice I
 found it too computationally expensive.  That's why I've adopted the
 compromise of using pretty good (but not necessarily optimal) choices
-for the hyper-parameters.</p><p><strong>Mini-batch size:</strong> How should we set the mini-batch size?  To
+for the hyper-parameters.
+-->
+これに対する代案として、比較対象の手法のそれぞれでまず最適なハイパーパラメータの値を
+求めておいて、最適な場合のパフォーマンス同士を比較するという方法も考えられます。
+原理的には、こちらの方がより公平で良いアプローチかもしれません。
+というのも、そうすることでそれぞれの手法の発揮しうる最高の性能を見ることができるからです。
+しかし実際的には、様々な手法を取り上げ比較していく中で、計算量が多すぎるのです。
+それが、私がこの本で部分的に最適なハイパーパラメータの使用を諦めた理由です。
+</p><p>
+<!--
+<strong>Mini-batch size:</strong> How should we set the mini-batch size?  To
 answer this question, let's first suppose that we're doing online
-learning, i.e., that we're using a mini-batch size of $1$.</p><p>The obvious worry about online learning is that using mini-batches
+learning, i.e., that we're using a mini-batch size of $1$.
+-->
+<strong>ミニバッチのサイズ：</strong>
+ミニバッチの大きさはどう決めるべきでしょうか？この問いに答えるために、
+まずはオンライン学習、つまりミニバッチのサイズが $1$ の学習を考えましょう。
+</p><p>
+<!--
+    The obvious worry about online learning is that using mini-batches
 which contain just a single training example will cause significant
 errors in our estimate of the gradient.  In fact, though, the errors
 turn out to not be such a problem.  The reason is that the individual
@@ -5169,7 +5203,19 @@ decreasing.  It's as though you are trying to get to the North
 Magnetic Pole, but have a wonky compass that's 10-20 degrees off each
 time you look at it.  Provided you stop to check the compass
 frequently, and the compass gets the direction right on average,
-you'll end up at the North Magnetic Pole just fine.</p><p>Based on this argument, it sounds as though we should use online
+you'll end up at the North Magnetic Pole just fine.
+-->
+まず心配になるのは、たった一つの訓練例しか含まないミニバッチでは、
+推定した勾配が大きな誤差を持つのではないかということです。しかし実際のところ、
+この誤差は大した問題でないことがわかります。
+勾配の推定値が一つ一つ非常に正確である必要はないのです。
+必要なのは、学習を進める間、コスト関数の減少傾向が続く程度の正確さです。
+例えるなら、見るたびに10度か20度くらいズレる気まぐれなコンパスを持って北極を目指すようなものです。
+コンパスが平均的には正しい方向を指して、しかも十分頻繁にコンパスを確認すれば、
+最終的には北極にたどり着くことができるでしょう。
+</p><p>
+<!--
+    Based on this argument, it sounds as though we should use online
 learning.  In fact, the situation turns out to be more complicated
 than that.  In a <a href="chap2.html#backprop_over_minibatch">problem
   in the last chapter</a> I pointed out that it's possible to use matrix
@@ -5180,7 +5226,19 @@ make it quite a bit faster to compute the gradient estimate for a
 mini-batch of (for example) size $100$, rather than computing the
 mini-batch gradient estimate by looping over the $100$ training
 examples separately.  It might take (say) only $50$ times as long,
-rather than $100$ times as long.</p><p>Now, at first it seems as though this doesn't help us that much.  With
+rather than $100$ times as long.
+-->
+この議論からは、オンライン学習がベストのように思えます。ところが実際には、
+状況はもっと複雑です。<a href="chap2.html#backprop_over_minibatch">前の章の問題</a>では、
+行列のテクニックを使うと、ミニバッチに含まれる訓練例に関するループを用いることなく、
+ミニバッチ全体を使って一度に勾配の計算ができます。計算を行うハードウェアや
+線形代数ライブラリの実装によっては、個別の訓練例を使った勾配計算を100回行うより、
+100個の訓練例を含むミニバッチについて行列を使って勾配を計算した方がずっと早いことも
+あるのです。行列を使うと、1個の訓練例で勾配を計算するより、
+例えば、100倍ではなく50倍しか時間が掛からないかもしれません。
+</p><p>
+<!--
+    Now, at first it seems as though this doesn't help us that much.  With
 our mini-batch of size $100$ the learning rule for the weights looks
 like:
 <a class="displaced_anchor" name="eqtn93"></a>\begin{eqnarray}
@@ -5206,7 +5264,36 @@ truly the same as $100$ instances of online learning, since in the
 mini-batch the $\nabla C_x$'s are all evaluated for the same set of
 weights, as opposed to the cumulative learning that occurs in the
 online case.  Still, it seems distinctly possible that using the
-larger mini-batch would speed things up.</p><p>With these factors in mind, choosing the best mini-batch size is a
+larger mini-batch would speed things up.
+-->
+今の話は大して役に立たないと感じるかもしれません。
+100個の訓練例を含むミニバッチを使って重みを学習する規則は次のようなものです：
+<a class="displaced_anchor" name="eqtn93"></a>\begin{eqnarray}
+  w \rightarrow w' = w-\eta \frac{1}{100} \sum_x \nabla C_x,
+\tag{93}\end{eqnarray}
+ここで、ミニバッチが含む訓練例に関する和を取っています。一方、オンライン学習では、
+<a class="displaced_anchor" name="eqtn94"></a>\begin{eqnarray}
+  w \rightarrow w' = w-\eta \nabla C_x
+\tag{94}\end{eqnarray}
+となります。いくらミニバッチ更新に50倍の時間しか掛からないからと言っても、
+まだオンライン学習の方が50倍頻繁に更新できるわけですから、
+やはりオンライン学習の方が良いと結論してしまいそうです。しかしもし、
+ミニバッチ学習の場合に学習率を100倍できるとしたらどうでしょう。
+この場合、更新規則は次のように変わります：
+<a class="displaced_anchor" name="eqtn95"></a>\begin{eqnarray}
+  w \rightarrow w' = w-\eta \sum_x \nabla C_x.
+\tag{95}\end{eqnarray}
+こうなると、100個の個別の訓練例について、
+学習率 $\eta$ でオンライン学習を行うのと同じに見えます。
+しかも、1個の訓練例について学習するより50倍しか時間が掛からないのです。
+もちろん、このミニバッチ学習はオンライン学習を100個の訓練例で実行するのと
+全く同じというわけではありません。オンライン学習では個別の例を学習するごとに
+重みを更新し、次の例では新しい重みを用いて勾配の計算を行うのに対して、
+ミニバッチ学習では100個の訓練例について同じ重みを用いて計算を行うからです。
+この点を考慮してもなお、ミニバッチ学習がオンライン学習よりも速い可能性は十分にあります。
+</p><p>
+<!--
+    With these factors in mind, choosing the best mini-batch size is a
 compromise.  Too small, and you don't get to take full advantage of
 the benefits of good matrix libraries optimized for fast hardware.
 Too large and you're simply not updating your weights often enough.
@@ -5222,7 +5309,25 @@ as above.  Plot the validation accuracy versus <em>time</em> (as in,
 real elapsed time, not epoch!), and choose whichever mini-batch size
 gives you the most rapid improvement in performance.  With the
 mini-batch size chosen you can then proceed to optimize the other
-hyper-parameters.</p><p>Of course, as you've no doubt realized, I haven't done this
+hyper-parameters.
+-->
+これらの要因を考慮すると、最適なミニバッチサイズはある種の妥協のもとで決まると言えます。
+もし小さすぎれば、高速なハードウェアに最適化された行列ライブラリの恩恵を十分に受けられません。
+もし大きすぎれば、重みの更新頻度が下がってしまいます。
+やりたいのは、学習スピードを最大化するようなミニバッチサイズを決めることです。
+幸い、学習スピードを最大化するミニバッチサイズは、ニューラルネットワークの
+アーキテクチャ以外のハイパーパラメータに対して比較的独立に決められるので、
+良いミニバッチサイズを見つける前に予め他のハイパーパラメータを最適化しておく必要はありません。
+ミニバッチサイズ以外のハイパーパラメータについては程よい値を入れておいて、
+学習率 $\eta$ も上述のようにスケーリングしながら異なるミニバッチサイズを試してみれば良いのです。
+そして、検証データに対する精度を<em>時間</em>についてプロットしましょう。
+ここで、時間はエポック数ではなく、掛かった実時間であることに注意してください。
+このプロットに基づいて、最もパフォーマンスの改善が速かったミニバッチサイズを
+選べば良いのです。
+他のハイパーパラメータの最適化は、ここで選んだミニバッチサイズを使って行います。
+</p><p>
+<!--
+    Of course, as you've no doubt realized, I haven't done this
 optimization in our work.  Indeed, our implementation doesn't use the
 faster approach to mini-batch updates at all.  I've simply used a
 mini-batch size of $10$ without comment or explanation in nearly all
@@ -5233,7 +5338,20 @@ because my preliminary experiments suggested the speedup would be
 rather modest.  In practical implementations, however, we would most
 certainly implement the faster approach to mini-batch updates, and
 then make an effort to optimize the mini-batch size, in order to
-maximize our overall speed.</p><p></p><p><strong>Automated techniques:</strong> I've been describing these heuristics
+maximize our overall speed.
+-->
+もう気づいている読者も居るでしょうが、この本ではここに述べた最適化を行ってはいません。
+実は、ここで述べたようなミニバッチ学習を高速化する手法を使ってさえいないのです。
+これまでほとんど全ての具体例で、説明なしに大きさ10のミニバッチを用いてきました。
+ですから、ミニバッチサイズを小さくすることで学習を高速化することもできたでしょう。
+そうしなかった理由として、一つはミニバッチ更新のやり方を示したかったこと、
+そしてもう一つは事前に行った実験からミニバッチサイズを小さくしても大して
+学習速度は改善しないと考えられたことが挙げられます。
+しかし実際の実装では、ほぼ間違いなくミニバッチ更新を高速な行列ライブラリ等を用いて実装し、
+全体の学習スピードを最大化するようにミニバッチサイズの最適かも行うでしょう。
+</p><p>
+<!--
+<strong>Automated techniques:</strong> I've been describing these heuristics
 as though you're optimizing your hyper-parameters by hand.
 Hand-optimization is a good way to build up a feel for how neural
 networks behave.  However, and unsurprisingly, a great deal of work
@@ -5254,7 +5372,30 @@ hyper-parameters*<span class="marginnote">
     Bayesian optimization of machine learning algorithms</a>, by Jasper
   Snoek, Hugo Larochelle, and Ryan Adams.</span>.  The code from the paper
 is <a href="https://github.com/jaberg/hyperopt">publicly available</a>, and
-has been used with some success by other researchers.</p><p><strong>Summing up:</strong> Following the rules-of-thumb I've described won't
+has been used with some success by other researchers.
+-->
+<strong>自動化技術：</strong>
+ここまでは、ハイパーパラメータの最適化を手で行うかのように説明してきました。
+自分の手を動かして最適化を行うことは、ニューラルネットワークの振る舞いについて
+感覚を養うのに良い方法です。
+しかし、当然ながら、実際は多くの場合にこの過程は自動化されています。
+よく使われるのは<em>グリッド探索</em>という方法で、ハイパーパラメータの空間を
+グリッド状に系統的に探索します。
+グリッド探索の成果と限界（そして簡単に実装できる代替手法）に関するレビューとして、
+James BergstraとYoshua Bengioによる2012年の論文*<span class="marginnote">
+*<a href="http://dl.acm.org/citation.cfm?id=2188395">Random
+    search for hyper-parameter optimization</a>, by James Bergstra and
+  Yoshua Bengio (2012).</span>を挙げておきます。
+より洗練された手法も多数提案されています。ここでそれらの全ては紹介しませんが、
+ベイズ統計に基づくハイパーパラメータの自動最適化を用いた2012年の論文は
+特に有望と思われるので紹介しておきます*<span class="marginnote">
+*<a href="http://papers.nips.cc/paper/4522-practical-bayesian-optimization-of-machine-learning-algorithms.pdf">Practical
+    Bayesian optimization of machine learning algorithms</a>, by Jasper
+  Snoek, Hugo Larochelle, and Ryan Adams.</span>。
+この論文のコードは<a href="https://github.com/jaberg/hyperopt">公開されており</a>、
+他の研究者にも利用されいくつかの成功を収めています。
+</p><p>
+<strong>Summing up:</strong> Following the rules-of-thumb I've described won't
 give you the absolute best possible results from your neural network.
 But it will likely give you a good start and a basis for further
 improvements.  In particular, I've discussed the hyper-parameters
