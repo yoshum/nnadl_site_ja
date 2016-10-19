@@ -3275,7 +3275,7 @@ $1$ か $0$ に非常に近い値を取ります。つまり、今考えてい�
 飽和してしまうのです。そしてそうなってしまうと、重みを少し変化させても
 隠れニューロンの活性はほんの僅かにしか変化しません。そしてこの非常に僅かな活性の変化は、
 ニューラルネットワークの残りの部分に対してほとんど影響せず、最終的にコスト関数に
-ごく小さな変化しかもたらさないでしょう。結果として、これらの重みの学習に勾配下降法を使っても、
+ごく小さな変化しかもたらさないでしょう。結果として、これらの重みの学習に勾配降下法を使っても、
 学習は非常にゆっくりとしか進行しないでしょう*<span class="marginnote">
 *この点についてはより詳細にChapter 2で議論しました。その際、
 <a href="chap2.html#the_four_fundamental_equations_behind_backpropagation">逆伝播の式</a>を
@@ -3367,7 +3367,7 @@ continue with the same initialization procedure as before.
 上述のように、バイアスについては以前と同様、平均が $0$ で標準偏差が $1$ のガウス分布で
 初期化します。こうしてもニューロンの過剰に飽和させることは無いので大きな問題になりません。
 実は、飽和の問題さえ避ければ、バイアスをどのように初期化しても大勢に影響はないのです。
-全てのバイアスを $0$ に初期化して、あとは勾配下降法で学習するに任せる人さえ居ます。
+全てのバイアスを $0$ に初期化して、あとは勾配降下法で学習するに任せる人さえ居ます。
 どのように初期化しても大して変わりないので、私たちは以前と同じ方法でバイアスを初期化することにします。
 </p><p>
 <!--
@@ -4131,7 +4131,7 @@ the modification is tiny, it has a big impact on results!
 その実装はコードを読んでも見逃してしまうほど些細なことです。この点に関わる変更の大部分は、
 様々なメソッド、特に <tt>Network.SGD</tt> に、パラメータ <tt>lmbda</tt> を渡すことです。
 そして本質的な変更は1行のプログラム、<tt>Network.update_mini_batch</tt> メソッドの
-終わりから4行目です。その部分で、重み減衰するように勾配下降法の更新規則を修正しています。
+終わりから4行目です。その部分で、重み減衰するように勾配降下法の更新規則を修正しています。
 しかし、その修正はわずかでも、結果へは大きな影響を与えるのです！
 </p><p>
 <!--
@@ -4158,7 +4158,7 @@ and accuracy either on the <tt>training_data</tt> or on a set of
 We've used these flags often earlier in the chapter, but let me give
 an example of how it works, just to remind you:
 -->
-他の小さくても重要な変更点は、確率的勾配下降法を実行するメソッド <tt>Network.SGD</tt> に
+他の小さくても重要な変更点は、確率的勾配降下法を実行するメソッド <tt>Network.SGD</tt> に
 いくつかのオプションフラグを追加したことです。これらのフラグは、
 <tt>training_data</tt> か <tt>evaluation_data</tt> でのコストと精度をモニターする
 ために用いられます。コストと精度を計算するデータ集合は <tt>Network.SGD</tt> に渡すことができます。
@@ -4750,7 +4750,7 @@ of the cost function,
 $\eta = 0.25$ では、コストが最初減少しますが、20エポックを過ぎた辺りでほぼ飽和して、
 その後はランダムに見える小さな振動をします。最後に、$\eta = 2.5$ では、
 はじめからコストは大きな振動をしています。この振動が起こる理由を理解するために、
-確率的勾配下降法ではコストの谷底に向かって小さなステップで
+確率的勾配降下法ではコストの谷底に向かって小さなステップで
 徐々に学習を進めていくことを思い出しましょう：
 </p><p><center>
 <img src="images/tikz33.png"/>
@@ -4789,15 +4789,15 @@ value for the learning rate, $\eta$.
 これが恐らく $\eta=2.5$ の時に起こっているのでしょう*<span class="marginnote">
 *この描像は分かりやすいですが、あくまでも直感的な説明として示したもので、
 完全な説明にはなっていません。より完全な説明は、手短に言うと次のようなものです：
-勾配下降法では、コスト関数に対する一次近似を手がかりにコストを減少させようと試みます。
+勾配降下法では、コスト関数に対する一次近似を手がかりにコストを減少させようと試みます。
 大きな $\eta$ では、コスト関数のより高次の項がより重要になり、
-場合によってはコスト関数の振る舞いを決定づけるので、勾配下降法が破綻してしまいます。
+場合によってはコスト関数の振る舞いを決定づけるので、勾配降下法が破綻してしまいます。
 これは特にコスト関数の最小や極小に近づくと起こりやすくなります。というのも、
 そのような領域では勾配が小さくなり、高次の項が支配的になりやすくなるためです。</span>。
 $\eta=0.25$ の場合は、
 最初しばらくはコスト関数の最小に向かって進み、最小に近づいた時だけ行き過ぎの問題が生じます。
 $\eta=0.025$ を選ぶと、最初の30エポックでは同様の問題は一切生じません。もちろん、
-これほど小さな学習率を選ぶと、確率的勾配下降法による学習が遅くなるという別の問題が生じます。
+これほど小さな学習率を選ぶと、確率的勾配降下法による学習が遅くなるという別の問題が生じます。
 より良い方法は、$\eta=0.25$ から始めて20エポック訓練し、それから $\eta=0.025$ に切り替えることでしょう。
 このように学習率を変動させる手法については後ほど議論します。
 しばらくは、一つの良い学習率 $\eta$ をどう選ぶかについて考えましょう。
@@ -4896,7 +4896,7 @@ which criterion you use.
 次のように理由付けできます。他のハイパーパラメータが試験データに対する最終的な分類精度の改善を
 目的とするので、検証データに対する分類精度に基づいてチューニングするのは理にかなっています。
 しかし、学習率が最終的な分類精度に与える影響は二義的なものです。
-学習率をチューニングする一義的な目的は勾配下降法のステップ幅を制御することですから、
+学習率をチューニングする一義的な目的は勾配降下法のステップ幅を制御することですから、
 訓練データに対するコストを監視するのが大きすぎるステップ幅を検出する最良の方法であるはずです。
 とは言え、あくまでもこれは私の個人的な美的趣味の問題です。
 検証データに対する分類精度が改善するなら、学習の初期段階に訓練コストは減少するでしょうから、
@@ -5132,9 +5132,9 @@ $\lambda$ の探索をどこから始めるべきか、原理的な議論を知�
 <h4><a name="exercise_30392"></a><a href="#exercise_30392">演習</a></h4><ul>
 <li>
 $\lambda$ や $\eta$ などのハイパーパラメータの良い値を決めるために、
-勾配下降法を使いたくなるかもしれません。
-勾配下降法を使った $\lambda$ の決定にはどのような障害があるでしょうか？
-また、$\eta$ の決定に勾配下降法を使うことについてはどうでしょうか？
+勾配降下法を使いたくなるかもしれません。
+勾配降下法を使った $\lambda$ の決定にはどのような障害があるでしょうか？
+また、$\eta$ の決定に勾配降下法を使うことについてはどうでしょうか？
 </ul>
 </p><p>
 <!--
@@ -5466,7 +5466,7 @@ blessing of the publisher, and may be located using a search engine.
 Yoshua Bengioによる2012年の論文*<span class="marginnote">
 *<a href="http://arxiv.org/abs/1206.5533">Practical
     recommendations for gradient-based training of deep
-    architectures</a>, by Yoshua Bengio (2012).</span>には、逆伝播法や勾配下降法を用いた
+    architectures</a>, by Yoshua Bengio (2012).</span>には、逆伝播法や勾配降下法を用いた
 （多層）ニューラルネットワークの学習について実践的なアドバイスが記されています。
 Benigoは、より系統的なハイパーパラメータの決め方など、多くの事項について
 この本よりもずっと詳細に議論しています。他におすすめしたい論文は、Yann LeCun, Léon Bottou, Genevieve Orr,
@@ -5564,12 +5564,27 @@ in-depth than the earlier discussions, but should convey some feeling
 </p>
 
 
-<p><h4><a name="variations_on_stochastic_gradient_descent"></a><a href="#variations_on_stochastic_gradient_descent">Variations on stochastic gradient descent</a></h4></p><p>Stochastic gradient descent by backpropagation has served us well in
+<p>
+<!--
+<h4><a name="variations_on_stochastic_gradient_descent"></a><a href="#variations_on_stochastic_gradient_descent">Variations on stochastic gradient descent</a></h4>
+-->
+<h4><a name="variations_on_stochastic_gradient_descent"></a><a href="#variations_on_stochastic_gradient_descent">確率的勾配降下法のバリエーション</a></h4>
+</p><p>
+<!--
+    Stochastic gradient descent by backpropagation has served us well in
 attacking the MNIST digit classification problem.  However, there are
 many other approaches to optimizing the cost function, and sometimes
 those other approaches offer performance superior to mini-batch
 stochastic gradient descent.  In this section I sketch two such
-approaches, the Hessian and momentum techniques.</p><p><strong>Hessian technique:</strong> To begin our discussion it helps to put
+approaches, the Hessian and momentum techniques.
+-->
+逆伝播法による確率的勾配降下法はMNIST手書き数字分類問題に対して十分な働きをしてきました。
+しかし、コスト関数の最適化については他にも多くのアプローチがあり、
+時にはそれらの手法がミニバッチを使った確率的勾配降下法よりも優れた性能を発揮する場合もあります。
+この節ではヘッセ行列法とモメンタム法の2つを概観します。
+</p><p>
+<!--
+    <strong>Hessian technique:</strong> To begin our discussion it helps to put
 neural networks aside for a bit.  Instead, we're just going to
 consider the abstract problem of minimizing a cost function $C$ which
 is a function of many variables, $w = w_1, w_2, \ldots$, so $C =
@@ -5609,17 +5624,75 @@ Provided <span id="margin_341200104540_reveal" class="equation_link">(98)</span>
 cost function, then we'd expect that moving from the point $w$ to
 $w+\Delta w = w-H^{-1} \nabla C$ should significantly decrease the
 cost function.  That suggests a possible algorithm for minimizing the
-cost:</p><p><ul>
-<li> Choose a starting point, $w$.</p><p><li> Update $w$ to a new point $w' = w-H^{-1} \nabla C$, where the
-  Hessian $H$ and $\nabla C$ are computed at $w$.</p><p><li> Update $w'$ to a new point $w{'}{'} = w'-H'^{-1} \nabla' C$,
-  where the Hessian $H'$ and $\nabla' C$ are computed at $w'$.</p><p><li> $\ldots$
+cost:
+-->
+<strong>ヘッセ行列法：</strong> この手法について議論する上で、
+ひとまずニューラルネットワークのことは脇においておきましょう。その代わり、
+多変数 $w=w_1, w_2, \ldots$ のあるコスト関数 $C(w)$ を最小化するという抽象的な問題を考えましょう。
+テイラーの定理により、コスト関数は点 $w$ の周りで
+<a class="displaced_anchor" name="eqtn96"></a>\begin{eqnarray}
+C(w+\Delta w) & = & C(w) + \sum_j \frac{\partial C}{\partial w_j} \Delta w_j
+\nonumber \\ & & + \frac{1}{2} \sum_{jk} \Delta w_j \frac{\partial^2 C}{\partial w_j
+\partial w_k} \Delta w_k + \ldots
+\tag{96}\end{eqnarray}
+と近似できます。これをよりコンパクトに、
+<a class="displaced_anchor" name="eqtn97"></a>\begin{eqnarray}
+  C(w+\Delta w) = C(w) + \nabla C \cdot \Delta w +
+  \frac{1}{2} \Delta w^T H \Delta w + \ldots,
+\tag{97}\end{eqnarray}
+と書き換えることもできます。ここで、$\nabla C$ はコスト関数の勾配、
+$H$ は<em>ヘッセ行列</em>と呼ばれる行列で、その $j$ 行 $k$ 列の要素は
+$\partial^2 C/\partial w_j \partial w_k$ です。上で省略した高次の項を無視すると、
+次の近似式が得られます：<a class="displaced_anchor" name="eqtn98"></a>\begin{eqnarray}
+  C(w+\Delta w) \approx C(w) + \nabla C \cdot \Delta w +
+  \frac{1}{2} \Delta w^T H \Delta w.
+\tag{98}\end{eqnarray}
+簡単な計算により、この右辺を最小化するには*<span class="marginnote">
+*厳密に言うと、これが極小ではなく最小であるためには、ヘッセ行列が正定値である必要があります。
+直感的には、$C$ が局所的に山や鞍点ではなく谷になっていることを意味します。</span>
+<a class="displaced_anchor" name="eqtn99"></a>\begin{eqnarray}
+    \Delta w = -H^{-1} \nabla C.
+\tag{99}\end{eqnarray}
+と選べば良いことが分かります。
+式 <span id="margin_341200104540_reveal" class="equation_link">(98)</span><span id="margin_341200104540" class="marginequation" style="display: none;"><a href="chap3.html#eqtn98" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  C(w+\Delta w) \approx C(w) + \nabla C \cdot \Delta w +
+  \frac{1}{2} \Delta w^T H \Delta w \nonumber\end{eqnarray}</a></span><script>$('#margin_341200104540_reveal').click(function() {$('#margin_341200104540').toggle('slow', function() {});});</script> が
+良い近似であるとすると、点 $w$ から $w+\Delta w = w-H^{-1} \nabla C$ へ移動することで
+コスト関数を大きく減少させられると期待できます。このことから、
+次のようなコスト関数の最小化アルゴリズムが考えられます：
+</p><p><!--
+<ul>
+<li> Choose a starting point, $w$.</p><p>
+<li> Update $w$ to a new point $w' = w-H^{-1} \nabla C$, where the
+  Hessian $H$ and $\nabla C$ are computed at $w$.</p><p>
+<li> Update $w'$ to a new point $w{'}{'} = w'-H'^{-1} \nabla' C$,
+  where the Hessian $H'$ and $\nabla' C$ are computed at $w'$.</p><p>
+<li> $\ldots$
+</ul>-->
+<ul>
+<li> 出発点 $w$ を選びます。</p><p>
+<li> 点 $w$ を新しい点 $w' = w-H^{-1} \nabla C$ に更新します。ここで、$\nabla C$ と
+    ヘッセ行列 $H$ は点 $w$ で計算します。</p><p>
+<li> 点 $w'$ を新しい点 $w{'}{'} = w'-H'^{-1} \nabla' C$ に更新します。ここで、
+    ヘッセ行列 $H'$ と $\nabla' C$ は点 $w'$ で計算します。</p><p>
+<li> $\ldots$
 </ul>
+<!--
 In practice, <span id="margin_681684129137_reveal" class="equation_link">(98)</span><span id="margin_681684129137" class="marginequation" style="display: none;"><a href="chap3.html#eqtn98" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
   C(w+\Delta w) \approx C(w) + \nabla C \cdot \Delta w +
   \frac{1}{2} \Delta w^T H \Delta w \nonumber\end{eqnarray}</a></span><script>$('#margin_681684129137_reveal').click(function() {$('#margin_681684129137').toggle('slow', function() {});});</script> is only an approximation, and it's
 better to take smaller steps.  We do this by repeatedly changing $w$
 by an amount $\Delta w = -\eta H^{-1} \nabla C$, where $\eta$ is known
-as the <em>learning rate</em>.</p><p>This approach to minimizing a cost function is known as the
+as the <em>learning rate</em>.
+-->
+実際には、式  <span id="margin_681684129137_reveal" class="equation_link">(98)</span><span id="margin_681684129137" class="marginequation" style="display: none;"><a href="chap3.html#eqtn98" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  C(w+\Delta w) \approx C(w) + \nabla C \cdot \Delta w +
+  \frac{1}{2} \Delta w^T H \Delta w \nonumber\end{eqnarray}</a></span><script>$('#margin_681684129137_reveal').click(function() {$('#margin_681684129137').toggle('slow', function() {});});</script> はあくまで近似であり、
+更新はもっと小さい幅で行うべきです。そのためには、<em>学習率</em> $\eta$ を導入し、
+$w$ の変化量を $\Delta w = -\eta H^{-1} \nabla C$ にすれば良いです。
+</p><p>
+<!--
+    This approach to minimizing a cost function is known as the
 <em>Hessian technique</em> or <em>Hessian optimization</em>.  There are
 theoretical and empirical results showing that Hessian methods
 converge on a minimum in fewer steps than standard gradient descent.
@@ -5627,7 +5700,16 @@ In particular, by incorporating information about second-order changes
 in the cost function it's possible for the Hessian approach to avoid
 many pathologies that can occur in gradient descent.  Furthermore,
 there are versions of the backpropagation algorithm which can be used
-to compute the Hessian.</p><p>If Hessian optimization is so great, why aren't we using it in our
+to compute the Hessian.
+-->
+コスト関数を最小化するこのアプローチは <em>ヘッセ行列法</em> あるいは <em>ヘッセ行列最適化</em>
+と呼ばれます。ヘッセ行列法が標準的な勾配降下法と比べて少ないステップ数で収束することが
+理論的・経験的に知られています。特に、コスト関数の2次の変化を取り入れることで、
+勾配降下法について知られている多くの病的な振る舞いを避けられることが知られています。
+さらに、ヘッセ行列を計算するために拡張された逆伝播法も知られています。
+</p><p>
+<!--
+    If Hessian optimization is so great, why aren't we using it in our
 neural networks?  Unfortunately, while it has many desirable
 properties, it has one very undesirable property: the Hessian matrix
 is very big.  Suppose you have a neural network with $10^7$ weights
@@ -5639,7 +5721,23 @@ However, that doesn't mean that it's not useful to understand.  In
 fact, there are many variations on gradient descent which are inspired
 by Hessian optimization, but which avoid the problem with overly-large
 matrices.  Let's take a look at one such technique, momentum-based
-gradient descent.</p><p><a name="momentum"></a></p><p><strong>Momentum-based gradient descent:</strong> Intuitively, the advantage
+gradient descent.
+-->
+ヘッセ行列最適化がそんなに素晴らしいのなら、なぜこれまで見てきたニューラルネットワークで
+使っていないのでしょうか？確かにヘッセ行列法は多くの良い性質を持ってはいるものの、
+一つ重要な、非常に好ましくない性質も持っています：ヘッセ行列は非常に大きいのです。
+例えば、重みとバイアスを合わせて $10^7$ 個のパラメータを持つニューラルネットワークを
+訓練するとします。すると、そのヘッセ行列は $10^7\times10^7 = 10^{14}$ 個もの要素を持ちます。
+この大量にある要素を計算しなければならないのみならず、逆行列まで計算しなければならないのです！
+このため、ヘッセ行列法を実際に適用するのは難しいのです。
+しかし、この方法には理解しやすいというメリットもあります。実は、
+勾配降下法の亜種には、ヘッセ行列法に触発された、しかし巨大な行列の問題を伴わない手法が
+数多く有ります。次に、そのような手法の一つ、モメンタム勾配降下法を見てみましょう。
+</p><p><a name="momentum"></a></p><p>
+<!--
+    <strong>Momentum-based gradient descent:</strong>
+
+    Intuitively, the advantage
 Hessian optimization has is that it incorporates not just information
 about the gradient, but also information about how the gradient is
 changing.  Momentum-based gradient descent is based on a similar
@@ -5655,7 +5753,25 @@ of "velocity" for the parameters we're trying to optimize.  The
 gradient acts to change the velocity, not (directly) the "position",
 in much the same way as physical forces change the velocity, and only
 indirectly affect position.  Second, the momentum method introduces a
-kind of friction term, which tends to gradually reduce the velocity.</p><p>Let's give a more precise mathematical description.  We introduce
+kind of friction term, which tends to gradually reduce the velocity.
+-->
+<strong>モメンタム勾配降下法</strong>
+直感的に、ヘッセ行列法の強みは勾配の情報に加えて勾配の変化に関する情報を
+取り入れられる点にあると言えます。モメンタム勾配降下法は同様の直感に基づいていますが、
+2階微分の巨大な行列を取り扱うことを巧妙に回避しています。
+モメンタム法を理解するために、以前に示した勾配降下法の
+<a href="chap1.html#gradient_descent">直感的な描像</a>に戻って、
+谷を転がり落ちるボールを考えてみましょう。勾配降下法はその名前の割に、
+実際にはそれほど谷底に落ちていくボールと似ていないことは既に指摘しました。
+モメンタム法では、2つの点で勾配加工法を修正し、より物理的な描像と近づけています。
+第一に、この手法では最適化するパラメータに「速度」の概念を導入します。
+勾配はこの速度を変化させますが、「位置」を（直接的には）変化させません。
+これは、物理的な「力」は速度を変化させますが、位置の変化は速度の変化を介して間接的にしか
+引き起こさないことと似ています。第2に、モメンタム法ではある種の摩擦項を導入し、
+自然と徐々に減速するように仕向けます。
+</p><p>
+<!--
+    Let's give a more precise mathematical description.  We introduce
 velocity variables $v = v_1, v_2, \ldots$, one for each corresponding
 $w_j$ variable*<span class="marginnote">
 *In a neural net the $w_j$ variables would, of
@@ -5676,17 +5792,38 @@ of change of $w$.  Intuitively, we build up the velocity by repeatedly
 adding gradient terms to it.  That means that if the gradient is in
 (roughly) the same direction through several rounds of learning, we
 can build up quite a bit of steam moving in that direction.  Think,
-for example, of what happens if we're moving straight down a slope:</p><p><center>
+for example, of what happens if we're moving straight down a slope:
+-->
+より精密で数学的な説明をしましょう。それぞれのパラメータ変数 $w_j$ に対して、
+速度変数 $v=v_1, v_2, \ldots$ を導入します*<span class="marginnote">
+*もちろん、ニューラルネットワークの$w_j$ 変数は全ての重みとバイアスを含みます。</span>。
+そして、勾配降下法におけるパラメータの更新規則を $w \rightarrow w'= w-\eta \nabla C$ から
+<a class="displaced_anchor" name="eqtn100"></a><a class="displaced_anchor" name="eqtn101"></a>\begin{eqnarray}
+  v & \rightarrow  & v' = \mu v - \eta \nabla C \tag{100}\\
+
+  w & \rightarrow & w' = w+v'
+\tag{101}\end{eqnarray}
+に置き換えます。ここで、$\mu$ は系の減衰、あるいは摩擦の大きさを決めるハイパーパラメータです。
+この方程式の意味を理解するには、まず摩擦が無い場合に相当する $\mu=1$ を考えてみるのが良いでしょう。
+その場合、$\nabla C$ が「力」として速度 $v$ を変化させること、
+そして速度が $w$ の変化率を与えていることが見て取れます。
+直感的には、勾配項を繰り返し足し上げることで速度が生じます。
+学習の数ステップに渡って勾配が（大まかに）同じ方向ならば、
+その方向にかなりの勢いがつきます。
+例えば、下り坂を真っ直ぐ下る時に何が起こるか考えてみてください：
+</p><p><center>
 <img src="images/tikz34.png"/>
-</center></p><p>With each step the velocity gets larger down the slope, so we move
+</center></p><p>
+<!--
+    With each step the velocity gets larger down the slope, so we move
 more and more quickly to the bottom of the valley.  This can enable
 the momentum technique to work much faster than standard gradient
 descent.  Of course, a problem is that once we reach the bottom of the
 valley we will overshoot.  Or, if the gradient should change rapidly,
 then we could find ourselves moving in the wrong direction.  That's
 the reason for the $\mu$ hyper-parameter in <span id="margin_821276191177_reveal" class="equation_link">(100)</span><span id="margin_821276191177" class="marginequation" style="display: none;"><a href="chap3.html#eqtn100" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
-  v & \rightarrow  & v' = \mu v - \eta \nabla C  \nonumber\end{eqnarray}</a></span><script>$('#margin_821276191177_reveal').click(function() {$('#margin_821276191177').toggle('slow', function() {});});</script>.  I
-said earlier that $\mu$ controls the amount of friction in the system;
+  v & \rightarrow  & v' = \mu v - \eta \nabla C  \nonumber\end{eqnarray}</a></span><script>$('#margin_821276191177_reveal').click(function() {$('#margin_821276191177').toggle('slow', function() {});});</script>.
+  I said earlier that $\mu$ controls the amount of friction in the system;
 to be a little more precise, you should think of $1-\mu$ as the amount
 of friction in the system.  When $\mu = 1$, as we've seen, there is no
 friction, and the velocity is completely driven by the gradient
@@ -5700,13 +5837,43 @@ value of $\mu$ interediate between $0$ and $1$ can give us much of the
 benefit of being able to build up speed, but without causing
 overshooting.  We can choose such a value for $\mu$ using the held-out
 validation data, in much the same way as we select $\eta$ and
-$\lambda$.</p><p></p><p></p><p>I've avoided naming the hyper-parameter $\mu$ up to now.  The reason
+$\lambda$.
+-->
+ステップ毎にスロープを下る速度が増していき、加速しながら谷底まで素早く移動していきます。
+これがモメンタム法が通常の勾配降下法よりも高速に学習する仕組みです。
+もちろん、このままでは谷底を通り過ぎてしまう問題が有ります。
+また、勾配が素早く変化する場合には、間違った方向に進んでしまうこともあるでしょう。
+この問題を解決するために、$\mu$ というハイパーパラメータを式 <span id="margin_821276191177_reveal" class="equation_link">(100)</span><span id="margin_821276191177" class="marginequation" style="display: none;"><a href="chap3.html#eqtn100" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+v & \rightarrow  & v' = \mu v - \eta \nabla C  \nonumber\end{eqnarray}</a></span><script>$('#margin_821276191177_reveal').click(function() {$('#margin_821276191177').toggle('slow', function() {});});</script> に導入したのです。
+既に、$\mu$ が摩擦を表すハイパーパラメータであるという説明をしました。より正確に言えば、
+$1-\mu$ が摩擦の大きさを表しています。既に見たように、$\mu=1$ の時には摩擦が無く、
+$\nabla C$ が加速度の役割をして速度を変化させます。反対に、$\mu=0$ の場合には、
+摩擦が大きて加速がつかず、式 <span id="margin_1375636495_reveal" class="equation_link">(100)</span><span id="margin_1375636495" class="marginequation" style="display: none;"><a href="chap3.html#eqtn100" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  v & \rightarrow  & v' = \mu v - \eta \nabla C  \nonumber\end{eqnarray}</a></span><script>$('#margin_1375636495_reveal').click(function() {$('#margin_1375636495').toggle('slow', function() {});});</script>
+と <span id="margin_834321992917_reveal" class="equation_link">(101)</span><span id="margin_834321992917" class="marginequation" style="display: none;"><a href="chap3.html#eqtn101" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  w & \rightarrow & w' = w+v' \nonumber\end{eqnarray}</a></span><script>$('#margin_834321992917_reveal').click(function() {$('#margin_834321992917').toggle('slow', function() {});});</script> は元の勾配下降法
+$w \rightarrow w'=w-\eta \nabla C$ に帰着します。実用的には、$\mu$ を0と1の間に取ることで、
+谷底を行き過ぎること無く、学習を加速することが可能になります。
+検証データを用いると、$\eta$ や $\lambda$ を決定したのと同じように $\mu$ の値を決定できます。
+</p><p></p><p></p><p>
+<!--
+    I've avoided naming the hyper-parameter $\mu$ up to now.  The reason
 is that the standard name for $\mu$ is badly chosen: it's called the
 <em>momentum co-efficient</em>.  This is potentially confusing, since
 $\mu$ is not at all the same as the notion of momentum from
 physics. Rather, it is much more closely related to friction.
 However, the term momentum co-efficient is widely used, so we will
-continue to use it.</p><p>A nice thing about the momentum technique is that it takes almost no
+continue to use it.
+-->
+ここまで、ハイパーパラメータ $\mu$ に名前を付けるのを避けてきました。
+その理由は、$\mu$ の標準的な名前があまりに酷いからです：<em>モメンタム係数</em>
+と呼ばれています。この名前は混乱の元になると思います。というのも、
+$\mu$ は物理におけるモメンタムの概念とは全く何の関係も無いからです。
+むしろ、摩擦と非常に関係があります。しかし、モメンタム係数という言葉は広く使われているので、
+今後はこの言葉を使うことにします。
+</p><p>
+<!--
+    A nice thing about the momentum technique is that it takes almost no
 work to modify an implementation of gradient descent to incorporate
 momentum.  We can still use backpropagation to compute the gradients,
 just as before, and use ideas such as sampling stochastically chosen
@@ -5714,14 +5881,35 @@ mini-batches.  In this way, we can get some of the advantages of the
 Hessian technique, using information about how the gradient is
 changing.  But it's done without the disadvantages, and with only
 minor modifications to our code.  In practice, the momentum technique
-is commonly used, and often speeds up learning.</p><p><h4><a name="exercise_603875"></a><a href="#exercise_603875">Exercise</a></h4><ul>
+is commonly used, and often speeds up learning.
+-->
+モメンタム法の優れた点は、元の勾配降下法の実装を修正してモメンタムの効果を取り入れるのが
+非常に容易であることです。以前と全く同じように逆伝播法を使って勾配を計算できますし、
+ミニバッチを使った確率的サンプリングの考えも同じように適用できます。
+このように、勾配の変化の情報を使うことでヘッセ行列法の利点を部分的に活用できます。
+しかも、ほとんどデメリットが無く、少しだけ実装を修正するだけで良いのです。
+実際の現場でもモメンタム法は広く利用され、学習の加速に貢献しています。
+</p><p>
+<!--
+    <h4><a name="exercise_603875"></a><a href="#exercise_603875">Exercise</a></h4><ul>
 <li> What would go wrong if we used $\mu > 1$ in the momentum
   technique?</p><p><li> What would go wrong if we used $\mu < 0$ in the momentum
   technique?
 </ul></p><p><h4><a name="problem_713937"></a><a href="#problem_713937">Problem</a></h4><ul>
 <li> Add momentum-based stochastic gradient descent to
   <tt>network2.py</tt>.
-</ul></p><p><strong>Other approaches to minimizing the cost function:</strong> Many other
+</ul>
+-->
+<h4><a name="exercise_603875"></a><a href="#exercise_603875">演習</a></h4><ul>
+<li> もしモメンタム法で $\mu>1$ とするとどのような問題が起こるでしょうか？</p><p>
+<li> もし $\mu < 0$ とするとどのような問題が起こるでしょうか？
+</ul></p><p>
+<h4><a name="problem_713937"></a><a href="#problem_713937">問題</a></h4><ul>
+<li> モメンタム法に基づいた確率的勾配降下法を <tt>network2.py</tt> に追加してください。
+</ul>
+</p><p>
+<!--
+<strong>Other approaches to minimizing the cost function:</strong> Many other
 approaches to minimizing the cost function have been developed, and
 there isn't universal agreeement on which is the best approach.  As
 you go deeper into neural networks it's worth digging into the other
@@ -5745,7 +5933,29 @@ results*<span class="marginnote">
 improves on the momentum technique.  However, for many problems, plain
 stochastic gradient descent works well, especially if momentum is
 used, and so we'll stick to stochastic gradient descent through the
-remainder of this book.</p><p><h4><a name="other_models_of_artificial_neuron"></a><a href="#other_models_of_artificial_neuron">Other models of artificial neuron</a></h4></p><p>Up to now we've built our neural networks using sigmoid neurons.  In
+remainder of this book.
+-->
+<strong>コスト関数を最小化するその他の手法：</strong>
+コスト関数を最小化する手法はこの他にも多数開発されてきましたが、どれが最適な手法か
+という問いに対しては一致した回答がありません。ニューラルネットワークを使い込んでいく中で、
+他の手法に取り組み、その挙動や利点・欠点を理解することは役に立つでしょう。
+前に示した論文*<a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf">Efficient
+    BackProp</a>, by Yann LeCun, Léon Bottou,
+  Genevieve Orr and Klaus-Robert Müller (1998).</span> では、
+共役勾配降下法やBFGS法（これと非常に関係の深い、
+<a href="http://en.wikipedia.org/wiki/Limited-memory_BFGS">L-BFGS</a>法と呼ばれる
+記憶制限BFGS法も重要です）を含め、幾つかの方法が紹介・比較されています。
+他に最近優れた結果*<span class="marginnote">
+*例えば、次の論文を参照してください。
+  <a href="http://www.cs.toronto.edu/&#126;hinton/absps/momentum.pdf">On the
+    importance of initialization and momentum in deep learning</a>, by
+  Ilya Sutskever, James Martens, George Dahl, and Geoffrey Hinton
+  (2012).</span>を出した手法としては、モメンタム法を修正したNesterovによる加速勾配法があります。
+しかし、多くの問題に対して、単純な確率的勾配降下法も、特にモメンタム法と組み合わせた時には
+良い性能を発揮します。ですから、この本の残りの部分では確率的勾配降下法を使うことにします。
+</p><p><h4><a name="other_models_of_artificial_neuron"></a>
+<a href="#other_models_of_artificial_neuron">Other models of artificial neuron</a></h4>
+</p><p>Up to now we've built our neural networks using sigmoid neurons.  In
 principle, a network built from sigmoid neurons can compute any
 function.  In practice, however, networks built using other model
 neurons sometimes outperform sigmoid networks.  Depending on the
