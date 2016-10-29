@@ -3113,8 +3113,9 @@ getting more or better training data.
 -->
 これらの注意は、開発を行う時にも研究論文を読む時にも心に留めておくべきです。
 多くの論文では、標準的なベンチマークとなるデータセットに対するパフォーマンスを改善する
-新しい手法やコツを探すことに注力しています。「我々の素晴らしい手法は、標準的なベンチマークX
-に対してYパーセントの改善をもたらしました」という主張の形式は、研究論文で見られる標準的ものです。
+新しい手法やコツを探すことに注力しています。研究論文ではしばしば、
+「我々の素晴らしい手法は、標準的なベンチマークX
+に対してYパーセントの改善をもたらしました」という形式を取る主張を目にします。
 このような主張はしばしばそれ自体が本当に興味深いものですが、
 使用した特定の訓練データセットにおいてのみ適用できるものだと理解しなければなりません。
 もしこの世界とは別に、ベンチマークのデータセットを作成した人がより多くの研究資金を獲得できる
@@ -3511,7 +3512,7 @@ references therein.
 <li><strong>正規化と改善された重み初期化法の関係</strong>
 L2正規化することで、時々自動的に新しい方法で重みを初期化することと似た
 効果が得られることがあります。重みの初期化に古い方法を使ったとしましょう。
-次のヒューリスティックな議論の概略を示してください：
+ヒューリスティックな議論で次のことを示してください：
 (1) $\lambda$ が小さすぎなければ、訓練のはじめの数エポックでは重み減衰が支配的である。
 (2) $\eta \lambda \ll n$ とすると、重みは $\exp(-\eta\lambda /m)$ の因子で減衰する。
 (3) $\lambda$ が大きすぎないとすると、重みの多さが $1/\sqrt{n}$ になった辺りで、
@@ -4429,15 +4430,15 @@ should get you started.
 常に一つ、何かできることがあるはずです。この節で紹介する発見的な方法は、
 その取っ掛かりを与えてくれるでしょう。
 </p><p>
-<!--frontier-->
+<!--
     <strong>Broad strategy:</strong> When using neural networks to attack a new
 problem the first challenge is to get <em>any</em> non-trivial learning,
 i.e., for the network to achieve results better than chance.  This can
 be surprisingly difficult, especially when confronting a new class of
 problem.  Let's look at some strategies you can use if you're having
 this kind of trouble.
-
-<strong>:</strong> ニューラルネットワークを使って新しい問題に取り組む時、
+-->
+<strong>出発点：</strong> ニューラルネットワークを使って新しい問題に取り組む時、
 第1の関門は<em>何でも良いので</em>とにかく何か学習をすることです。
 言い換えると、ニューラルネットワークでデタラメよりはマシな結果を達成することが第1歩です。
 ものすごく低いハードルに思えるかもしれませんが、実際にはそれが驚くほど難しい場合もあります。
@@ -5348,7 +5349,7 @@ maximize our overall speed.
 そしてもう一つは事前に行った実験からミニバッチサイズを小さくしても大して
 学習速度は改善しないと考えられたことが挙げられます。
 しかし実際の実装では、ほぼ間違いなくミニバッチ更新を高速な行列ライブラリ等を用いて実装し、
-全体の学習スピードを最大化するようにミニバッチサイズの最適かも行うでしょう。
+全体の学習スピードを最大化するようにミニバッチサイズの最適化も行うでしょう。
 </p><p>
 <!--
 <strong>Automated techniques:</strong> I've been describing these heuristics
@@ -5755,7 +5756,7 @@ in much the same way as physical forces change the velocity, and only
 indirectly affect position.  Second, the momentum method introduces a
 kind of friction term, which tends to gradually reduce the velocity.
 -->
-<strong>モメンタム勾配降下法</strong>
+<strong>モメンタム勾配降下法：</strong>
 直感的に、ヘッセ行列法の強みは勾配の情報に加えて勾配の変化に関する情報を
 取り入れられる点にあると言えます。モメンタム勾配降下法は同様の直感に基づいていますが、
 2階微分の巨大な行列を取り扱うことを巧妙に回避しています。
@@ -6196,7 +6197,7 @@ learn fastest, or give the best generalization performance, for any
 particular application.
 -->
 この議論はどの程度真面目に考えるべきでしょうか？この議論は示唆的ですが
-ヒューリスティックですい、tanhニューロンがシグモイドニューロンより高性能である
+ヒューリスティックですし、tanhニューロンがシグモイドニューロンより高性能である
 ことの厳密な証明にはなっていません。ここで説明した問題を補うような良い性質を、
 シグモイドニューロンが備えているのでしょうか。実際のところ多くの課題に対して、
 tanhニューロンはシグモイドニューロンと比べて良くても僅かな改善しかしないことが
@@ -6214,9 +6215,9 @@ by
 \tag{105}\end{eqnarray}
 Graphically, the rectifying function $\max(0, z)$ looks like this:
 -->
-シグモイドニューロンのもう一つの変種は、<em>正規化線形ニューロン</em> あるいは
-<em>正規化線形ユニット</em> と呼ばれるものです。入力 $x$, 重みベクトル $w$, そして
-バイアス $b$ が与えられた時、正規化線形ユニットの出力は
+シグモイドニューロンのもう一つの変種は、<em>Rectified Linear Unit</em> あるいは
+<em>ReLU</em> と呼ばれるものです。入力 $x$, 重みベクトル $w$, そして
+バイアス $b$ が与えられた時、ReLUの出力は
 <a class="displaced_anchor" name="eqtn105"></a>\begin{eqnarray}
   \max(0, w \cdot x+b).
 \tag{105}\end{eqnarray}
@@ -6286,7 +6287,7 @@ units can be used to compute any function, and they can be trained
 using ideas such as backpropagation and stochastic gradient descent.
 -->
 明らかにシグモイドともtanhとも相当異なる形をしています。
-しかし、シグモイドやtanhと同様、正規化線形ユニットを使ったニューラルネットワークは
+しかし、シグモイドやtanhと同様、ReLUを使ったニューラルネットワークは
 任意の関数を計算可能であることが知られており、逆伝播法や確率的勾配降下法を用いて
 訓練できます。
 </p><p>
@@ -6332,7 +6333,7 @@ and so the neuron stops learning entirely.  These are just two of the
 many issues that make it non-trivial to understand when and why
 rectified linear units perform better than sigmoid or tanh neurons.
 -->
-シグモイドやtanhニューロンよりも正規化線形ユニットが力を発揮できるのは
+シグモイドやtanhニューロンよりもReLUが力を発揮できるのは
 どのような場面でしょうか？画像認識に関する最近の研究によると*<span class="marginnote">
 *関連する文献としては、
 Kevin Jarrett, Koray Kavukcuoglu, Marc'Aurelio Ranzato, Yann
@@ -6343,26 +6344,26 @@ LeCunによる <a href="http://yann.lecun.com/exdb/publis/pdf/jarrett-iccv-09.pd
     Sparse Rectiﬁer Neural Networks</a> (2011), そして、Alex
   Krizhevsky, Ilya Sutskever, Geoffrey Hinton による
   <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">ImageNet Classification with Deep Convolutional Neural Networks</a> (2012)
-等があります。これらの文献では、正規化線形ユニットを用いたニューラルネットワークで
+等があります。これらの文献では、ReLUを用いたニューラルネットワークで
 出力層、コスト関数、正規化等をどう設計すべきかという重要な点について詳細な議論を
 行っています。ここで行う簡単な説明では、そのような詳細は省略します。
-また、これらの論文では、正規化線形ユニットの長所も短所も詳細に議論しています。
+また、これらの論文では、ReLUの長所も短所も詳細に議論しています。
 その他に有益な論文としては、Vinod Nair と Geoffrey Hinton による
 <a href="https://www.cs.toronto.edu/&#126;hinton/absps/reluICML.pdf">Rectified
   Linear Units Improve Restricted Boltzmann Machines</a> (2010) があります。
 この論文では、ニューラルネットワークに対する少々違ったアプローチにおいて正規化線形
 ユニットを使うご利益を議論しています。</span>
-多くのニューラルネットワークで正規化線形ユニットの大きなご利益が得られるそうです。
-しかし、tanhニューロンの場合もそうでしたが、正規化線形ユニットをいつ、そしてなぜ
+多くのニューラルネットワークでReLUの大きなご利益が得られるそうです。
+しかし、tanhニューロンの場合もそうでしたが、ReLUをいつ、そしてなぜ
 使うべきなのか、という問いに対しては、未だに深い理解は得られていません。
 幾つかの論点を概観しておきましょう。まず、シグモイドニューロンの学習が遅くなるのは、
 ニューロンが飽和している時、すなわち、ニューロンの出力が $0$ か $1$ に近いときです。
 この章で何度も見てきたように、$\sigma'$ という因子が勾配を小さくしてしまうことで
 学習が遅くなるのでした。tanhニューロンも飽和してしまうと同様の問題にぶつかります。
-反対に、正規化線形ユニットは重み付き入力値を大きくしても飽和することがないでしょう。
-そのため、飽和に伴った学習速度の低下を起こさないのです。一方で、世紀佳撰系ユニットへの
+反対に、ReLUは重み付き入力値を大きくしても飽和することがないでしょう。
+そのため、飽和に伴った学習速度の低下を起こさないのです。一方で、ReLUへの
 入力が負の値を取るときには、勾配がゼロになります。そのため、ニューロンは学習を
-完全にやめてしまうでしょう。この2つは、いつ、なぜ、正規化線形ユニットが
+完全にやめてしまうでしょう。この2つは、いつ、なぜ、ReLUが
 優れているのかという問題の理解を妨げているたくさんある要因の一部に過ぎません。
 </p><p>
 <!--
@@ -6399,18 +6400,53 @@ sometimes advantages in doing so.
 しかし、同じアイデアはシグモイドニューロンに限らず他の種類のニューロンにも
 当てはまることは覚えておいてください。そして時には他のニューロンの方が
 高い性能を発揮する場合もあることを心に留めておいてください。
-</p><p><h4><a name="on_stories_in_neural_networks"></a><a href="#on_stories_in_neural_networks">On stories in neural networks</a></h4> </p><p><blockquote><em><strong>Question:</strong> How do you
+</p><p>
+<!--
+<h4><a name="on_stories_in_neural_networks"></a>
+<a href="#on_stories_in_neural_networks">On stories in neural networks</a></h4>
+-->
+<h4><a name="on_stories_in_neural_networks"></a>
+<a href="#on_stories_in_neural_networks">ニューラルネットワークに関する「お話」について</a></h4>
+</p><p>
+<!--
+<blockquote><em><strong>Question:</strong> How do you
   approach utilizing and researching machine learning techniques that
   are supported almost entirely empirically, as opposed to
   mathematically? Also in what situations have you noticed some of
-  these techniques fail?</p><p>  <strong>Answer:</strong> You have to realize that our theoretical
+  these techniques fail?
+-->
+<blockquote><em><strong>質問：</strong>
+機械学習の手法は数学的にほとんど理解されておらず、
+それが上手くいくかどうかは経験的な裏付けしかありません。
+これらの手法を利用したり研究したりしたい場合、どうやって取り掛かれば良いのですか？
+また、これら機械学習の手法が破綻するのはどのような状況ですか？
+</p><p>
+<!--
+<strong>Answer:</strong> You have to realize that our theoretical
   tools are very weak. Sometimes, we have good mathematical intuitions
   for why a particular technique should work. Sometimes our intuition
   ends up being wrong [...] The questions become: how well does my
   method work on this particular problem, and how large is the set of
-  problems on which it works well.</p><p>  -
+  problems on which it works well.
+-->
+<strong>回答：</strong>
+まず、手元にある理論的な道具はとても貧弱であることを認める必要があります。
+時には、ある特定の手法が効果的に働くであろうという、
+数学的な直感に基づく予測が可能な場合もあります。
+また時には、私たちの直感が誤りだと後になって気づくこともあります。（中略）
+質問はこう言い換えるべきでしょう：
+この手法はこの特定の問題に対してどのくらい効果的ですか？
+そして、この手法が上手く働く問題はどのくらいたくさんありますか？
+</p><p>
+<!--  -
   <a href="http://www.reddit.com/r/MachineLearning/comments/25lnbt/ama_yann_lecun/chivdv7">Question
-    and answer</a> with neural networks researcher Yann LeCun</em></blockquote></p><p>Once, attending a conference on the foundations of quantum mechanics,
+    and answer</a> with neural networks researcher Yann LeCun</em></blockquote>
+-->
+- <a href="http://www.reddit.com/r/MachineLearning/comments/25lnbt/ama_yann_lecun/chivdv7">Question
+  and answer</a>, ニューラルネットワーク研究者 Yann LeCun</em></blockquote>
+</p><p>
+<!--
+    Once, attending a conference on the foundations of quantum mechanics,
 I noticed what seemed to me a most curious verbal habit: when talks
 finished, questions from the audience often began with "I'm very
 sympathetic to your point of view, but [...]".  Quantum foundations
@@ -6424,7 +6460,22 @@ realized that assessment was too harsh.  The speakers were wrestling
 with some of the hardest problems human minds have ever confronted.
 Of course progress was slow!  But there was still value in hearing
 updates on how people were thinking, even if they didn't always have
-unarguable new progress to report.</p><p>You may have noticed a verbal tic similar to "I'm very sympathetic
+unarguable new progress to report.
+-->
+かつて量子力学の基礎付けに関する会議に出席した時、発言者達が非常に興味深い習慣を
+持っていることに気づきました。発表が終わると、聴衆からの質問がしばしば
+「あなたの視点にはとても共感しました。しかし、...」から始まるのです。
+量子力学の基礎付けは、私が普段研究している分野ではありません。
+この質問のしかたに気づいたのは、この分野以外の研究会で発表者の視点に共感を表現する
+質問者を見かけることは皆無だからです。当時は、この種の質問が蔓延るのは、
+この分野がほとんど進展していなくて、皆が無駄な努力をしていることの現れだろうと
+考えていました。後になって、この評価は厳しすぎたことに気づきました。
+発表者は人類の頭脳が向き合った中で最も難しい問題の一つに取り組んでいたのです。
+進展が遅いのは当たり前です！そして、はっきりと新しい進展が無かったとしても、
+人々がどう考えているのかについて最新の話を聞くことには価値があったのです。
+</p><p>
+<!--
+You may have noticed a verbal tic similar to "I'm very sympathetic
 [...]" in the current book.  To explain what we're seeing I've often
 fallen back on saying "Heuristically, [...]", or "Roughly speaking,
 [...]", following up with a story to explain some phenomenon or
@@ -6432,7 +6483,19 @@ other.  These stories are plausible, but the empirical evidence I've
 presented has often been pretty thin.  If you look through the
 research literature you'll see that stories in a similar style appear
 in many research papers on neural nets, often with thin supporting
-evidence.  What should we think about such stories?</p><p>In many parts of science - especially those parts that deal with
+evidence.  What should we think about such stories?
+-->
+この本を読んでいて、読者の皆さんは「とても共感しました」と同種の決まり文句に
+気づいたかもしれません。何かを説明しようとする度に、「ヒューリスティックに」や
+「大雑把に言って」等と口にした後、何らかの現象等を説明するお話を続けました。
+これらのお話はもっともらしいですが、経験的な証拠としては非常に心許ないものです。
+ニューラルネットワークの研究に関する文献等を調べてみると、多くの論文に
+同様の体裁を取ったお話が見られることでしょう。
+それも、多くの場合証拠としてはとても弱いものです。
+この状況はどう理解するべきでしょうか？
+</p><p>
+<!--
+In many parts of science - especially those parts that deal with
 simple phenomena - it's possible to obtain very solid, very reliable
 evidence for quite general hypotheses.  But in neural networks there
 are large numbers of parameters and hyper-parameters, and extremely
@@ -6443,7 +6506,19 @@ a problem that, like quantum foundations, tests the limits of the
 human mind.  Instead, we often make do with evidence for or against a
 few specific instances of a general statement.  As a result those
 statements sometimes later need to be modified or abandoned, when new
-evidence comes to light.</p><p>One way of viewing this situation is that any heuristic story about
+evidence comes to light.
+-->
+科学の多くの分野、特に単純な現象を扱う分野で、非常に一般的な仮説に対する、
+非常に強固で非常に信頼度の高い証拠が得られます。しかし、ニューラルネットワークの場合、
+多数のパラメータやハイパーパラメータが存在し、それらが極度に複雑に絡み合っています。
+このように非常に複雑な系では、信頼できる一般的な議論を行うことは非常に困難です。
+ニューラルネットワークを完全に一般的に理解することは、量子力学の基礎付けのように、
+人類の頭脳の限界に挑戦する課題です。一般論を展開する代わりに、
+その具体例を幾つか取り上げて、一般的な主張がもっともらしいかどうかの議論を行うのです。
+そして時には、後の検証で修正されたり破棄されたりする結果となるのです。
+</p><p>
+<!--
+One way of viewing this situation is that any heuristic story about
 neural networks carries with it an implied challenge.  For example,
 consider the statement I <a href="#dropout_explanation">quoted
   earlier</a>, explaining why dropout works*<span class="marginnote">
@@ -6463,7 +6538,29 @@ are investigating dropout (and many variations), trying to understand
 how it works, and what its limits are.  And so it goes with many of
 the heuristics we've discussed.  Each heuristic is not just a
 (potential) explanation, it's also a challenge to investigate and
-understand in more detail.</p><p>Of course, there is not time for any single person to investigate all
+understand in more detail.
+-->
+ヒューリスティックに頼るという事実が問題の困難さを示していると見ることもできます。
+例えば、ドロップアウト法の説明で<a href="#dropout_explanation">引用</a>
+した文章を思い出してみましょう*<span class="marginnote">
+*出典は Alex Krizhevsky, Ilya Sutskever, Geoffrey Hinton による
+<a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">ImageNet
+  Classification with Deep Convolutional Neural Networks</a> (2012) です。</span>：
+「この手法はニューロン間の複雑な相互適合を軽減します。
+というのも、 訓練に際してニューロンは特定の他のニューロンを
+頼りにすることができないからです。 したがって、あるニューロンは、
+ランダムに選ばれた他のニューロンと一緒にされても役に立つような、
+データが持つより強固な特徴を学ぶように強制されるのです。」
+この主張は内容が豊富で刺激的です。この主張を一つ一つ検証していくこと、
+すなわち、この主張のどこが正しくどこが誤っていて、どのような変更や修正が必要なのか
+明らかにしていくことで、立派な研究ができるでしょう。
+実際、ドロップアウトやその変種について、それが上手くいくメカニズムや限界を調べている
+研究者の一団がいます。彼らは、この本でここまで議論してきたヒューリスティックに
+取り組んでいるのです。それぞれのヒューリスティックは（潜在的に）ある現象を
+説明してくれるだけでなく、それ自体がより詳しく調べて理解すべき課題となるのです。
+</p><p>
+<!--
+    Of course, there is not time for any single person to investigate all
 these heuristic explanations in depth.  It's going to take decades (or
 longer) for the community of neural networks researchers to develop a
 really powerful, evidence-based theory of how neural networks learn.
@@ -6482,7 +6579,25 @@ nets, while retaining a healthy awareness of the limitations of such
 stories, and carefully keeping track of just how strong the evidence
 is for any given line of reasoning.  Put another way, we need good
 stories to help motivate and inspire us, and rigorous in-depth
-investigation in order to uncover the real facts of the matter.</p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></div><div class="footer"> <span class="left_footer"> In academic work,
+investigation in order to uncover the real facts of the matter.
+-->
+もちろん、一人の人間がこれら全てのヒューリスティックな議論を詳しく調べるには、
+全く時間が足りません。ニューラルネットワークの学習についてエビデンスに基づいた強力な
+理論を構築するには、これから何十年も（あるいはもっと）時間が掛かるでしょう。
+では、私たちはヒューリスティックな説明を根拠に欠ける曖昧なものとして捨て去るべきだと
+いうのでしょうか？そんなことはありません！むしろ、そのようなヒューリスティックには、
+私たちの思考を刺激し導くという重要な役割があるのです。
+これは大航海時代のようなものです：初期の探検家たちは、時に完全な誤解に基づいて探検し、
+そして新しい発見をしてきたのです。それらの誤解は、後になって地理に関する知識が
+蓄積されるにつれ、修正されてきました。ニューラルネットワークに対する理解が今日非常に
+貧弱であるように、何かをほとんど理解できていない時こそ、一歩ずつ完全に正しい思考を
+進めるよりも、大胆に探検していくことが重要なのです。ですから、この本でしてきた
+ヒューリスティックな議論は、ニューラルネットワークについて考える際の便利なガイドである
+と考えるべきです。ただし、それらの話に限界があることも認識し、
+どの程度強く裏付けられているのかを意識しておく必要があります。
+言い換えると、ニューラルネットワークを使っていく上で発想の助けになるお話と、
+実際に起こっていることを明らかにする厳密で詳細な検討が必要なのです。
+</p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></div><div class="footer"> <span class="left_footer"> In academic work,
 please cite this book as: Michael A. Nielsen, "Neural Networks and
 Deep Learning", Determination Press, 2014
 
