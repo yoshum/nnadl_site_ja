@@ -3113,8 +3113,9 @@ getting more or better training data.
 -->
 これらの注意は、開発を行う時にも研究論文を読む時にも心に留めておくべきです。
 多くの論文では、標準的なベンチマークとなるデータセットに対するパフォーマンスを改善する
-新しい手法やコツを探すことに注力しています。「我々の素晴らしい手法は、標準的なベンチマークX
-に対してYパーセントの改善をもたらしました」という主張の形式は、研究論文で見られる標準的ものです。
+新しい手法やコツを探すことに注力しています。研究論文ではしばしば、
+「我々の素晴らしい手法は、標準的なベンチマークX
+に対してYパーセントの改善をもたらしました」という形式を取る主張を目にします。
 このような主張はしばしばそれ自体が本当に興味深いものですが、
 使用した特定の訓練データセットにおいてのみ適用できるものだと理解しなければなりません。
 もしこの世界とは別に、ベンチマークのデータセットを作成した人がより多くの研究資金を獲得できる
@@ -3171,7 +3172,13 @@ and this is an extremely active area of current work.
 結果として、過適合を軽減するより強力な正規化手法の開発が急務となっており、
 現在も極めて活発な研究分野をなしています。
 </p><p>
-<h3><a name="weight_initialization"></a><a href="#weight_initialization">Weight initialization</a></h3></p><p>When we create our neural networks, we have to make choices for the
+<!--
+<h3><a name="weight_initialization"></a><a href="#weight_initialization">Weight initialization</a></h3>
+-->
+<h3><a name="weight_initialization"></a><a href="#weight_initialization">重みの初期化</a></h3>
+</p><p>
+<!--
+    When we create our neural networks, we have to make choices for the
 initial weights and biases.  Up to now, we've beeen choosing them
 according to a prescription which I discussed only briefly
 <a href="chap1.html#weight_initialization">back in Chapter 1</a>.  Just to
@@ -3180,16 +3187,38 @@ biases using independent Gaussian random variables, normalized to have
 mean $0$ and standard deviation $1$.  While this approach has worked
 well, it was quite <em>ad hoc</em>, and it's worth revisiting to see if
 we can find a better way of setting our initial weights and biases,
-and perhaps help our neural networks learn faster.</p><p>It turns out that we can do quite a bit better than initializing with
+and perhaps help our neural networks learn faster.
+-->
+ニューラルネットワークを学習させる前に、重みとバイアスの初期値を選ぶ必要があります。
+これまでの例では、<a href="chap1.html#weight_initialization">Chapter 1</a>で
+手短に議論した処方に従って選んできました。念のためもう一度書いておくと、
+その処方とは、全ての重みとバイアスを平均 $0$、標準偏差 $1$ に規格化した独立なガウス分布に従って
+選ぶものでした。これまではこの方法で上手くいきましたが、そのように選ぶべき根拠も
+今のところ明らかではありません。重みとバイアスの初期値をより上手く選ぶことで、
+ニューラルネットワークの学習を加速することはできないでしょうか？
+</p><p>
+<!--
+    It turns out that we can do quite a bit better than initializing with
 normalized Gaussians.  To see why, suppose we're working with a
 network with a large number - say $1,000$ - of input neurons.  And
 let's suppose we've used normalized Gaussians to initialize the
 weights connecting to the first hidden layer.  For now I'm going to
 concentrate specifically on the weights connecting the input neurons
 to the first neuron in the hidden layer, and ignore the rest of the
-network:</p><p><center>
+network:
+-->
+実は、結論から言ってしまうと、規格化されたガウス分布を使うよりもずっと良い
+やり方があるのです。その理由を見るために、非常にたくさん、例えば $1,000$個の
+入力ニューロンを持つニューラルネットワークを考えてみましょう。
+そして、第1の隠れ層につながる重みを全て規格化されたガウス分布で初期化するとします。
+しばらくは入力ニューロンと隠れ層の第1のニューロンを結ぶ重みに集中し、
+ニューラルネットワークの残りの部分を無視することにします：
+</p><p><center>
 <img src="images/tikz32.png"/>
-</center></p><p>We'll suppose for simplicity that we're trying to train using a
+</center>
+</p><p>
+<!--
+    We'll suppose for simplicity that we're trying to train using a
 training input $x$ in which half the input neurons are on, i.e., set
 to $1$, and half the input neurons are off, i.e., set to $0$.  The
 argument which follows applies more generally, but you'll get the gist
@@ -3200,8 +3229,25 @@ a sum over a total of $501$ normalized Gaussian random variables,
 accounting for the $500$ weight terms and the $1$ extra bias term.
 Thus $z$ is itself distributed as a Gaussian with mean zero and
 standard deviation $\sqrt{501} \approx 22.4$.  That is, $z$ has a very
-broad Gaussian distribution, not sharply peaked at all:</p><p><div id="wide_gaussian"></div>
-<script type="text/javascript" src="js/wide_gaussian.js"></script></p><p>In particular, we can see from this graph that it's quite likely that
+broad Gaussian distribution, not sharply peaked at all:
+-->
+議論をさらに単純化するために、ある特定の訓練入力 $x$ を使って
+ニューラルネットワークを訓練することを考えます。その $x$ は、
+半分の入力ニューロンがオン、すなわち $1$ の値を取り、残り半分のニューロンがオフ、
+すなわち $0$ の値を取るものとします。以下の議論はより一般的な状況で成り立ちますが、
+この特別な例から状況が大まかに理解できると思います。
+隠れニューロンへの入力となる重み付き総和 $z = \sum_j w_j x_j+b$ を考えましょう。
+半分の $x_j$ はゼロなので、総和のうち $500$ 項は消えます。
+したがって、$z$ は $500$ 個の重みと $1$ 個のバイアスを合わせて、
+全部で $501$ 個の規格化されたガウス分布変数の和になります。
+したがって、$z$ 自身も平均がゼロで標準偏差が $\sqrt{501} \approx 22.4$ の
+ガウス分布に従うランダム変数です。
+つまり、$z$ はかなり広がったガウス分布に従っていて、その分布は全く鋭くありません：
+</p><p><div id="wide_gaussian"></div>
+<script type="text/javascript" src="js/wide_gaussian.js"></script>
+</p><p>
+<!--
+    In particular, we can see from this graph that it's quite likely that
 $|z|$ will be pretty large, i.e., either $z \gg 1$ or $z \ll -1$.  If
 that's the case then the output $\sigma(z)$ from the hidden neuron
 will be very close to either $1$ or $0$.  That means our hidden neuron
@@ -3222,11 +3268,38 @@ earlier in this chapter, in which output neurons which saturated on
 the wrong value caused learning to slow down.  We addressed that
 earlier problem with a clever choice of cost function.  Unfortunately,
 while that helped with saturated output neurons, it does nothing at
-all for the problem with saturated hidden neurons.</p><p>I've been talking about the weights input to the first hidden layer.
+all for the problem with saturated hidden neurons.
+-->
+特に、$|z|$ が非常に大きく $z\gg 1$ か $z\ll -1$ が高い確率で成り立つことは、
+このグラフから明らかです。その場合、隠れニューロンの出力 $\sigma(z)$ は
+$1$ か $0$ に非常に近い値を取ります。つまり、今考えている隠れニューロンは
+飽和してしまうのです。そしてそうなってしまうと、重みを少し変化させても
+隠れニューロンの活性はほんの僅かにしか変化しません。そしてこの非常に僅かな活性の変化は、
+ニューラルネットワークの残りの部分に対してほとんど影響せず、最終的にコスト関数に
+ごく小さな変化しかもたらさないでしょう。結果として、これらの重みの学習に勾配降下法を使っても、
+学習は非常にゆっくりとしか進行しないでしょう*<span class="marginnote">
+*この点についてはより詳細にChapter 2で議論しました。その際、
+<a href="chap2.html#the_four_fundamental_equations_behind_backpropagation">逆伝播の式</a>を
+用いて、飽和したニューロンへ入力する重みの学習は遅くなることを示しました。</span>。
+この問題は、出力ニューロンが誤った値に飽和していると学習が非常に遅くなるという、
+この章の前半で議論した問題と似ています。その際は、コスト関数を上手く選ぶことで
+その問題を解決しました。良いコスト関数は出力ニューロンの飽和の問題を解決しましたが、
+残念ながら、同じ方法では隠れニューロンの飽和の問題は全く改善されません。
+</p><p>
+<!--
+    I've been talking about the weights input to the first hidden layer.
 Of course, similar arguments apply also to later hidden layers: if the
 weights in later hidden layers are initialized using normalized
 Gaussians, then activations will often be very close to $0$ or $1$,
-and learning will proceed very slowly.</p><p>Is there some way we can choose better initializations for the weights
+and learning will proceed very slowly.
+-->
+ここまで、第1の隠れ層に入力する重みについて議論してきました。もちろん、同様の議論は
+他の隠れ層に対しても成り立ちます：隠れ層の重みを規格化されたガウス分布を使って
+初期化した場合、隠れニューロンの活性はしばしば $0$ か $1$ に非常に近く、
+学習は非常にゆっくりとしか進みません。
+</p><p>
+<!--
+    Is there some way we can choose better initializations for the weights
 and biases, so that we don't get this kind of saturation, and so avoid
 a learning slowdown?  Suppose we have a neuron with $n_{\rm in}$ input
 weights.  Then we shall initialize those weights as Gaussian random
@@ -3243,15 +3316,46 @@ $z$ has a Gaussian distribution with mean $0$ and standard deviation
 $\sqrt{3/2} = 1.22\ldots$.  This is much more sharply peaked than
 before, so much so that even the graph below understates the
 situation, since I've had to rescale the vertical axis, when compared
-to the earlier graph:</p><p><div id="narrow_gaussian"></div> <script
-  type="text/javascript" src="js/narrow_gaussian.js"></script>  </p><p>Such a neuron is much less likely to saturate, and correspondingly
-much less likely to have problems with a learning slowdown.</p><p><h4><a name="exercise_319349"></a><a href="#exercise_319349">Exercise</a></h4><ul>
-<li> Verify that the standard deviation of $z = \sum_j w_j x_j + b$
+to the earlier graph:
+-->
+この種の飽和と学習の減速を避けるために、重みとバイアスのもっと上手い初期化の方法は
+あるのでしょうか？今、$n_{\rm in}$ 個の入力を持つニューロンを考えます。
+その入力に掛かる重みを平均 $0$ で標準偏差 $1/\sqrt{n_{\rm in}}$ のガウス分布で
+初期化しましょう。つまり、ガウス分布を押しつぶしてニューロンが飽和しづらくなるようにします。
+バイアスについては後述する理由により、変わらず平均 $0$ で標準偏差 $1$ のガウス分布で初期化します。
+そのように選ぶことで、重み付き総和 $z = \sum_j w_j x_j + b$ は再び平均 $0$ のガウス分布に
+従うランダム変数となりますが、以前よりもずっと鋭い分布になります。
+前に考えたように、$500$ 個の入力がゼロで $500$ 個の入力が $1$ だとしましょう。
+このとき、簡単な計算により（下の演習参照）、$z$ は平均 $0$ で標準偏差
+$\sqrt{3/2}=1.22\ldots$ のガウス分布に従うことが分かります。
+この分布は前よりもずっと鋭いピークを持っています。実は、下のグラフではかなり控えめに
+ピークが描かれています。というのも、ピークの全体を描くために、このグラフでは前のグラフから
+縦軸のスケールを変えているからです。
+</p><p>
+<div id="narrow_gaussian"></div> <script
+  type="text/javascript" src="js/narrow_gaussian.js"></script>
+</p><p>
+<!--
+    Such a neuron is much less likely to saturate, and correspondingly
+much less likely to have problems with a learning slowdown.
+-->
+このようなニューロンはずっと飽和しづらく、学習の減速はずっと起こりづらいでしょう。
+</p><p><h4><a name="exercise_319349"></a><a href="#exercise_319349">Exercise</a></h4><ul>
+<li>
+<!--
+    Verify that the standard deviation of $z = \sum_j w_j x_j + b$
   in the paragraph above is $\sqrt{3/2}$.  It may help to know that:
   (a) the variance of a sum of independent random variables is the sum
   of the variances of the individual random variables; and (b) the
   variance is the square of the standard deviation.
-</ul></p><p>I stated above that we'll continue to initialize the biases as before,
+-->
+上の段落に出てきた $z = \sum_j w_j x_j + b$ の標準偏差が $\sqrt{3/2}$ であることを
+示してください。ヒント：(a) 独立なランダム変数の和の分散は、個々のランダム変数の分散の
+和に等しくなります。(b) 分散は標準偏差の2乗です。
+</ul>
+</p><p>
+<!--
+    I stated above that we'll continue to initialize the biases as before,
 as Gaussian random variables with a mean of $0$ and a standard
 deviation of $1$.  This is okay, because it doesn't make it too much
 more likely that our neurons will saturate.  In fact, it doesn't much
@@ -3259,7 +3363,16 @@ matter how we initialize the biases, provided we avoid the problem
 with saturation.  Some people go so far as to initialize all the
 biases to $0$, and rely on gradient descent to learn appropriate
 biases.  But since it's unlikely to make much difference, we'll
-continue with the same initialization procedure as before.</p><p>Let's compare the results for both our old and new approaches to
+continue with the same initialization procedure as before.
+-->
+上述のように、バイアスについては以前と同様、平均が $0$ で標準偏差が $1$ のガウス分布で
+初期化します。こうしてもニューロンの過剰に飽和させることは無いので大きな問題になりません。
+実は、飽和の問題さえ避ければ、バイアスをどのように初期化しても大勢に影響はないのです。
+全てのバイアスを $0$ に初期化して、あとは勾配降下法で学習するに任せる人さえ居ます。
+どのように初期化しても大して変わりないので、私たちは以前と同じ方法でバイアスを初期化することにします。
+</p><p>
+<!--
+    Let's compare the results for both our old and new approaches to
 weight initialization, using the MNIST digit classification task.  As
 before, we'll use $30$ hidden neurons, a mini-batch size of $10$, a
 regularization parameter $\lambda = 5.0$, and the cross-entropy cost
@@ -3267,6 +3380,12 @@ function.  We will decrease the learning rate slightly from $\eta =
 0.5$ to $0.1$, since that makes the results a little more easily
 visible in the graphs.  We can train using the old method of weight
 initialization:
+-->
+では、MNISTの手書き文字分類のタスクを使って、重みの初期化のやり方による結果の違いを見てみましょう。
+以前と同様に、$30$ 個の隠れニューロン、大きさ $10$ のミニバッチ、正規化パラメータ $\lambda=5.0$ と、
+クロスエントロピーコスト関数を用いることにします。
+結果をグラフ上で少し見やすくするため、学習率は $\eta=0.5$ から $0.1$ に少し減らすことにします。
+まず、以前のやり方で重みを初期化してからニューラルネットワークを訓練してみましょう：
 <div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">mnist_loader</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">training_data</span><span class="p">,</span> <span class="n">validation_data</span><span class="p">,</span> <span class="n">test_data</span> <span class="o">=</span> \
 <span class="o">...</span> <span class="n">mnist_loader</span><span class="o">.</span><span class="n">load_data_wrapper</span><span class="p">()</span>
@@ -3277,22 +3396,36 @@ initialization:
 <span class="o">...</span> <span class="n">evaluation_data</span><span class="o">=</span><span class="n">validation_data</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">monitor_evaluation_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
-
+<!--
 We can also train using the new approach to weight initialization.
 This is actually even easier, since <tt>network2</tt>'s default way of
 initializing the weights is using this new approach.  That means we
 can omit the <tt>net.large_weight_initializer()</tt> call above:
+-->
+次に、新しい方法で重みを初期化してみましょう。実はこちらのほうが簡単です。
+というのも、<tt>network2</tt> のデフォルトでは、新しい方法で重みを初期化するように
+なっているからです。したがって、上の <tt>net.large_weight_initializer()</tt> を
+省略すればよいです：
 <div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network2</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">cost</span><span class="o">=</span><span class="n">network2</span><span class="o">.</span><span class="n">CrossEntropyCost</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">training_data</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">lmbda</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">evaluation_data</span><span class="o">=</span><span class="n">validation_data</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">monitor_evaluation_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
-
+<!--
 Plotting the results*<span class="marginnote">
 *The program used to generate this and
   the next graph is
   <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/weight_initialization.py">weight_initialization.py</a>.</span>,
-we obtain:</p><p><center><img src="images/weight_initialization_30.png" width="520px"></center></p><p>In both cases, we end up with a classification accuracy somewhat over
+we obtain:
+-->
+結果をプロットすると*<span class="marginnote">
+*これと次のグラフを作成するために使ったプログラムは、
+  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/weight_initialization.py">weight_initialization.py</a> です。</span>、次のグラフが得られます：
+</p><p>
+<center><img src="images/weight_initialization_30.png" width="520px"></center>
+</p><p>
+<!--
+    In both cases, we end up with a classification accuracy somewhat over
 96 percent.  The final classification accuracy is almost exactly the
 same in the two cases.  But the new initialization technique brings us
 there much, much faster.  At the end of the first epoch of training
@@ -3301,7 +3434,19 @@ accuracy under 87 percent, while the new approach is already almost 93
 percent.  What appears to be going on is that our new approach to
 weight initialization starts us off in a much better regime, which
 lets us get good results much more quickly.  The same phenomenon is
-also seen if we plot results with $100$ hidden neurons:</p><p><center><img src="images/weight_initialization_100.png" width="520px"></center></p><p>In this case, the two curves don't quite meet.  However, my
+also seen if we plot results with $100$ hidden neurons:
+-->
+いずれの場合も、最終的な分類精度は96パーセント強といったところです。
+30エポックで両者はほぼ同じ分類精度に到達します。しかし、新しい方法では、
+ずっとずっと早くその分類精度に到達します。最初のエポックが終わったところで、
+古いやり方では分類精度が87パーセント弱ですが、新しい方法では93パーセントに
+達しようとしています。
+重みの初期化方法を変えることで、古いやり方よりずっと良い領域から出発できて、
+結果の改善もかなり素早く進行するのです。
+同じ現象は $100$ 個の隠れニューロンを使っても起こります：
+</p><p><center><img src="images/weight_initialization_100.png" width="520px"></center></p><p>
+<!--
+    In this case, the two curves don't quite meet.  However, my
 experiments suggest that with just a few more epochs of training (not
 shown) the accuracies become almost exactly the same.  So on the basis
 of these experiments it looks as though the improved weight
@@ -3310,7 +3455,20 @@ performance of our networks.  However, in Chapter 4 we'll see examples
 of neural networks where the long-run behaviour is significantly
 better with the $1/\sqrt{n_{\rm in}}$ weight initialization.  Thus
 it's not only the speed of learning which is improved, it's sometimes
-also the final performance.</p><p>The $1/\sqrt{n_{\rm in}}$ approach to weight initialization helps
+also the final performance.
+-->
+この場合には、2つの曲線が一致するには至っていません。しかし、私が自分で
+実験してみた結果、あと2, 3エポックだけ訓練を続けると、分類精度はほとんど
+同じになります。したがって、これらの実験の結果を見ると、重みの初期化方法を改善しても、
+学習がスピードアップするだけで、最終的なニューラルネットワークのパフォーマンスを
+改善することは無いかのように思えます。しかし、Chapter 4では、
+重みの初期分布の標準偏差を $1/\sqrt{n_{\rm in}}$ にすることで、
+ニューラルネットワークの長時間における振る舞いが顕著に改善される例を扱います。
+重みの初期化方法は学習速度のみならず、
+時にニューラルネットワークのパフォーマンスをも左右することになるのです。
+</p><p>
+<!--
+    The $1/\sqrt{n_{\rm in}}$ approach to weight initialization helps
 improve the way our neural nets learn.  Other techniques for weight
 initialization have also been proposed, many building on this basic
 idea.  I won't review the other approaches here, since $1/\sqrt{n_{\rm
@@ -3321,7 +3479,20 @@ Bengio*<span class="marginnote">
 *<a href="http://arxiv.org/pdf/1206.5533v2.pdf">Practical
     Recommendations for Gradient-Based Training of Deep
     Architectures</a>, by Yoshua Bengio (2012).</span>, as well as the
-references therein.</p><p><h4><a name="problem_735589"></a><a href="#problem_735589">Problem</a></h4><ul>
+references therein.
+-->
+重みの初期分布の標準偏差を $1/\sqrt{n_{\rm in}}$ にすることで、
+ニューラルネットワークの学習が改善されます。重みを初期化する他の手法も
+提案されていますが、多くは同じ基本的なアイデアに基づいています。
+私たちの目的のためにはこれまでに紹介した方法で十分なので、ここでは他の手法は取り上げません。
+関心がある読者は、Yoshua Bengioによる2012年の論文*<span class="marginnote">
+*<a href="http://arxiv.org/pdf/1206.5533v2.pdf">Practical
+    Recommendations for Gradient-Based Training of Deep
+    Architectures</a>, by Yoshua Bengio (2012).</span>の14, 15ページにある議論と、
+そこで引用されている文献を見てみることを勧めます。
+</p><p>
+<!--
+<h4><a name="problem_735589"></a><a href="#problem_735589">Problem</a></h4><ul>
 <li><strong>Connecting regularization and the improved method of weight
   initialization</strong> L2 regularization sometimes automatically gives us
   something similar to the new approach to weight initialization.
@@ -3335,7 +3506,28 @@ references therein.</p><p><h4><a name="problem_735589"></a><a href="#problem_735
   $1/\sqrt{n}$, where $n$ is the total number of weights in the
   network.  Argue that these conditions are all satisfied in the
   examples graphed in this section.
-</ul></p><p></p><p></p><p></p><p></p><p></p><p><h3><a name="handwriting_recognition_revisited_the_code"></a><a href="#handwriting_recognition_revisited_the_code">Handwriting recognition revisited: the code</a></h3></p><p>Let's implement the ideas we've discussed in this chapter.  We'll
+</ul>
+-->
+<h4><a name="problem_735589"></a><a href="#problem_735589">問題</a></h4><ul>
+<li><strong>正規化と改善された重み初期化法の関係</strong>
+L2正規化することで、時々自動的に新しい方法で重みを初期化することと似た
+効果が得られることがあります。重みの初期化に古い方法を使ったとしましょう。
+ヒューリスティックな議論で次のことを示してください：
+(1) $\lambda$ が小さすぎなければ、訓練のはじめの数エポックでは重み減衰が支配的である。
+(2) $\eta \lambda \ll n$ とすると、重みは $\exp(-\eta\lambda /m)$ の因子で減衰する。
+(3) $\lambda$ が大きすぎないとすると、重みの多さが $1/\sqrt{n}$ になった辺りで、
+重み減衰が落ち着いてくる。
+ここで、$n$ はニューラルネットワークの全ての重みの数とします。
+この節でグラフに示した例では、これら全ての条件が満たされていることを議論してください。
+</ul>
+</p><p>
+<!--
+<h3><a name="handwriting_recognition_revisited_the_code"></a><a href="#handwriting_recognition_revisited_the_code">Handwriting recognition revisited: the code</a></h3>
+-->
+<h3><a name="handwriting_recognition_revisited_the_code"></a><a href="#handwriting_recognition_revisited_the_code">手書き文字認識再訪：コード</a></h3>
+</p><p>
+<!--
+    Let's implement the ideas we've discussed in this chapter.  We'll
 develop a new program,
 <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/src/network2.py"><tt>network2.py</tt></a>,
 which is an improved version of the program
@@ -3345,11 +3537,29 @@ we developed in
   1</a>.  If you haven't looked at <tt>network.py</tt> in a while then you
 may find it helpful to spend a few minutes quickly reading over the
 earlier discussion.  It's only 74 lines of code, and is easily
-understood. </p><p>As was the case in <tt>network.py</tt>, the star of <tt>network2.py</tt>
+understood.
+-->
+この章で議論してきたアイデアを実装しましょう。新しいプログラム <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/src/network2.py"><tt>network2.py</tt></a>
+を開発します。これは<a href="chap1.html#implementing_our_network_to_classify_digits">Chapter
+  1</a>で作成した
+  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/src/network.py"><tt>network.py</tt></a>
+を修正したバージョンです。もし <tt>network.py</tt> の内容を覚えていなければ、
+ここで軽く復習しておくと後の助けになるでしょう。たった74行のコードですし、
+簡単に理解できます。
+</p><p>
+<!--
+    As was the case in <tt>network.py</tt>, the star of <tt>network2.py</tt>
 is the <tt>Network</tt> class, which we use to represent our neural
 networks.  We initialize an instance of <tt>Network</tt> with a list of
 <tt>sizes</tt> for the respective layers in the network, and a choice
-for the <tt>cost</tt> to use, defaulting to the cross-entropy:</p><p><div class="highlight"><pre><span class="k">class</span> <span class="nc">Network</span><span class="p">():</span>
+for the <tt>cost</tt> to use, defaulting to the cross-entropy:
+-->
+<tt>network.py</tt> と同様に、<tt>network2.py</tt> での中心選手も <tt>Network</tt> クラスです。
+このクラスはニューラルネットワークを表しています。
+<tt>Network</tt> のインスタンスを初期化するには、各層のニューロン数 <tt>sizes</tt> と
+コスト関数を指定する <tt>cost</tt> を指定します。コスト関数にはデフォルトでクロスエントロピー
+が指定されています：
+</p><p><div class="highlight"><pre><span class="k">class</span> <span class="nc">Network</span><span class="p">():</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sizes</span><span class="p">,</span> <span class="n">cost</span><span class="o">=</span><span class="n">CrossEntropyCost</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_layers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sizes</span><span class="p">)</span>
@@ -3357,40 +3567,81 @@ for the <tt>cost</tt> to use, defaulting to the cross-entropy:</p><p><div class=
         <span class="bp">self</span><span class="o">.</span><span class="n">default_weight_initializer</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cost</span><span class="o">=</span><span class="n">cost</span>
 </pre></div>
-</p><p>The first couple of lines of the <tt>__init__</tt> method are the same
+</p><p>
+<!--
+    The first couple of lines of the <tt>__init__</tt> method are the same
 as in <tt>network.py</tt>, and are pretty self-explanatory.  But the
 next two lines are new, and we need to understand what they're doing
-in detail.</p><p>Let's start by examining the <tt>default_weight_initializer</tt>
+in detail.
+-->
+<tt>__init__</tt> メソッド冒頭の2行は <tt>network.py</tt> と同じですし、
+見れば何をしているのか分かるでしょう。しかし続く2行は新しく、
+その挙動を詳細に理解する必要があります。
+</p><p>
+<!--
+    Let's start by examining the <tt>default_weight_initializer</tt>
 method. This makes use of our <a href="#weight_initialization">new and
   improved approach</a> to weight initialization.  As we've seen, in that
 approach the weights input to a neuron are initialized as Gaussian
 random variables with mean 0 and standard deviation $1$ divided by the
 square root of the number of connections input to the neuron.  Also in
 this method we'll initialize the biases, using Gaussian random
-variables with mean $0$ and standard deviation $1$.  Here's the code:</p><p><div class="highlight"><pre>    <span class="k">def</span> <span class="nf">default_weight_initializer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+variables with mean $0$ and standard deviation $1$.  Here's the code:
+-->
+まずは <tt>default_weight_initializer</tt> を見てみましょう。
+このメソッドでは<a href="#weight_initialization">改善された手法</a>で重みを初期化します。
+あるニューロンに入力する重みの数を $n_{\rm in}$ とすると、
+新しい手法ではそのニューロンに入力する重みを平均 $0$ で標準偏差 $1/\sqrt{n_{\rm in}}$ の
+ガウス分布で初期化します。また、バイアスについては平均 $0$ で標準偏差が $1$ のガウス分布で
+初期化します。そのコードは以下の通りです：
+</p><p><div class="highlight"><pre>    <span class="k">def</span> <span class="nf">default_weight_initializer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">biases</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizes</span><span class="p">[</span><span class="mi">1</span><span class="p">:]]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
                         <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizes</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizes</span><span class="p">[</span><span class="mi">1</span><span class="p">:])]</span>
 </pre></div>
-</p><p>To understand the code, it may help to recall that <tt>np</tt> is the
+</p><p>
+<!--
+    To understand the code, it may help to recall that <tt>np</tt> is the
 Numpy library for doing linear algebra.  We'll <tt>import</tt> Numpy at
 the beginning of our program.  Also, notice that we don't initialize
 any biases for the first layer of neurons.  We avoid doing this
 because the first layer is an input layer, and so any biases would not
-be used.  We did exactly the same thing in <tt>network.py</tt>.</p><p>Complementing the <tt>default_weight_initializer</tt> we'll also include
+be used.  We did exactly the same thing in <tt>network.py</tt>.
+-->
+このコードを理解するために、まず <tt>np</tt> が線形代数計算を行う Numpy ライブラリーである
+ことを思い出しましょう。Numpy はプログラムの冒頭で <tt>import</tt> しています。
+第1層は入力層なので、この層ではバイアスを初期化していません。
+これは <tt>network.py</tt> で行ったことと同じです。
+</p><p>
+<!--
+    Complementing the <tt>default_weight_initializer</tt> we'll also include
 a <tt>large_weight_initializer</tt> method.  This method initializes the
 weights and biases using the old approach from Chapter 1, with both
 weights and biases initialized as Gaussian random variables with mean
 $0$ and standard deviation $1$.  The code is, of course, only a tiny
-bit different from the <tt>default_weight_initializer</tt>:</p><p><div class="highlight"><pre>    <span class="k">def</span> <span class="nf">large_weight_initializer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+bit different from the <tt>default_weight_initializer</tt>:
+-->
+補足として、プログラムには <tt>large_weight_initializer</tt> メソッドも含まれています。
+このメソッドは、重みとバイアスをChapter 1で使った古い方法、つまり平均 $0$ で標準偏差 $1$ の
+ガウス分布で初期化します。コードは、<tt>default_weight_initializer</tt> とほんの僅かに違うだけです：
+</p><p><div class="highlight"><pre>    <span class="k">def</span> <span class="nf">large_weight_initializer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">biases</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizes</span><span class="p">[</span><span class="mi">1</span><span class="p">:]]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
                         <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizes</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizes</span><span class="p">[</span><span class="mi">1</span><span class="p">:])]</span>
 </pre></div>
-</p><p>I've included the <tt>large_weight_initializer</tt> method mostly as a
+</p><p>
+<!--
+    I've included the <tt>large_weight_initializer</tt> method mostly as a
 convenience to make it easier to compare the results in this chapter
 to those in Chapter 1. I can't think of many practical situations
-where I would recommend using it!</p><p>The second new thing in <tt>Network</tt>'s <tt>__init__</tt> method is
+where I would recommend using it!
+-->
+<tt>large_weight_initializer</tt> メソッドを入れたのは、主にこの章の結果とChapter 1の
+結果を簡単に比較できるようにするためです。
+実際問題として古い方法を使うべき状況はほとんど思いつきません！
+</p><p>
+<!--
+    The second new thing in <tt>Network</tt>'s <tt>__init__</tt> method is
 that we now initialize a <tt>cost</tt> attribute.  To understand how
 that works, let's look at the class we use to represent the
 cross-entropy cost*<span class="marginnote">
@@ -3400,7 +3651,19 @@ cross-entropy cost*<span class="marginnote">
   you're curious about details, all <tt>@staticmethod</tt> does is tell
   the Python interpreter that the method which follows doesn't depend
   on the object in any way.  That's why <tt>self</tt> isn't passed as a
-  parameter to the <tt>fn</tt> and <tt>delta</tt> methods.</span>:</p><p><div class="highlight"><pre><span class="k">class</span> <span class="nc">CrossEntropyCost</span><span class="p">:</span>
+  parameter to the <tt>fn</tt> and <tt>delta</tt> methods.</span>:
+-->
+<tt>Network</tt> クラスの <tt>__init__</tt> メソッドに関する第2の変更点は、
+<tt>cost</tt> 属性を初期化する点です。この動作を理解するために、
+クロスエントロピーコスト関数を表すクラスを見てみましょう*<span class="marginnote">
+*もしPythonの静的メソッドに馴染みがなければ、<tt>@staticmethod</tt> デコレータは
+気にせず、<tt>fn</tt> や <tt>delta</tt> を普通のメソッドだと考えて差し支えありません。
+関心がある読者のために書いておくと、<tt>@staticmethod</tt> を付けることで、
+そのメソッドはそれが属しているブジェクトに依存していないことを表しています。
+<tt>fn</tt> や <tt>delta</tt>メソッドが第1引数に <tt>self</tt> を受け取っていないのは
+そのためです。
+</span>：
+</p><p><div class="highlight"><pre><span class="k">class</span> <span class="nc">CrossEntropyCost</span><span class="p">:</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">fn</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -3410,7 +3673,9 @@ cross-entropy cost*<span class="marginnote">
     <span class="k">def</span> <span class="nf">delta</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">a</span><span class="o">-</span><span class="n">y</span><span class="p">)</span>
 </pre></div>
-</p><p>Let's break this down.  The first thing to observe is that even though
+</p><p>
+<!--
+    Let's break this down.  The first thing to observe is that even though
 the cross-entropy is, mathematically speaking, a function, we've
 implemented it as a Python class, not a Python function.  Why have I
 made that choice?  The reason is that the cost plays two different
@@ -3428,14 +3693,40 @@ error depends on the choice of cost function: different cost function,
 different form for the output error.  For the cross-entropy the output
 error is, as we saw in Equation <span id="margin_33201621799_reveal" class="equation_link">(66)</span><span id="margin_33201621799" class="marginequation" style="display: none;"><a href="chap3.html#eqtn66" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
     \delta^L = a^L-y.
-   \nonumber\end{eqnarray}</a></span><script>$('#margin_33201621799_reveal').click(function() {$('#margin_33201621799').toggle('slow', function() {});});</script>,</p><p><a class="displaced_anchor" name="eqtn92"></a>\begin{eqnarray}
+   \nonumber\end{eqnarray}</a></span><script>$('#margin_33201621799_reveal').click(function() {$('#margin_33201621799').toggle('slow', function() {});});</script>,
+-->
+中身を詳しく見ていきましょう。まず気づいてほしいのは、クロスエントロピー自体は
+数学的にいえば「関数」ですが、Pythonのクラスとして実装されている点です。
+この実装を選んだのは、コスト関数がニューラルネットワークで2つの異なる役割を持つからです。
+その1つ目は、出力活性 $a$ が正解の出力 $y$ にどのくらい似ているかの指標の役割です。
+この役割は <tt>CrossEntropyCost.fn</tt> メソッドに実装されています。
+（脇道に逸れますが、<tt>CrossEntropyCost.fn</tt> の中で呼ばれている <tt>np.nan_to_num</tt> は
+ゼロに非常に近い数値の対数をNumpyで正しく扱うために必要です。）もう一つの役割を
+理解するために、<a href="chap2.html#the_four_fundamental_equations_behind_backpropagation">Chapter
+  2</a>で議論した逆伝播法を思い出しましょう。
+逆伝播を行うには、ニューラルネットワークの出力誤差 $\delta^L$ を計算する必要があります。
+そして、出力誤差の形は選んだコスト関数ごとに異なります。クロスエントロピーの場合、
+出力誤差は式<span id="margin_33201621799_reveal" class="equation_link">(66)</span><span id="margin_33201621799" class="marginequation" style="display: none;"><a href="chap3.html#eqtn66" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+    \delta^L = a^L-y.
+   \nonumber\end{eqnarray}</a></span><script>$('#margin_33201621799_reveal').click(function() {$('#margin_33201621799').toggle('slow', function() {});});</script> で示した表式です：
+</p><p>
+<a class="displaced_anchor" name="eqtn92"></a>\begin{eqnarray}
   \delta^L = a^L-y.
 \tag{92}\end{eqnarray}
+<!--
 For this reason we define a second method,
 <tt>CrossEntropyCost.delta</tt>, whose purpose is to tell our network
 how to compute the output error.  And then we bundle these two methods
 up into a single class containing everything our networks need to know
-about the cost function.</p><p>In a similar way, <tt>network2.py</tt> also contains a class to
+about the cost function.
+-->
+このため、第二のメソッド、<tt>CrossEntropyCost.delta</tt> を定義しました。
+このメソッドは出力誤差を計算します。この2つは
+ニューラルネットワークがコスト関数について知るべきことの全てですから、
+2つのメソッドを一つのクラスにまとめたのです。
+</p><p>
+<!--
+    In a similar way, <tt>network2.py</tt> also contains a class to
 represent the quadratic cost function.  This is included for
 comparison with the results of Chapter 1, since going forward we'll
 mostly use the cross entropy.  The code is just below.  The
@@ -3445,7 +3736,17 @@ desired output, <tt>y</tt>.  The value returned by
 <tt>QuadraticCost.delta</tt> is based on the
 expression <span id="margin_667945012404_reveal" class="equation_link">(30)</span><span id="margin_667945012404" class="marginequation" style="display: none;"><a href="chap2.html#eqtn30" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
   \delta^L = (a^L-y) \odot \sigma'(z^L) \nonumber\end{eqnarray}</a></span><script>$('#margin_667945012404_reveal').click(function() {$('#margin_667945012404').toggle('slow', function() {});});</script> for the output error for the
-quadratic cost, which we derived back in Chapter 2.</p><p><div class="highlight"><pre><span class="k">class</span> <span class="nc">QuadraticCost</span><span class="p">:</span>
+quadratic cost, which we derived back in Chapter 2.
+-->
+同様に、<tt>network2.py</tt> は2乗コスト関数を表すクラスも含んでいます。
+これはChapter 1の結果と比較するためだけに入っており、今後の議論ではほとんど
+クロスエントロピーのみを用います。コードは下に示しました。<tt>QuadraticCost.fn</tt> メソッドは
+実際の出力 <tt>a</tt> と正解出力 <tt>y</tt> から2乗誤差を計算します。
+<tt>QuadraticCost.delta</tt> から返される値は、Chapter 2で導出した2乗コスト関数の
+出力誤差 <span id="margin_667945012404_reveal" class="equation_link">(30)</span><span id="margin_667945012404" class="marginequation" style="display: none;"><a href="chap2.html#eqtn30" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  \delta^L = (a^L-y) \odot \sigma'(z^L) \nonumber\end{eqnarray}</a></span><script>$('#margin_667945012404_reveal').click(function() {$('#margin_667945012404').toggle('slow', function() {});});</script>
+にもとづいています。
+</p><p><div class="highlight"><pre><span class="k">class</span> <span class="nc">QuadraticCost</span><span class="p">:</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">fn</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -3455,7 +3756,9 @@ quadratic cost, which we derived back in Chapter 2.</p><p><div class="highlight"
     <span class="k">def</span> <span class="nf">delta</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">a</span><span class="o">-</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigmoid_prime_vec</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
 </pre></div>
-</p><p>We've now understood the main differences between <tt>network2.py</tt>
+</p><p>
+<!--
+We've now understood the main differences between <tt>network2.py</tt>
 and <tt>network.py</tt>.  It's all pretty simple stuff.  There are a
 number of smaller changes, which I'll discuss below, including the
 implementation of L2 regularization.  Before getting to that, let's
@@ -3465,7 +3768,18 @@ structure, and in particular reading the documentation strings, so you
 understand what each piece of the program is doing.  Of course, you're
 also welcome to delve as deeply as you wish!  If you get lost, you may
 wish to continue reading the prose below, and return to the code
-later.  Anyway, here's the code:</p><p><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;network2.py</span>
+later.  Anyway, here's the code:
+-->
+これで <tt>network2.py</tt> と <tt>network.py</tt> の主な違いは理解しました。
+どれも簡単なことです。以下で議論するように、
+L2正規化の実装など小さな変更点はたくさんあります。それらに取り掛かる前に、
+<tt>network2.py</tt> の完全なコードを見てみましょう。
+コード全体を細かく読んでいく必要はありません。その代わり、全体の構造を掴むようにしましょう。
+特に、ドキュメント文字列を読むのはプログラムの各部が何をしているのか理解する
+助けになるでしょう。もちろん、お望みなら深く掘り下げたら良いでしょう。
+コードの読解に困ったら、下の文章を読んでからコードに戻ってても良いでしょう。
+ともかく、まずはコードを示します：
+</p><p><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;network2.py</span>
 <span class="sd">~~~~~~~~~~~~~~</span>
 
 <span class="sd">An improved version of network.py, implementing the stochastic</span>
@@ -3802,7 +4116,9 @@ later.  Anyway, here's the code:</p><p><div class="highlight"><pre><span class="
 
 <span class="n">sigmoid_prime_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">sigmoid_prime</span><span class="p">)</span>
 </pre></div>
-</p><p>One of the more interesting changes in the code is to include L2
+</p><p>
+<!--
+    One of the more interesting changes in the code is to include L2
 regularization.  Although this is a major conceptual change, it's so
 trivial to implement that it's easy to miss in the code.  For the most
 part it just involves passing the parameter <tt>lmbda</tt> to various
@@ -3810,18 +4126,46 @@ methods, notably the <tt>Network.SGD</tt> method.  The real work is done
 in a single line of the program, the fourth-last line of the
 <tt>Network.update_mini_batch</tt> method.  That's where we modify the
 gradient descent update rule to include weight decay.  But although
-the modification is tiny, it has a big impact on results!</p><p>This is, by the way, common when implementing new techniques in neural
+the modification is tiny, it has a big impact on results!
+-->
+最も興味深い変更点の一つは、L2正規化を実装した点です。これは概念的には大きな変更ですが、
+その実装はコードを読んでも見逃してしまうほど些細なことです。この点に関わる変更の大部分は、
+様々なメソッド、特に <tt>Network.SGD</tt> に、パラメータ <tt>lmbda</tt> を渡すことです。
+そして本質的な変更は1行のプログラム、<tt>Network.update_mini_batch</tt> メソッドの
+終わりから4行目です。その部分で、重み減衰するように勾配降下法の更新規則を修正しています。
+しかし、その修正はわずかでも、結果へは大きな影響を与えるのです！
+</p><p>
+<!--
+    This is, by the way, common when implementing new techniques in neural
 networks.  We've spent thousands of words discussing regularization.
 It's conceptually quite subtle and difficult to understand.  And yet
 it was trivial to add to our program!  It occurs surprisingly often
 that sophisticated techniques can be implemented with small changes to
-code.</p><p>Another small but important change to our code is the addition of
+code.
+-->
+ところで、このようなことはニューラルネットワークで新しい技術を実装する時に
+しばしば起こります。正規化を議論するのに大変長い文章を費やしました。
+正規化は概念的にはとても微妙で理解するのも難しいものです。それでも、
+プログラムに実装するのはとても簡単なことなのです。
+洗練された高度な手法が、コードの僅かな変更で実装できてしまうことは、
+驚くほど頻繁に起こります。
+</p><p>
+<!--
+    Another small but important change to our code is the addition of
 several optional flags to the stochastic gradient descent method,
 <tt>Network.SGD</tt>.  These flags make it possible to monitor the cost
 and accuracy either on the <tt>training_data</tt> or on a set of
 <tt>evaluation_data</tt> which can be passed to <tt>Network.SGD</tt>.
 We've used these flags often earlier in the chapter, but let me give
-an example of how it works, just to remind you:</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">mnist_loader</span>
+an example of how it works, just to remind you:
+-->
+他の小さくても重要な変更点は、確率的勾配降下法を実行するメソッド <tt>Network.SGD</tt> に
+いくつかのオプションフラグを追加したことです。これらのフラグは、
+<tt>training_data</tt> か <tt>evaluation_data</tt> でのコストと精度をモニターする
+ために用いられます。コストと精度を計算するデータ集合は <tt>Network.SGD</tt> に渡すことができます。
+この章の中でもこれらのフラグを何度も使ってきましたが、思い出してもらうために、
+今一度使い方の例を示しておきます：
+</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">mnist_loader</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">training_data</span><span class="p">,</span> <span class="n">validation_data</span><span class="p">,</span> <span class="n">test_data</span> <span class="o">=</span> \
 <span class="o">...</span> <span class="n">mnist_loader</span><span class="o">.</span><span class="n">load_data_wrapper</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">network2</span>
@@ -3834,7 +4178,9 @@ an example of how it works, just to remind you:</p><p><div class="highlight"><pr
 <span class="o">...</span> <span class="n">monitor_training_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">monitor_training_cost</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
-</p><p>Here, we're setting the <tt>evaluation_data</tt> to be the
+</p><p>
+<!--
+    Here, we're setting the <tt>evaluation_data</tt> to be the
 <tt>validation_data</tt>.  But we could also have monitored performance
 on the <tt>test_data</tt> or any other data set.  We also have four
 flags telling us to monitor the cost and accuracy on both the
@@ -3843,7 +4189,17 @@ flags telling us to monitor the cost and accuracy on both the
 monitor our <tt>Network</tt>'s performance.  Furthermore,
 <tt>network2.py</tt>'s <tt>Network.SGD</tt> method returns a four-element
 tuple representing the results of the monitoring.  We can use this as
-follows:</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">evaluation_cost</span><span class="p">,</span> <span class="n">evaluation_accuracy</span><span class="p">,</span>
+follows:
+-->
+ここでは、<tt>evaluation_data</tt> に <tt>validation_data</tt> をセットしていますが、
+パフォーマンスのモニターには <tt>test_data</tt> を使うこともできますし、他のデータセットを使うこともできます。
+その他に4つのフラグをセットして、コストと精度を <tt>evaluation_data</tt> と
+<tt>training_data</tt> の両方でモニターするよう設定しています。これらのフラグは
+デフォルトで <tt>False</tt> ですが、ここでは <tt>True</tt> にセットして
+<tt>Network</tt> のパフォーマンスをモニターしています。さらに、<tt>network2.py</tt> の
+<tt>Network.SGD</tt> メソッドは、モニタリングの結果を表す4要素のタプルを返します。
+これは次のように利用します：
+</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">evaluation_cost</span><span class="p">,</span> <span class="n">evaluation_accuracy</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">training_cost</span><span class="p">,</span> <span class="n">training_accuracy</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">training_data</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">lmbda</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">evaluation_data</span><span class="o">=</span><span class="n">validation_data</span><span class="p">,</span>
@@ -3852,14 +4208,27 @@ follows:</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <
 <span class="o">...</span> <span class="n">monitor_training_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
 <span class="o">...</span> <span class="n">monitor_training_cost</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
-</p><p>So, for example, <tt>evaluation_cost</tt> will be a 30-element list
+</p><p>
+<!--
+    So, for example, <tt>evaluation_cost</tt> will be a 30-element list
 containing the cost on the evaluation data at the end of each epoch.
 This sort of information is extremely useful in understanding a
 network's behaviour.  It can, for example, be used to draw graphs
 showing how the network learns over time.  Indeed, that's exactly how
 I constructed all the graphs earlier in the chapter.  Note, however,
 that if any of the monitoring flags are not set, then the
-corresponding element in the tuple will be the empty list.</p><p>Other additions to the code include a <tt>Network.save</tt> method, to
+corresponding element in the tuple will be the empty list.
+-->
+ですから、例えば、<tt>evaluation_cost</tt> は30個の要素を持つリストで、
+それぞれの要素は各エポック終了後の <tt>evaluation_data</tt> に対するコストです。
+この種の情報はニューラルネットワークの振る舞いを理解する上で非常に有用です。
+例えば、時間とともに学習が進行する様子をグラフに描く時に使えます。
+実際、この章で示したグラフはこのようにして描いたものなのです。
+ただし、もしモニタリングのフラグが設定されていなければ、
+対応するタプルの要素は空リストになることに注意してください。
+</p><p>
+<!--
+    Other additions to the code include a <tt>Network.save</tt> method, to
 save <tt>Network</tt> objects to disk, and a function to <tt>load</tt>
 them back in again later.  Note that the saving and loading is done
 using JSON, not Python's <tt>pickle</tt> or <tt>cPickle</tt> modules,
@@ -3872,14 +4241,51 @@ change we'd most likely change the attributes defined in the
 <tt>Network.__init__</tt> method.  If we've simply pickled the objects
 that would cause our <tt>load</tt> function to fail.  Using JSON to do
 the serialization explicitly makes it easy to ensure that old
-<tt>Network</tt>s will still <tt>load</tt>.</p><p>There are many other minor changes in the code for <tt>network2.py</tt>,
+<tt>Network</tt>s will still <tt>load</tt>.
+-->
+この他に追加した機能としては、<tt>Network</tt> オブジェクトをディスクに保存する
+<tt>Network.save</tt> メソッドと、保存した <tt>Network</tt> オブジェクトを
+後から読み込む <tt>load</tt> 関数があります。
+保存と読み込みは、Pythonで標準的に使われる <tt>pickle</tt> や <tt>cPickle</tt> ではなく、
+JSONを使って行っています。JSONを使うほうが <tt>pickle</tt> や <tt>cPickle</tt> に比べて
+多くのコードを必要とします。JSONを使った理由は、将来 <tt>Network</tt> クラスを修正する
+可能性があるからです。例えば、シグモイドニューロンではなく他のニューロンを使うように
+<tt>Network</tt> を修正するとしましょう。この変更を実装するために、
+<tt>Network.__init__</tt> メソッドで定義する属性を変更することになるでしょう。
+すると、単純に <tt>pickle</tt> を用いてしまうと <tt>load</tt> 関数は失敗してしまいます。
+JSONを使いシリアル化を明示的に行うことで、
+古い <tt>Network</tt> クラスをより簡単に確実に読み込むことができます。
+</p><p>
+<!--
+    There are many other minor changes in the code for <tt>network2.py</tt>,
 but they're all simple variations on <tt>network.py</tt>.  The net
 result is to expand our 74-line program to a far more capable 152
-lines.</p><p><h4><a name="problems_236423"></a><a href="#problems_236423">Problems</a></h4><ul>
-<li> Modify the code above to implement L1 regularization, and use L1
+lines.
+-->
+他にも <tt>network2.py</tt> のコードにはたくさんの小さな変更があります。
+しかし、それらは全て <tt>network.py</tt> からの単純な変化に過ぎません。
+全体としては、74行のプログラムをより強力な152行に拡大する結果になりました。
+</p><p>
+<!--
+<h4><a name="problems_236423"></a><a href="#problems_236423">Problems</a></h4>
+-->
+<h4><a name="problems_236423"></a><a href="#problems_236423">問題</a></h4>
+<ul>
+<li>
+<!--
+Modify the code above to implement L1 regularization, and use L1
   regularization to classify MNIST digits using a $30$ hidden neuron
   network.  Can you find a regularization parameter that enables you
-  to do better than running unregularized?</p><p><li> Take a look at the <tt>Network.cost_derivative</tt> method in
+  to do better than running unregularized?
+-->
+上のコードを修正して、L1正規化を実装してください。
+また、30個の隠れニューロンを持つニューラルネットワークで、
+L1正規化を使ってMNISTの手書き数字の分類を行ってください。
+正規化を行わない場合よりも精度が良くなる正規化パラメータは見つかりますか？
+</p><p>
+<li>
+<!--
+    Take a look at the <tt>Network.cost_derivative</tt> method in
   <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/src/network.py"><tt>network.py</tt></a>.
   That method was written for the quadratic cost.  How would you
   rewrite the method for the cross-entropy cost?  Can you think of a
@@ -3888,7 +4294,24 @@ lines.</p><p><h4><a name="problems_236423"></a><a href="#problems_236423">Proble
   <tt>Network.cost_derivative</tt> method entirely, instead
   incorporating its functionality into the
   <tt>CrossEntropyCost.delta</tt> method.  How does this solve the
-  problem you've just identified?</p><p></ul></p><p><h3><a name="how_to_choose_a_neural_network's_hyper-parameters"></a><a href="#how_to_choose_a_neural_network's_hyper-parameters">How to choose a neural network's hyper-parameters?</a></h3></p><p>Up until now I haven't explained how I've been choosing values for
+  problem you've just identified?
+-->
+<a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/src/network.py"><tt>network.py</tt></a> の <tt>Network.cost_derivative</tt> メソッドを見てください。
+このメソッドは2乗コスト関数用に書かれています。
+これをクロスエントロピーコスト関数用に書き直すにはどうしたら良いでしょうか？
+また、<tt>Network.cost_derivative</tt> メソッドのクロスエントロピー版で生じる問題を指摘してください。
+<tt>network2.py</tt> では、<tt>Network.cost_derivative</tt> メソッドを完全に
+無くしてしまい、代わりにその機能を <tt>CrossEntropyCost.delta</tt> メソッドに
+実装しました。こうすることで、先に指摘した問題がどう解決されますか？
+</p><p></ul>
+</p><p>
+<!--
+<h3><a name="how_to_choose_a_neural_network's_hyper-parameters"></a><a href="#how_to_choose_a_neural_network's_hyper-parameters">How to choose a neural network's hyper-parameters?</a></h3>
+-->
+<h3><a name="how_to_choose_a_neural_network's_hyper-parameters"></a><a href="#how_to_choose_a_neural_network's_hyper-parameters">ニューラルネットワークのハイパーパラメータをどう選ぶか?</a></h3>
+</p><p>
+<!--
+    Up until now I haven't explained how I've been choosing values for
 hyper-parameters such as the learning rate, $\eta$, the regularization
 parameter, $\lambda$, and so on.  I've just been supplying values
 which work pretty well.  In practice, when you're using neural nets to
@@ -3900,7 +4323,19 @@ our first experiments we choose many of the hyper-parameters in the
 same way as was done earlier this chapter: 30 hidden neurons, a
 mini-batch size of 10, training for 30 epochs using the cross-entropy.
 But we choose a learning rate $\eta = 10.0$ and regularization
-parameter $\lambda = 1000.0$.  Here's what I saw on one such run:</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">mnist_loader</span>
+parameter $\lambda = 1000.0$.  Here's what I saw on one such run:
+-->
+ここまでは、学習率 $\eta$ や正規化パラメータ $\lambda$ 等のハイパーパラメータを
+私がどのように決めたのか説明せず、ニューラルネットワークが上手く働くよう私が
+事前に決めた値を使ってきました。実際問題として、ニューラルネットワークを使って何かの
+課題に取り組むにあたって、良いハイパーパラメータを見つけるのは困難な場合があります。
+例えば、MNISTの手書き数字分類問題を今ここで初めて知って、
+適切なハイパーパラメータの値を知らずにこれに取り掛かることを想像してみてください。
+その際に最初の実験から、多くのハイパーパラメータについてこの章で使ってきた値、
+30個の隠れニューロン、大きさ10のミニバッチ、そしてクロスエントロピーを使った30エポックの訓練を
+運良く選んだとしましょう。しかし学習率については $\eta=10.0$、そして正規化パラメータは
+$\lambda = 1000.0$ を選んだとします。すると次のような結果が得られます：
+</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">mnist_loader</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">training_data</span><span class="p">,</span> <span class="n">validation_data</span><span class="p">,</span> <span class="n">test_data</span> <span class="o">=</span> \
 <span class="o">...</span> <span class="n">mnist_loader</span><span class="o">.</span><span class="n">load_data_wrapper</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">network2</span>
@@ -3927,8 +4362,16 @@ parameter $\lambda = 1000.0$.  Here's what I saw on one such run:</p><p><div cla
 <span class="n">Epoch</span> <span class="mi">29</span> <span class="n">training</span> <span class="n">complete</span>
 <span class="n">Accuracy</span> <span class="n">on</span> <span class="n">evaluation</span> <span class="n">data</span><span class="p">:</span> <span class="mi">967</span> <span class="o">/</span> <span class="mi">10000</span>
 </pre></div>
-</p><p>Our classification accuracies are no better than chance!  Our network
-is acting as a random noise generator!</p><p>"Well, that's easy to fix," you might say, "just decrease the
+</p><p>
+<!--
+    Our classification accuracies are no better than chance!  Our network
+is acting as a random noise generator!
+-->
+なんと分類精度は全くの当てずっぽうと同等です！
+ニューラルネットワークはサイコロのようなものになってしまいました！
+</p><p>
+<!--
+    "Well, that's easy to fix," you might say, "just decrease the
 learning rate and regularization hyper-parameters".  Unfortunately,
 you don't <em>a priori</em> know those are the hyper-parameters you need
 to adjust.  Maybe the real problem is that our 30 hidden neuron
@@ -3945,7 +4388,28 @@ large, or uses a lot of training data, since you may train for hours
 or days or weeks, only to get no result.  If the situation persists,
 it damages your confidence.  Maybe neural networks are the wrong
 approach to your problem?  Maybe you should quit your job and take up
-beekeeping?</p><p>In this section I explain some heuristics which can be used to set the
+beekeeping?
+-->
+こんな風に考える読者がいるかもしれません。「ふむ、こんなのは簡単に直せるよ。
+学習率と正規化ハイパーパラメータを小さくすれば良いんだろう」。
+しかしちょっと待ってください。そう言えるのは上手く働くハイパーパラメータを
+事前に知っていたからであって、学習率と正規化パラメータを調整すれば上手くいくことを
+ア・プリオリには知らないのです。もしかすると、隠れニューロンの数が30個では
+他のハイパーパラメータをいかに調整しても上手くいかないのかもしれません。
+もしかすると少なくとも100個、いや300個は隠れニューロンが必要なのでは？
+あるいは隠れ層が複数必要なのでは？いや出力のエンコーディングが問題なのかもしれませんよ？
+本当は学習が進行しているけれども、もっと多くのエポックが必要という可能性はありませんか？
+ミニバッチの大きさが小さすぎませんか？2乗コスト関数にしてみてはどうでしょう？
+重みの初期化方法を変えてみるのは？等など。広すぎるハイパーパラメータの空間で
+途方に暮れてしまいそうです。巨大なニューラルネットワークを扱っていたり
+巨大な訓練データを使ったりしている時には特に苛立たしい問題です。何しろ、
+訓練するのに何時間も何日も、もしかすると何週間も掛かるのに、
+何の結果も得られないこともあるのですから。
+このような状況が続けば自信を無くすかもしれません。
+もうこんな仕事は辞めて田舎で畑仕事でも始めたほうがマシに思えるかもしれません。
+</p><p>
+<!--
+    In this section I explain some heuristics which can be used to set the
 hyper-parameters in a neural network.  The goal is to help you develop
 a workflow that enables you to do a pretty good job setting
 hyper-parameters.  Of course, I won't cover everything about
@@ -3954,12 +4418,35 @@ any case, a problem that is ever completely solved, nor is there
 universal agreement amongst practitioners on the right strategies to
 use.  There's always one more trick you can try to eke out a bit more
 performance from your network.  But the heuristics in this section
-should get you started.</p><p><strong>Broad strategy:</strong> When using neural networks to attack a new
+should get you started.
+-->
+この節では、ニューラルネットワークのハイパーパラメータを定める発見的な方法を
+いくつか紹介します。目標は、ハイパーパラメータを上手に決めるためのワークフローを
+読者が確立する手助けをすることです。もちろん、ハイパーパラメータの最適化について
+全てをカバーするわけではありません。何しろとても大きな問題です。
+そして、完全に解決されている問題ではないし、ニューラルネットワークを使う人々の間で
+普遍的に共有されている合意も無いのです。
+ニューラルネットワークのパフォーマンスをほんの少し向上させるために、
+常に一つ、何かできることがあるはずです。この節で紹介する発見的な方法は、
+その取っ掛かりを与えてくれるでしょう。
+</p><p>
+<!--
+    <strong>Broad strategy:</strong> When using neural networks to attack a new
 problem the first challenge is to get <em>any</em> non-trivial learning,
 i.e., for the network to achieve results better than chance.  This can
 be surprisingly difficult, especially when confronting a new class of
 problem.  Let's look at some strategies you can use if you're having
-this kind of trouble.</p><p>Suppose, for example, that you're attacking MNIST for the first time.
+this kind of trouble.
+-->
+<strong>出発点：</strong> ニューラルネットワークを使って新しい問題に取り組む時、
+第1の関門は<em>何でも良いので</em>とにかく何か学習をすることです。
+言い換えると、ニューラルネットワークでデタラメよりはマシな結果を達成することが第1歩です。
+ものすごく低いハードルに思えるかもしれませんが、実際にはそれが驚くほど難しい場合もあります。
+特に、新しい種類の問題に取り組む時には、この取っ掛かりから困難な場合があります。
+まずはこの種の困難に遭った時に採りうる戦略を見てみましょう。
+</p><p>
+<!--
+    Suppose, for example, that you're attacking MNIST for the first time.
 You start out enthusiastic, but are a little discouraged when your
 first network fails completely, as in the example above.  The way to
 go is to strip the problem down.  Get rid of all the training and
@@ -3968,12 +4455,36 @@ a network to distinguish 0s from 1s.  Not only is that an inherently
 easier problem than distinguishing all ten digits, it also reduces the
 amount of training data by 80 percent, speeding up training by a
 factor of 5.  That enables much more rapid experimentation, and so
-gives you more rapid insight into how to build a good network.</p><p>You can further speed up experimentation by stripping your network
+gives you more rapid insight into how to build a good network.
+-->
+例えば、あなたがMNISTに初めて取り組むとしましょう。勢い勇んで取り掛かったものの、
+ニューラルネットワークで得た最初の結果が先程見たような散々なもので、
+少々落ち込んでいます。この状況を何とかするには、まず生じている問題を特定することです。
+手始めに、訓練データと検証データから0と1以外の画像を全て取り除きましょう。
+そして、ニューラルネットワークが0と1を区別できるように訓練してみましょう。
+この0と1を区別するという新しい問題は、元々の10種類の数字を区別する問題より簡単であるのみならず、
+訓練データの量を80%減らすことになるので、訓練が5倍速くなります。
+こうすることで問題を特定するための実験を素早く実行することが可能になりますし、
+良いニューラルネットワークを構築するにはどうしたら良いのか、素早い見立てが可能になります。
+</p><p>
+<!--
+    You can further speed up experimentation by stripping your network
 down to the simplest network likely to do meaningful learning.  If you
 believe a <tt>[784, 10]</tt> network can likely do better-than-chance
 classification of MNIST digits, then begin your experimentation with
 such a network.  It'll be much faster than training a
-<tt>[784, 30, 10]</tt> network, and you can build back up to the latter.</p><p>You can get another speed up in experimentation by increasing the
+<tt>[784, 30, 10]</tt> network, and you can build back up to the latter.
+-->
+さらに素早く実験を行うには、まともに学習が可能であると期待できる範囲で、
+ニューラルネットワークをできるだけ単純化することができます。
+もし各層のニューロン数が <tt>[784, 10]</tt> のニューラルネットワークが
+MNISTの手書き数字分類問題に対して乱数よりはまともな正答率を達成できると考えるなら、
+実験の出発点としてこのようなニューラルネットワークから実験を採用するのが良いでしょう。
+ニューロン数が <tt>[784, 30, 10]</tt> のニューラルネットワークよりはずっと速く学習するでしょうから、
+実験も速く進むでしょう。
+</p><p>
+<!--
+    You can get another speed up in experimentation by increasing the
 frequency of monitoring.  In <tt>network2.py</tt> we monitor performance
 at the end of each training epoch.  With 50,000 images per epoch, that
 means waiting quite a while - about a minute, on my laptop, when
@@ -3994,7 +4505,30 @@ illustration, we'll strip down our training data to just the first
 1,000 MNIST training images.  Let's try it and see what happens.  (To
 keep the code below simple I haven't implemented the idea of using
 only 0 and 1 images.  Of course, that can be done with just a little
-more work.)</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network2</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+more work.)
+-->
+実験をさらにスピードアップするには、モニタリングの頻度を上げるという方法があります。
+<tt>network2.py</tt> では、訓練の各エポックが終了した時点でパフォーマンスを測定しました。
+一つのエポックに50,000枚の画像が含まれるので、ニューラルネットワークの学習状況について
+情報を得るのに随分と時間が掛かります。例えば、私のノートPCで各層のニューロン数が
+ <tt>[784, 30, 10]</tt> のニューラルネットワークを訓練すると、
+学習状況についてフィードバックを受けるまで約1分掛かります。
+もちろん、1分というのは決して長時間ではありませんが、
+大量のハイパーパラメータを決めたい時にはそれでも厄介です。
+何百、何千通りものハイパーパラメータを試そうと思うと、随分と大きな負担です。
+もっと頻繁に、例えば訓練画像1,000枚ごとに検証精度を監視することで、
+より素早いフィードバックが得られます。さらに、
+10,000枚の画像を全て使う代わりに100枚の検証画像から精度を推定することで、
+より速くパフォーマンスを測定することが可能です。
+大切なのは、まともな学習に必要なだけの訓練画像をニューラルネットワークに与えることと、
+そこそこに良いパフォーマンスの推定を得ることなのです。もちろん、
+<tt>network2.py</tt> は現時点でこういうモニタリングを行ってはいませんが、
+ここでは実例として、MNISTの訓練データを1,000枚に減らしてみます。
+動かしてみて何が起こるか見てみましょう。
+(単純にするために、0と1の画像だけを使うというアイデアは実装していません。
+もちろん、あと少し工夫すればそれを実装することも可能です。)
+</p><p>
+<div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network2</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">training_data</span><span class="p">[:</span><span class="mi">1000</span><span class="p">],</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="n">lmbda</span> <span class="o">=</span> <span class="mf">1000.0</span><span class="p">,</span> \
 <span class="o">...</span> <span class="n">evaluation_data</span><span class="o">=</span><span class="n">validation_data</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> \
 <span class="o">...</span> <span class="n">monitor_evaluation_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -4008,15 +4542,31 @@ more work.)</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span
 <span class="n">Accuracy</span> <span class="n">on</span> <span class="n">evaluation</span> <span class="n">data</span><span class="p">:</span> <span class="mi">10</span> <span class="o">/</span> <span class="mi">100</span>
 <span class="o">...</span>
 </pre></div>
-</p><p>We're still getting pure noise!  But there's a big win: we're now
+</p><p>
+<!--
+    We're still getting pure noise!  But there's a big win: we're now
 getting feedback every second, rather than once a minute or so.  That
 means you can more quickly experiment with other choices of
 hyper-parameter, or even conduct experiments trialling many different
-choices of hyper-parameter nearly simultaneously.</p><p>In the above example I left $\lambda$ as $\lambda = 1000.0$, as we
+choices of hyper-parameter nearly simultaneously.
+-->
+まだ出てくるのは純粋なノイズです！
+でも一つ大きな進歩があります：今やフィードバックを得るのに1分も待つ必要がなく、
+1秒毎に情報が得られます。これなら、ハイパーパラメータを変えて実験を繰り返すのも容易ですし、
+あるいは様々な異なるハイパーパラメータをほぼ同時に試してみることさえも可能でしょう。
+</p><p>
+<!--
+    In the above example I left $\lambda$ as $\lambda = 1000.0$, as we
 used earlier.  But since we changed the number of training examples we
 should really change $\lambda$ to keep the weight decay the same.
 That means changing $\lambda$ to $20.0$.  If we do that then this is
-what happens:</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network2</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+what happens:
+-->
+上の例では、$\lambda$ を以前に使った $\lambda = 1000.0$ のままにしておきました。
+しかし、訓練データの数を変えたのだから、重み減衰の割合を一定に保つために $\lambda$ も
+変更するべきです。この場合は、$\lambda = 20.0$ にすると前と重み減衰の因子が前と同じになります。
+以下がその結果です：
+</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network2</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">training_data</span><span class="p">[:</span><span class="mi">1000</span><span class="p">],</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="n">lmbda</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">,</span> \
 <span class="o">...</span> <span class="n">evaluation_data</span><span class="o">=</span><span class="n">validation_data</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> \
 <span class="o">...</span> <span class="n">monitor_evaluation_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -4033,13 +4583,24 @@ what happens:</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</sp
 <span class="n">Accuracy</span> <span class="n">on</span> <span class="n">evaluation</span> <span class="n">data</span><span class="p">:</span> <span class="mi">18</span> <span class="o">/</span> <span class="mi">100</span>
 <span class="o">...</span>
 </pre></div>
-</p><p>Ahah!  We have a signal.  Not a terribly good signal, but a signal
+</p><p>
+<!--
+    Ahah!  We have a signal.  Not a terribly good signal, but a signal
 nonetheless.  That's something we can build on, modifying the
 hyper-parameters to try to get further improvement.  Maybe we guess
 that our learning rate needs to be higher.  (As you perhaps realize,
 that's a silly guess, for reasons we'll discuss shortly, but please
 bear with me.)  So to test our guess we try dialling $\eta$ up to
-$100.0$:</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network2</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+$100.0$:
+-->
+なんと、今度はシグナルが出ました！とても良い結果とは言えませんが、
+ともかく偶然よりは良い結果です。
+これは、さらなる改善を得るためにハイパーパラメータを修正していく際の出発点になります。
+学習率をもっと大きくするべきだと推測するかもしれません。
+（恐らく皆さんも気づいているように、これは愚かな推測です。
+その理由についてはすぐに議論しますが、しばらくは我慢してください。）
+そこでその推測を検証するために、$\eta$ の値を $100.0$ まで上げてみましょう：
+</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network2</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">training_data</span><span class="p">[:</span><span class="mi">1000</span><span class="p">],</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span> <span class="n">lmbda</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">,</span> \
 <span class="o">...</span> <span class="n">evaluation_data</span><span class="o">=</span><span class="n">validation_data</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> \
 <span class="o">...</span> <span class="n">monitor_evaluation_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -4057,9 +4618,15 @@ $100.0$:</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <
 
 <span class="o">...</span>
 </pre></div>
-</p><p>That's no good!  It suggests that our guess was wrong, and the problem
+</p><p>
+<!--
+    That's no good!  It suggests that our guess was wrong, and the problem
 wasn't that the learning rate was too low.  So instead we try dialling
-$\eta$ down to $\eta = 1.0$:</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network2</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+$\eta$ down to $\eta = 1.0$:
+-->
+これはひどい！この結果は、学習率が小さすぎるという推測が間違っていたことを示唆します。
+そこで反対に、$\eta$ を $1.0$ まで小さくしてみましょう：
+</p><p><div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">net</span> <span class="o">=</span> <span class="n">network2</span><span class="o">.</span><span class="n">Network</span><span class="p">([</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">net</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">training_data</span><span class="p">[:</span><span class="mi">1000</span><span class="p">],</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">lmbda</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">,</span> \
 <span class="o">...</span> <span class="n">evaluation_data</span><span class="o">=</span><span class="n">validation_data</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> \
 <span class="o">...</span> <span class="n">monitor_evaluation_accuracy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -4077,7 +4644,9 @@ $\eta$ down to $\eta = 1.0$:</p><p><div class="highlight"><pre><span class="o">&
 
 <span class="o">...</span>
 </pre></div>
-</p><p>That's better!  And so we can continue, individually adjusting each
+</p><p>
+<!--
+    That's better!  And so we can continue, individually adjusting each
 hyper-parameter, gradually improving performance.  Once we've explored
 to find an improved value for $\eta$, then we move on to find a good
 value for $\lambda$.  Then experiment with a more complex
@@ -4088,7 +4657,21 @@ on, at each stage evaluating performance using our held-out validation
 data, and using those evaluations to find better and better
 hyper-parameters.  As we do so, it typically takes longer to witness
 the impact due to modifications of the hyper-parameters, and so we can
-gradually decrease the frequency of monitoring.</p><p>This all looks very promising as a broad strategy.  However, I want to
+gradually decrease the frequency of monitoring.
+-->
+こちらの方が良いですね！このように続けていって、ハイパーパラメータを一つずつ調整して、
+パフォーマンスを徐々に改善していきます。学習率 $\eta$ の値を改善できたら、
+次に正規化パラメータ $\lambda$ の改善に進みます。
+それができたら、次はより複雑な構造のニューラルネットワーク、例えば隠れニューロンを10個持つ
+ニューラルネットワークで実験しましょう。前と同じように $\eta$ と $\lambda$ を調整します。
+次に隠れニューロンを20個に増やして、他のハイパーパラメータも調整しましょう。
+以下同様に、各段階で検証データの一部を使ったパフォーマンスの測定を行い、
+その結果を参考にしながらより良いハイパーパラメータを見つけていきます。
+これを続けていくうちに、しばしばハイパーパラメータを修正した効果が現れるのに
+時間が掛かるようになるので、モニタリングの頻度を徐々に下げることができます。
+</p><p>
+<!--
+    This all looks very promising as a broad strategy.  However, I want to
 return to that initial stage of finding hyper-parameters that enable a
 network to learn anything at all.  In fact, even the above discussion
 conveys too positive an outlook.  It can be immensely frustrating to
@@ -4101,13 +4684,39 @@ will merely slow you down.  In fact, it speeds things up, since you
 much more quickly find a network with a meaningful signal.  Once
 you've got such a signal, you can often get rapid improvements by
 tweaking the hyper-parameters.  As with many things in life, getting
-started can be the hardest thing to do.</p><p>Okay, that's the broad strategy.  Let's now look at some specific
+started can be the hardest thing to do.
+-->
+これは一般的でとても有望な戦略に見えます。
+しかし、実際のところ、上の議論でさえ見通しが楽観的すぎるのです。
+何も学習しないニューラルネットワークをいじるのは、どうしようもなく骨の折れる作業です。
+何日もハイパーパラメータの調整を行って、それでも無意味な結果しか得られないことだってあります。
+ですから、改めて強調したいのですが、初期の段階では、実験をしたらできるだけ素早く
+フィードバックが得られるようにしておくことがとても重要なのです。
+最初に問題やニューラルネットワークの構造を単純化してしまうと、
+当初の目的から遠ざかってしまうように思えるかもしれません。
+しかし、こうすることでニューラルネットワークが意味のある学習をするまでに掛かる時間はずっと短縮されるし、
+一旦意味のあるシグナルが得られれば、ハイパーパラメータを調整することで
+ニューラルネットワークの性能はしばしば急速に向上していきます。
+一番最初の取っ掛かりが、最も苦労するところなのです。
+</p><p>
+<!--
+    Okay, that's the broad strategy.  Let's now look at some specific
 recommendations for setting hyper-parameters.  I will focus on the
 learning rate, $\eta$, the L2 regularization parameter, $\lambda$, and
 the mini-batch size.  However, many of the remarks apply also to other
 hyper-parameters, including those associated to network architecture,
 other forms of regularization, and some hyper-parameters we'll meet
-later in the book, such as the momentum co-efficient.</p><p><strong>Learning rate:</strong> Suppose we run three MNIST networks with three
+later in the book, such as the momentum co-efficient.
+-->
+ここまでは一般的な話をしてきました。ここからは、ハイパーパラメータの決め方について、
+私が勧める具体的な手順をいくつか見てみましょう。以下では、学習率 $\eta$、
+L2正規化パラメータ $\lambda$、そしてミニバッチのサイズの決め方を議論します。
+しかし、ここで述べることの多くは、
+ニューラルネットワークのアーキテクチャや他の正規化法に関わるハイパーパラメータ、
+あるいはモーメンタム係数などこの本で後に議論するハイパーパラメータ等にも当て余ります。
+</p><p>
+<!--
+<strong>Learning rate:</strong> Suppose we run three MNIST networks with three
 different learning rates, $\eta = 0.025$, $\eta = 0.25$ and $\eta =
 2.5$, respectively.  We'll set the other hyper-parameters as for the
 experiments in earlier sections, running over 30 epochs, with a
@@ -4116,16 +4725,40 @@ using the full $50,000$ training images.  Here's a graph showing the
 behaviour of the training cost as we train*<span class="marginnote">
 *The graph was
   generated by
-  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/multiple_eta.py">multiple_eta.py</a>.</span>:</p><p><center><img src="images/multiple_eta.png" width="520px"></center></p><p>With $\eta = 0.025$ the cost decreases smoothly until the final epoch.
+  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/multiple_eta.py">multiple_eta.py</a>.</span>:
+-->
+<strong>学習率：</strong> 3つの異なる学習率、$\eta = 0.025$、$\eta = 0.25$、$\eta = 2.5$ を
+持つニューラルネットワークにMNISTの学習をさせることを考えます。他のハイパーパラメータについては、
+以前に用いたのと同様、訓練は30エポック行い、ミニバッチのサイズは10、正規化パラメータは
+$\lambda = 5.0$ を採用します。また、ここでは $50,000$ 枚全ての訓練画像を用いることにします。
+次のグラフは、訓練の経過とともにコストがどう変化するかを示しています*<span class="marginnote">
+*このグラフは
+  <a href="https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/fig/multiple_eta.py">multiple_eta.py</a>を用いて生成したものです。</span>：
+</p><p>
+<center><img src="images/multiple_eta.png" width="520px"></center>
+</p><p>
+<!--
+    With $\eta = 0.025$ the cost decreases smoothly until the final epoch.
 With $\eta = 0.25$ the cost initially decreases, but after about $20$
 epochs it is near saturation, and thereafter most of the changes are
 merely small and apparently random oscillations.  Finally, with $\eta
 = 2.5$ the cost makes large oscillations right from the start.  To
 understand the reason for the oscillations, recall that stochastic
 gradient descent is supposed to step us gradually down into a valley
-of the cost function,</p><p><center>
+of the cost function,
+-->
+学習率 $\eta = 0.025$ では、最後のエポックまで滑らかにコストが減少しています。
+$\eta = 0.25$ では、コストが最初減少しますが、20エポックを過ぎた辺りでほぼ飽和して、
+その後はランダムに見える小さな振動をします。最後に、$\eta = 2.5$ では、
+はじめからコストは大きな振動をしています。この振動が起こる理由を理解するために、
+確率的勾配降下法ではコストの谷底に向かって小さなステップで
+徐々に学習を進めていくことを思い出しましょう：
+</p><p><center>
 <img src="images/tikz33.png"/>
-</center></p><p>However, if $\eta$ is too large then the steps will be so large that
+</center>
+</p><p>
+<!--
+However, if $\eta$ is too large then the steps will be so large that
 they may actually overshoot the minimum, causing the algorithm to
 climb up out of the valley instead.  That's likely*<span class="marginnote">
 *This
@@ -4150,7 +4783,28 @@ gradient descent.  An even better approach would be to start with
 $\eta = 0.25$, train for $20$ epochs, and then switch to $\eta =
 0.025$.  We'll discuss such variable learning rate schedules later.
 For now, though, let's stick to figuring out how to find a single good
-value for the learning rate, $\eta$.</p><p></p><p>With this picture in mind, we can set $\eta$ as follows.  First, we
+value for the learning rate, $\eta$.
+-->
+しかし、もし学習率 $\eta$ が大きすぎると、ステップが大きすぎてコストの最小を通り過ぎてしまう
+可能性があります。そうすると、谷底に下る代わりに登ってしまうでしょう。
+これが恐らく $\eta=2.5$ の時に起こっているのでしょう*<span class="marginnote">
+*この描像は分かりやすいですが、あくまでも直感的な説明として示したもので、
+完全な説明にはなっていません。より完全な説明は、手短に言うと次のようなものです：
+勾配降下法では、コスト関数に対する一次近似を手がかりにコストを減少させようと試みます。
+大きな $\eta$ では、コスト関数のより高次の項がより重要になり、
+場合によってはコスト関数の振る舞いを決定づけるので、勾配降下法が破綻してしまいます。
+これは特にコスト関数の最小や極小に近づくと起こりやすくなります。というのも、
+そのような領域では勾配が小さくなり、高次の項が支配的になりやすくなるためです。</span>。
+$\eta=0.25$ の場合は、
+最初しばらくはコスト関数の最小に向かって進み、最小に近づいた時だけ行き過ぎの問題が生じます。
+$\eta=0.025$ を選ぶと、最初の30エポックでは同様の問題は一切生じません。もちろん、
+これほど小さな学習率を選ぶと、確率的勾配降下法による学習が遅くなるという別の問題が生じます。
+より良い方法は、$\eta=0.25$ から始めて20エポック訓練し、それから $\eta=0.025$ に切り替えることでしょう。
+このように学習率を変動させる手法については後ほど議論します。
+しばらくは、一つの良い学習率 $\eta$ をどう選ぶかについて考えましょう。
+</p><p>
+<!--
+    With this picture in mind, we can set $\eta$ as follows.  First, we
 estimate the threshold value for $\eta$ at which the cost on the
 training data immediately begins decreasing, instead of oscillating or
 increasing.  This estimate doesn't need to be too accurate.  You can
@@ -4167,18 +4821,51 @@ may optionally refine your estimate, to pick out the largest value of
 $\eta$ at which the cost decreases during the first few epochs, say
 $\eta = 0.5$ or $\eta = 0.2$ (there's no need for this to be
 super-accurate).  This gives us an estimate for the threshold value of
-$\eta$.</p><p></p><p>Obviously, the actual value of $\eta$ that you use should be no larger
+$\eta$.
+-->
+この描像を頭に入れておくと、$\eta$ を次のように定めることができます。
+まず、コスト関数が振動や増加をせずちゃんと減少してくれる学習率の上限を見積もります。
+この見積もりがとても正確である必要はありません。桁がわかれば良いという程度です。
+ですから、$\eta=0.01$ から始めて数エポックの間コストが減少すれば、
+順番に $\eta=0.1, 1.0, \ldots$ と試していき、コストが最初の数エポックで振動や増加を
+する値を見つけます。逆に、$\eta=0.01$ でも最初の数エポックでコストが振動や増加を始めたら、
+$\eta=0.001, 0.0001, \ldots$ と試してい、コストが数エポックの間減少する値を見つけます。
+これでコストを減少させられる学習率 $\eta$ の上限が大雑把に見積もられます。
+もっと細かく、例えば $\eta=0.5$ や $\eta = 0.2$ のような値を試してみることで、
+上限の見積もりを改善することも可能です（ただしこれが非常に正確である必要はありません）。
+</p><p>
+<!--
+    Obviously, the actual value of $\eta$ that you use should be no larger
 than the threshold value.  In fact, if the value of $\eta$ is to
 remain useable over many epochs then you likely want to use a value
 for $\eta$ that is smaller, say, a factor of two below the threshold.
 Such a choice will typically allow you to train for many epochs,
-without causing too much of a slowdown in learning.</p><p></p><p>In the case of the MNIST data, following this strategy leads to an
+without causing too much of a slowdown in learning.
+-->
+実際に使う $\eta$ の値はこの上限より小さく取らねばなりません。
+実際のところ、選んだ学習率 $\eta$ が多くのエポックに渡って使い物になるためには、
+例えば、上限の半分くらいに $\eta$ をとるのが良いかもしれません。
+そのように選ぶことで、通常は学習の速度を落とし過ぎることなく、
+より多くのエポックを使って訓練することが可能になります。
+</p><p>
+<!--
+    In the case of the MNIST data, following this strategy leads to an
 estimate of $0.1$ for the order of magnitude of the threshold value of
 $\eta$.  After some more refinement, we obtain a threshold value $\eta
 = 0.5$.  Following the prescription above, this suggests using $\eta =
 0.25$ as our value for the learning rate.  In fact, I found that using
 $\eta = 0.5$ worked well enough over $30$ epochs that for the most
-part I didn't worry about using a lower value of $\eta$.</p><p>This all seems quite straightforward.  However, using the training
+part I didn't worry about using a lower value of $\eta$.
+-->
+MNISTの場合には、この戦略に従うと、コストを減少させられる学習率の上限が
+桁で言って $0.1$ 程度であるという見積もりを得ます。より細かく見ていくと、
+$\eta=0.5$ 程度が上限であることが分かります。上記の処方に従うと、
+学習率として $\eta=0.25$ を選ぶと良さそうだと言えます。
+実際のところ、$\eta=0.5$ でも30エポックくらいなら十分に良く学習しますが、
+たいていはより小さな $\eta$ を選んでも問題ありません。
+</p><p>
+<!--
+    This all seems quite straightforward.  However, using the training
 cost to pick $\eta$ appears to contradict what I said earlier in this
 section, namely, that we'd pick hyper-parameters by evaluating
 performance using our held-out validation data.  In fact, we'll use
@@ -4197,7 +4884,27 @@ the best way to detect if the step size is too big.  With that said,
 this is a personal aesthetic preference.  Early on during learning the
 training cost usually only decreases if the validation accuracy
 improves, and so in practice it's unlikely to make much difference
-which criterion you use.</p><p><strong>Use early stopping to determine the number of training
+which criterion you use.
+-->
+ここで述べたことは、どれもとても単純に思えます。
+しかし、$\eta$ を選ぶために訓練データに対するコスト関数の値を用いるのは、
+この節で前に述べたことと矛盾するのではないでしょうか？つまり、ハイパーパラメータを選ぶには、
+取っておいた("held-out")検証データを用いると言ったはずですよね？
+実際、正規化パラメータ、ミニバッチのサイズ、そして隠れ層や隠れニューロンの数など
+ニューラルネットワークのパラメータを定めるために、検証データに対する精度を用います。
+では、学習率についてはなぜ状況が異なるのでしょうか？
+率直に言って、この選択は私の美的な好みによるもので、たぶん多少特殊ですが、
+次のように理由付けできます。他のハイパーパラメータが試験データに対する最終的な分類精度の改善を
+目的とするので、検証データに対する分類精度に基づいてチューニングするのは理にかなっています。
+しかし、学習率が最終的な分類精度に与える影響は二義的なものです。
+学習率をチューニングする一義的な目的は勾配降下法のステップ幅を制御することですから、
+訓練データに対するコストを監視するのが大きすぎるステップ幅を検出する最良の方法であるはずです。
+とは言え、あくまでもこれは私の個人的な美的趣味の問題です。
+検証データに対する分類精度が改善するなら、学習の初期段階に訓練コストは減少するでしょうから、
+実際上は検証データの分類精度と訓練コストのどちらを基準としても大した差は生じないと考えられます。
+</p><p>
+<!--<strong>
+Use early stopping to determine the number of training
   epochs:</strong> As we discused earlier in the chapter, early stopping means
 that at the end of each epoch we should compute the classification
 accuracy on the validation data.  When that stops improving,
@@ -4209,7 +4916,21 @@ Furthermore, early stopping also automatically prevents us from
 overfitting.  This is, of course, a good thing, although in the early
 stages of experimentation it can be helpful to turn off early
 stopping, so you can see any signs of overfitting, and use it to
-inform your approach to regularization.</p><p>To implement early stopping we need to say more precisely what it
+inform your approach to regularization.
+-->
+<strong>訓練エポック数を決める手段としての早期打ち切り：</strong>
+この章で前に議論したように、早期打ち切りとは各エポックが終了するたびに検証データに対する
+分類精度を計算し、その改善が止まったら訓練を打ち切るという処方です。
+こうすることで、とても簡単にエポック数を定めることができます。
+この処方が特に便利なのは、訓練エポック数がその他のハイパーパラメータに対してどう依存するのか
+気にする必要が無い点です。他のハイパーパラメータを変えると必要なエポック数も変わりますが、
+その効果は自動的に取り込まれます。その上、早期打ち切りは自動的に過適合を防ぎます。
+これはもちろん良いことです。
+ただし、実験の初期の段階では、あえて早期打ち切りを行わない方が良い場合もあります。
+早期打ち切りを止めることで過適合を起こし、その様子を調べることで正規化の指針を得るのです。
+</p><p>
+<!--
+To implement early stopping we need to say more precisely what it
 means that the classification accuracy has stopped improving.  As
 we've seen, the accuracy can jump around quite a bit, even when the
 overall trend is to improve.  If we stop the first time the accuracy
@@ -4220,7 +4941,21 @@ for example, that we're doing MNIST.  Then we might elect to terminate
 if the classification accuracy hasn't improved during the last ten
 epochs.  This ensures that we don't stop too soon, in response to bad
 luck in training, but also that we're not waiting around forever for
-an improvement that never comes.</p><p>This no-improvement-in-ten rule is good for initial exploration of
+an improvement that never comes.
+-->
+早期打ち切りを実装するには、まずは「分類精度の改善が止まる」という一文が意味するところを
+より正確に述べておく必要があります。既に見たように、分類精度が全体的に改善の傾向にあっても、
+エポックを重ねるごとに改善し続けるわけではなく上がったり下がったりを繰り返すこともあります。
+もし分類精度が始めて減少した時点で訓練をやめてしまうなら、
+ほぼ間違いなく改善の余地を残してしまうことになるでしょう。
+もっと良いやり方は、分類精度の最高値がしばらく更新されなかった時点で打ち切ることです。
+例えば、MNISTの問題を考えましょう。そこで、分類精度が過去10エポックに渡って改善しなかった
+時点で訓練を打ち切ることにするとどうでしょう。こうしておけば、訓練中の不運のために
+早すぎる打ち切りを行ってしまうことは無いでしょうし、
+全く改善の得られないまま永久に待ち続ける心配も無いでしょう。
+</p><p>
+<!--
+    This no-improvement-in-ten rule is good for initial exploration of
 MNIST.  However, networks can sometimes plateau near a particular
 classification accuracy for quite some time, only to then begin
 improving again.  If you're trying to get really good performance, the
@@ -4235,31 +4970,89 @@ get pretty good results.  Similarly, for problems other than MNIST,
 the no-improvement-in-ten rule may be much too aggressive or not
 nearly aggressive enough, depending on the details of the problem.
 However, with a little experimentation it's usually easy to find a
-pretty good strategy for early stopping.</p><p>We haven't used early stopping in our MNIST experiments to date.  The
+pretty good strategy for early stopping.
+-->
+この「10エポック・ルール」はMNIST問題の取っ掛かりに用いるには良いでしょう。
+しかし、ニューラルネットワークでは時折、長期間に渡って分類精度が停滞した後に
+再び改善を始める場合があります。もし本当に良いパフォーマンスを目指すなら、
+10エポック・ルールでは忍耐が足りないかもしれません。
+その場合の私の提案は、初期の実験で10エポック・ルールを採用し、
+ニューラルネットワークの訓練状況が明らかになるに従い徐々に改善を待つ期間を長くしていくことです。
+20エポック・ルール、50エポック・ルール、というように。
+この戦略はもちろん、最適化の必要な新たなハイパーパラメータを生み出してしまいます！
+しかし実際には、多くの場合このハイパーパラメータを決めるのは難しくありません。
+MNIST以外の問題に対しても同様に、10エポック・ルールが早すぎるかそうでもないかは
+問題の詳細に依存することですが、普通は少し実験をしてみれば早期打ち切りの良い戦略が
+簡単に見つかるものです。
+</p><p>
+<!--
+    We haven't used early stopping in our MNIST experiments to date.  The
 reason is that we've been doing a lot of comparisons between different
 approaches to learning.  For such comparisons it's helpful to use the
 same number of epochs in each case.  However, it's well worth
-modifying <tt>network2.py</tt> to implement early stopping:</p><p><h4><a name="problem_831601"></a><a href="#problem_831601">Problem</a></h4><ul>
+modifying <tt>network2.py</tt> to implement early stopping:
+-->
+これまで示したコードでは、MNIST問題の実験で早期打ち切りを用いていません。
+その理由は、多くの異なる学習手法を試して比較してきたからです。このような比較では、
+それぞれの場合で同数のエポックを使うのが便利でしょう。
+しかし、読者の皆さんは是非自分で <tt>network2.py</tt> を修正して早期打ち切りを実装してみてください：
+</p><p>
+<!--
+<h4><a name="problem_831601"></a><a href="#problem_831601">Problem</a></h4><ul>
 <li> Modify <tt>network2.py</tt> so that it implements early stopping
   using a no-improvement-in-$n$ epochs strategy, where $n$ is a
-  parameter that can be set.</p><p><li> Can you think of a rule for early stopping <em>other</em> than
+  parameter that can be set.
+  -->
+<h4><a name="problem_831601"></a><a href="#problem_831601">問題</a></h4><ul>
+<li> <tt>network2.py</tt> を修正して「$n$エポック・ルール」を使った早期打ち切りを
+実装してください。ここで、$n$ は指定できるパラメータとします。
+</p><p><!--
+<li> Can you think of a rule for early stopping <em>other</em> than
   no-improvement-in-$n$?  Ideally, the rule should compromise between
   getting high validation accuracies and not training too long.  Add
   your rule to <tt>network2.py</tt>, and run three experiments comparing
   the validation accuracies and number of epochs of training to
-  no-improvement-in-$10$.</p><p></ul></p><p><strong>Learning rate schedule:</strong> We've been holding the learning rate
+  no-improvement-in-$10$.</p><p></ul>
+-->
+<li>「$n$エポック・ルール」以外に早期打ち切りの方法を挙げてみましょう。
+理想的には、検証データに対する分類精度を上げることと訓練時間を短縮することを
+上手くバランスさせるような規則であるべきです。そのような規則を <tt>network2.py</tt> に
+追加した上で実験を3回行い、検証精度と訓練エポック数を10エポック・ルールと比較してください。
+</p><p>
+<!--
+<strong>Learning rate schedule:</strong> We've been holding the learning rate
 $\eta$ constant.  However, it's often advantageous to vary the
 learning rate.  Early on during the learning process it's likely that
 the weights are badly wrong.  And so it's best to use a large learning
 rate that causes the weights to change quickly.  Later, we can reduce
 the learning rate as we make more fine-tuned adjustments to our
-weights.</p><p>How should we set our learning rate schedule?  Many approaches are
+weights.
+-->
+<strong>学習率のスケジューリング：</strong>
+これまでは訓練の間、学習率 $\eta$ を定数に固定してきました。
+しかし、しばしば学習率を変化させることが有効です。
+学習過程の初期には、重みがひどく間違った値を取っているでしょうから、
+大きな学習率を用いて学習の進みを早めるのが良いでしょう。その後、学習率を小さくしていくことで、
+重みをより精密に調整することができます。
+</p><p>
+<!--
+    How should we set our learning rate schedule?  Many approaches are
 possible.  One natural approach is to use the same basic idea as early
 stopping.  The idea is to hold the learning rate constant until the
 validation accuracy starts to get worse.  Then decrease the learning
 rate by some amount, say a factor of two or ten.  We repeat this many
 times, until, say, the learning rate is a factor of 1,024 (or 1,000)
-times lower than the initial value.  Then we terminate.</p><p></p><p>A variable learning schedule can improve performance, but it also
+times lower than the initial value.  Then we terminate.
+-->
+学習率を訓練中に変更する具体的な手順、学習率のスケジューリングには、様々なものが考えられます。
+一つの自然なアプローチは、早期打ち切りと同様の発想に基づくものです。
+それは、まずは学習率を固定しておき、検証精度が悪くなり始めると、
+学習率を例えば半分や10分の1程度に減らすというものです。
+これを学習率が、例えば初期値の1,024分の1（あるいは1,000分の1）になるまで
+繰り返してから学習を終了します。
+</p><p>
+<!--
+    A variable learning schedule can improve performance, but it also
 opens up a world of possible choices for the learning schedule.  Those
 choices can be a headache - you can spend forever trying to optimize
 your learning schedule.  For first experiments my suggestion is to use
@@ -4273,12 +5066,36 @@ learning schedule, along the lines I've described*<span class="marginnote">
   <a href="http://arxiv.org/abs/1003.0358">Deep, Big, Simple Neural Nets
     Excel on Handwritten Digit Recognition</a>, by Dan Claudiu
   Cireșan, Ueli Meier, Luca Maria Gambardella, and
-  Jürgen Schmidhuber (2010).</span>.</p><p><h4><a name="exercise_336628"></a><a href="#exercise_336628">Exercise</a></h4><ul>
+  Jürgen Schmidhuber (2010).</span>.
+-->
+学習率のスケジューリングはパフォーマンスを改善しますが、
+学習率のスケジューリングを決定するという新たな自由度をもたらします。
+この選択が頭痛の種になりえます。学習率のスケジューリングを決めるために
+無限の時間を掛けて試行錯誤することも可能でしょう。ですから、最初の実験に対する私の提案は、
+ただ一つ、定数の学習率を用いることです。それで良い第1近似が得られるでしょう。
+その後、ニューラルネットワークの発揮しうる最高のパフォーマンスを実現したいと考えるなら、
+上で述べたような学習率のスケジューリングを試すと良いでしょう*<span class="marginnote">
+*MNIST問題に取り組む際に学習率を変化させるご利益を示した最近の読みやすい論文として、
+<a href="http://arxiv.org/abs/1003.0358">Deep, Big, Simple Neural Nets
+  Excel on Handwritten Digit Recognition</a>, by Dan Claudiu
+Cireșan, Ueli Meier, Luca Maria Gambardella, and
+Jürgen Schmidhuber (2010) を勧めます。</span>。
+</p><p>
+<!--
+<h4><a name="exercise_336628"></a><a href="#exercise_336628">Exercise</a></h4><ul>
 <li> Modify <tt>network2.py</tt> so that it implements a learning
   schedule that: halves the learning rate each time the validation
   accuracy satisfies the no-improvement-in-$10$ rule; and terminates
   when the learning rate has dropped to $1/128$ of its original value.
-</ul></p><p><strong>The regularization parameter, $\lambda$:</strong> I suggest starting
+  -->
+<h4><a name="exercise_336628"></a><a href="#exercise_336628">Exercise</a></h4><ul>
+<li> <tt>network2.py</tt> を修正して、次のような学習率のスケジューリングを実装してください：
+検証精度が10エポック・ルールを満たすごとに学習率を半分にし、学習率が初期値の $1/128$ に
+なった段階で訓練を終了させてください。
+</ul>
+</p><p>
+<!--
+<strong>The regularization parameter, $\lambda$:</strong> I suggest starting
 initially with no regularization ($\lambda = 0.0$), and determining a
 value for $\eta$, as above.  Using that choice of $\eta$, we can then
 use the validation data to select a good value for $\lambda$.  Start
@@ -4290,13 +5107,39 @@ by trialling $\lambda = 1.0$*<span class="marginnote">
 increase or decrease by factors of $10$, as needed to improve
 performance on the validation data.  Once you've found a good order of
 magnitude, you can fine tune your value of $\lambda$.  That done, you
-should return and re-optimize $\eta$ again.</p><p><h4><a name="exercise_30392"></a><a href="#exercise_30392">Exercise</a></h4><ul>
+should return and re-optimize $\eta$ again.
+-->
+<strong>正規化パラメータ $\lambda$：</strong>
+まずは正規化無し（$\lambda=0.0$）で、上述のように学習率 $\eta$ を最適化しましょう。
+そこで決めた $\eta$ を使って、$\lambda$ の良い値を選びます。その時は、$\lambda=1.0$*
+<span class="marginnote">
+*初期値として $\lambda=1.0$ を使うべき原理的な理由があるわけではありません。
+$\lambda$ の探索をどこから始めるべきか、原理的な議論を知っている人がいたら、
+教えていただけるとありがたく思います(mn@michaelnielsen.org)。</span> から
+始めて、検証データに対する分類精度が改善するように $\lambda$ を10倍、あるいは10分の1倍していきます。
+一旦 $\lambda$ の良い大きさがどのくらいの桁にあるのか分かったら、
+さらに細かく $\lambda$ の値を調整しても良いでしょう。
+それが終わったら、再び $\eta$ を最適化し直しましょう。
+</p><p>
+<!--
+<h4><a name="exercise_30392"></a><a href="#exercise_30392">Exercise</a></h4><ul>
 <li> It's tempting to use gradient descent to try to learn good
   values for hyper-parameters such as $\lambda$ and $\eta$.  Can you
   think of an obstacle to using gradient descent to determine
   $\lambda$?  Can can you think of an obstacle to using gradient
   descent to determine $\eta$?
-</ul></p><p><strong>How I selected hyper-parameters earlier in this book:</strong> If you
+</ul>
+-->
+<h4><a name="exercise_30392"></a><a href="#exercise_30392">演習</a></h4><ul>
+<li>
+$\lambda$ や $\eta$ などのハイパーパラメータの良い値を決めるために、
+勾配降下法を使いたくなるかもしれません。
+勾配降下法を使った $\lambda$ の決定にはどのような障害があるでしょうか？
+また、$\eta$ の決定に勾配降下法を使うことについてはどうでしょうか？
+</ul>
+</p><p>
+<!--
+<strong>How I selected hyper-parameters earlier in this book:</strong> If you
 use the recommendations in this section you'll find that you get
 values for $\eta$ and $\lambda$ which don't always exactly match the
 values I've used earlier in the book.  The reason is that the book has
@@ -4310,16 +5153,48 @@ usually tried to keep hyper-parameters constant across the approaches
 being compared (or to scale them in an appropriate way).  Of course,
 there's no reason for the same hyper-parameters to be optimal for all
 the different approaches to learning, so the hyper-parameters I've
-used are something of a compromise.</p><p>As an alternative to this compromise, I could have tried to optimize
+used are something of a compromise.
+-->
+<strong>私がこの本で使ったハイパーパラメータの選び方：</strong>
+この節で紹介してきた手順に従うと、この本でこれまで使ってきた $\eta$ や $\lambda$ の値と
+必ずしも一致しない値が得られるでしょう。そうなる理由は、本書の中では説明の都合という制約のために、
+いつも最適なハイパーパラメータを使うことができなかったためです。
+これまで見てきた学習手法の比較を思い返してみましょう。
+例えば、2乗コスト関数とクロスエントロピーコスト関数の比較、
+重みの初期化に関する新旧2つのアプローチの比較、正規化の有無の比較、等など。
+このような比較を意味あるものにするために、異なるアプローチで同じハイパーパラメータ
+（あるいは適切にスケールしたハイパーパラメータ）を使うように心掛けました。
+当然、採用する学習手法によってハイパーパラメータの最適値は異なるのが普通です。
+ですから、異なる手法を同じハイパーパラメータで比較するには、最適値をある程度諦めることになります。
+</p><p>
+<!--
+    As an alternative to this compromise, I could have tried to optimize
 the heck out of the hyper-parameters for every single approach to
 learning.  In principle that'd be a better, fairer approach, since
 then we'd see the best from every approach to learning.  However,
 we've made dozens of comparisons along these lines, and in practice I
 found it too computationally expensive.  That's why I've adopted the
 compromise of using pretty good (but not necessarily optimal) choices
-for the hyper-parameters.</p><p><strong>Mini-batch size:</strong> How should we set the mini-batch size?  To
+for the hyper-parameters.
+-->
+これに対する代案として、比較対象の手法のそれぞれでまず最適なハイパーパラメータの値を
+求めておいて、最適な場合のパフォーマンス同士を比較するという方法も考えられます。
+原理的には、こちらの方がより公平で良いアプローチかもしれません。
+というのも、そうすることでそれぞれの手法の発揮しうる最高の性能を見ることができるからです。
+しかし実際的には、様々な手法を取り上げ比較していく中で、計算量が多すぎるのです。
+それが、私がこの本で部分的に最適なハイパーパラメータの使用を諦めた理由です。
+</p><p>
+<!--
+<strong>Mini-batch size:</strong> How should we set the mini-batch size?  To
 answer this question, let's first suppose that we're doing online
-learning, i.e., that we're using a mini-batch size of $1$.</p><p>The obvious worry about online learning is that using mini-batches
+learning, i.e., that we're using a mini-batch size of $1$.
+-->
+<strong>ミニバッチのサイズ：</strong>
+ミニバッチの大きさはどう決めるべきでしょうか？この問いに答えるために、
+まずはオンライン学習、つまりミニバッチのサイズが $1$ の学習を考えましょう。
+</p><p>
+<!--
+    The obvious worry about online learning is that using mini-batches
 which contain just a single training example will cause significant
 errors in our estimate of the gradient.  In fact, though, the errors
 turn out to not be such a problem.  The reason is that the individual
@@ -4329,7 +5204,19 @@ decreasing.  It's as though you are trying to get to the North
 Magnetic Pole, but have a wonky compass that's 10-20 degrees off each
 time you look at it.  Provided you stop to check the compass
 frequently, and the compass gets the direction right on average,
-you'll end up at the North Magnetic Pole just fine.</p><p>Based on this argument, it sounds as though we should use online
+you'll end up at the North Magnetic Pole just fine.
+-->
+まず心配になるのは、たった一つの訓練例しか含まないミニバッチでは、
+推定した勾配が大きな誤差を持つのではないかということです。しかし実際のところ、
+この誤差は大した問題でないことがわかります。
+勾配の推定値が一つ一つ非常に正確である必要はないのです。
+必要なのは、学習を進める間、コスト関数の減少傾向が続く程度の正確さです。
+例えるなら、見るたびに10度か20度くらいズレる気まぐれなコンパスを持って北極を目指すようなものです。
+コンパスが平均的には正しい方向を指して、しかも十分頻繁にコンパスを確認すれば、
+最終的には北極にたどり着くことができるでしょう。
+</p><p>
+<!--
+    Based on this argument, it sounds as though we should use online
 learning.  In fact, the situation turns out to be more complicated
 than that.  In a <a href="chap2.html#backprop_over_minibatch">problem
   in the last chapter</a> I pointed out that it's possible to use matrix
@@ -4340,7 +5227,19 @@ make it quite a bit faster to compute the gradient estimate for a
 mini-batch of (for example) size $100$, rather than computing the
 mini-batch gradient estimate by looping over the $100$ training
 examples separately.  It might take (say) only $50$ times as long,
-rather than $100$ times as long.</p><p>Now, at first it seems as though this doesn't help us that much.  With
+rather than $100$ times as long.
+-->
+この議論からは、オンライン学習がベストのように思えます。ところが実際には、
+状況はもっと複雑です。<a href="chap2.html#backprop_over_minibatch">前の章の問題</a>では、
+行列のテクニックを使うと、ミニバッチに含まれる訓練例に関するループを用いることなく、
+ミニバッチ全体を使って一度に勾配の計算ができます。計算を行うハードウェアや
+線形代数ライブラリの実装によっては、個別の訓練例を使った勾配計算を100回行うより、
+100個の訓練例を含むミニバッチについて行列を使って勾配を計算した方がずっと早いことも
+あるのです。行列を使うと、1個の訓練例で勾配を計算するより、
+例えば、100倍ではなく50倍しか時間が掛からないかもしれません。
+</p><p>
+<!--
+    Now, at first it seems as though this doesn't help us that much.  With
 our mini-batch of size $100$ the learning rule for the weights looks
 like:
 <a class="displaced_anchor" name="eqtn93"></a>\begin{eqnarray}
@@ -4366,7 +5265,36 @@ truly the same as $100$ instances of online learning, since in the
 mini-batch the $\nabla C_x$'s are all evaluated for the same set of
 weights, as opposed to the cumulative learning that occurs in the
 online case.  Still, it seems distinctly possible that using the
-larger mini-batch would speed things up.</p><p>With these factors in mind, choosing the best mini-batch size is a
+larger mini-batch would speed things up.
+-->
+今の話は大して役に立たないと感じるかもしれません。
+100個の訓練例を含むミニバッチを使って重みを学習する規則は次のようなものです：
+<a class="displaced_anchor" name="eqtn93"></a>\begin{eqnarray}
+  w \rightarrow w' = w-\eta \frac{1}{100} \sum_x \nabla C_x,
+\tag{93}\end{eqnarray}
+ここで、ミニバッチが含む訓練例に関する和を取っています。一方、オンライン学習では、
+<a class="displaced_anchor" name="eqtn94"></a>\begin{eqnarray}
+  w \rightarrow w' = w-\eta \nabla C_x
+\tag{94}\end{eqnarray}
+となります。いくらミニバッチ更新に50倍の時間しか掛からないからと言っても、
+まだオンライン学習の方が50倍頻繁に更新できるわけですから、
+やはりオンライン学習の方が良いと結論してしまいそうです。しかしもし、
+ミニバッチ学習の場合に学習率を100倍できるとしたらどうでしょう。
+この場合、更新規則は次のように変わります：
+<a class="displaced_anchor" name="eqtn95"></a>\begin{eqnarray}
+  w \rightarrow w' = w-\eta \sum_x \nabla C_x.
+\tag{95}\end{eqnarray}
+こうなると、100個の個別の訓練例について、
+学習率 $\eta$ でオンライン学習を行うのと同じに見えます。
+しかも、1個の訓練例について学習するより50倍しか時間が掛からないのです。
+もちろん、このミニバッチ学習はオンライン学習を100個の訓練例で実行するのと
+全く同じというわけではありません。オンライン学習では個別の例を学習するごとに
+重みを更新し、次の例では新しい重みを用いて勾配の計算を行うのに対して、
+ミニバッチ学習では100個の訓練例について同じ重みを用いて計算を行うからです。
+この点を考慮してもなお、ミニバッチ学習がオンライン学習よりも速い可能性は十分にあります。
+</p><p>
+<!--
+    With these factors in mind, choosing the best mini-batch size is a
 compromise.  Too small, and you don't get to take full advantage of
 the benefits of good matrix libraries optimized for fast hardware.
 Too large and you're simply not updating your weights often enough.
@@ -4382,7 +5310,25 @@ as above.  Plot the validation accuracy versus <em>time</em> (as in,
 real elapsed time, not epoch!), and choose whichever mini-batch size
 gives you the most rapid improvement in performance.  With the
 mini-batch size chosen you can then proceed to optimize the other
-hyper-parameters.</p><p>Of course, as you've no doubt realized, I haven't done this
+hyper-parameters.
+-->
+これらの要因を考慮すると、最適なミニバッチサイズはある種の妥協のもとで決まると言えます。
+もし小さすぎれば、高速なハードウェアに最適化された行列ライブラリの恩恵を十分に受けられません。
+もし大きすぎれば、重みの更新頻度が下がってしまいます。
+やりたいのは、学習スピードを最大化するようなミニバッチサイズを決めることです。
+幸い、学習スピードを最大化するミニバッチサイズは、ニューラルネットワークの
+アーキテクチャ以外のハイパーパラメータに対して比較的独立に決められるので、
+良いミニバッチサイズを見つける前に予め他のハイパーパラメータを最適化しておく必要はありません。
+ミニバッチサイズ以外のハイパーパラメータについては程よい値を入れておいて、
+学習率 $\eta$ も上述のようにスケーリングしながら異なるミニバッチサイズを試してみれば良いのです。
+そして、検証データに対する精度を<em>時間</em>についてプロットしましょう。
+ここで、時間はエポック数ではなく、掛かった実時間であることに注意してください。
+このプロットに基づいて、最もパフォーマンスの改善が速かったミニバッチサイズを
+選べば良いのです。
+他のハイパーパラメータの最適化は、ここで選んだミニバッチサイズを使って行います。
+</p><p>
+<!--
+    Of course, as you've no doubt realized, I haven't done this
 optimization in our work.  Indeed, our implementation doesn't use the
 faster approach to mini-batch updates at all.  I've simply used a
 mini-batch size of $10$ without comment or explanation in nearly all
@@ -4393,7 +5339,20 @@ because my preliminary experiments suggested the speedup would be
 rather modest.  In practical implementations, however, we would most
 certainly implement the faster approach to mini-batch updates, and
 then make an effort to optimize the mini-batch size, in order to
-maximize our overall speed.</p><p></p><p><strong>Automated techniques:</strong> I've been describing these heuristics
+maximize our overall speed.
+-->
+もう気づいている読者も居るでしょうが、この本ではここに述べた最適化を行ってはいません。
+実は、ここで述べたようなミニバッチ学習を高速化する手法を使ってさえいないのです。
+これまでほとんど全ての具体例で、説明なしに大きさ10のミニバッチを用いてきました。
+ですから、ミニバッチサイズを小さくすることで学習を高速化することもできたでしょう。
+そうしなかった理由として、一つはミニバッチ更新のやり方を示したかったこと、
+そしてもう一つは事前に行った実験からミニバッチサイズを小さくしても大して
+学習速度は改善しないと考えられたことが挙げられます。
+しかし実際の実装では、ほぼ間違いなくミニバッチ更新を高速な行列ライブラリ等を用いて実装し、
+全体の学習スピードを最大化するようにミニバッチサイズの最適化も行うでしょう。
+</p><p>
+<!--
+<strong>Automated techniques:</strong> I've been describing these heuristics
 as though you're optimizing your hyper-parameters by hand.
 Hand-optimization is a good way to build up a feel for how neural
 networks behave.  However, and unsurprisingly, a great deal of work
@@ -4414,7 +5373,31 @@ hyper-parameters*<span class="marginnote">
     Bayesian optimization of machine learning algorithms</a>, by Jasper
   Snoek, Hugo Larochelle, and Ryan Adams.</span>.  The code from the paper
 is <a href="https://github.com/jaberg/hyperopt">publicly available</a>, and
-has been used with some success by other researchers.</p><p><strong>Summing up:</strong> Following the rules-of-thumb I've described won't
+has been used with some success by other researchers.
+-->
+<strong>自動化技術：</strong>
+ここまでは、ハイパーパラメータの最適化を手で行うかのように説明してきました。
+自分の手を動かして最適化を行うことは、ニューラルネットワークの振る舞いについて
+感覚を養うのに良い方法です。
+しかし、当然ながら、実際は多くの場合にこの過程は自動化されています。
+よく使われるのは<em>グリッド探索</em>という方法で、ハイパーパラメータの空間を
+グリッド状に系統的に探索します。
+グリッド探索の成果と限界（そして簡単に実装できる代替手法）に関するレビューとして、
+James BergstraとYoshua Bengioによる2012年の論文*<span class="marginnote">
+*<a href="http://dl.acm.org/citation.cfm?id=2188395">Random
+    search for hyper-parameter optimization</a>, by James Bergstra and
+  Yoshua Bengio (2012).</span>を挙げておきます。
+より洗練された手法も多数提案されています。ここでそれらの全ては紹介しませんが、
+ベイズ統計に基づくハイパーパラメータの自動最適化を用いた2012年の論文は
+特に有望と思われるので紹介しておきます*<span class="marginnote">
+*<a href="http://papers.nips.cc/paper/4522-practical-bayesian-optimization-of-machine-learning-algorithms.pdf">Practical
+    Bayesian optimization of machine learning algorithms</a>, by Jasper
+  Snoek, Hugo Larochelle, and Ryan Adams.</span>。
+この論文のコードは<a href="https://github.com/jaberg/hyperopt">公開されており</a>、
+他の研究者にも利用されいくつかの成功を収めています。
+</p><p>
+<!--
+<strong>Summing up:</strong> Following the rules-of-thumb I've described won't
 give you the absolute best possible results from your neural network.
 But it will likely give you a good start and a basis for further
 improvements.  In particular, I've discussed the hyper-parameters
@@ -4427,7 +5410,24 @@ in good values.  Above all, keep in mind that the heuristics I've
 described are rules of thumb, not rules cast in stone.  You should be
 on the lookout for signs that things aren't working, and be willing to
 experiment.  In particular, this means carefully monitoring your
-network's behaviour, especially the validation accuracy.</p><p>The difficult of choosing hyper-parameters is exacerbated by the fact
+network's behaviour, especially the validation accuracy.
+-->
+<strong>まとめ：</strong>
+ここで大雑把に説明してきたやり方に従っても、ニューラルネットワークが持つ最大限の性能を
+発揮できることが保証されているわけではありません。とは言え、さらなる改善を前に
+十分良い出発点に立つことはできるはずです。特に、ここでの説明はハイパーパラメータごとに
+ほぼ独立して行ってきましたが、実際にはハイパーパラメータ同士の関係も問題になります。
+例えば、まず $\eta$ の最適化を行ってから $\lambda$ の最適化に取り掛かると、
+$\eta$ が再び最適からは程遠い状態になってしまう、なんてことも起こりえます。
+実際上は、両者を行ったり来たりしながら徐々に良い値に近づいていくのが上手いやり方です。
+そして何より、ここまで説明してきたことはあくまで経験則であって、
+金科玉条の類ではないことを心に留めておいてください。
+ここに書いたやり方に従っているときも、常に上手くいっていないところが無いか気を配り、
+その兆しがあれば自分で実験してみることが大切です。
+これは、ニューラルネットワークの振る舞い、特に検証精度を注意深くチェックすることを意味します。
+</p><p>
+<!--
+    The difficult of choosing hyper-parameters is exacerbated by the fact
 that the lore about how to choose hyper-parameters is widely spread,
 across many research papers and software programs, and often is only
 available inside the heads of individual practitioners.  There are
@@ -4458,7 +5458,34 @@ nets*<span class="marginnote">
   Grégoire Montavon, Geneviève Orr, and Klaus-Robert
     Müller.</span>.  The book is expensive, but many of the articles have
 been placed online by their respective authors with, one presumes, the
-blessing of the publisher, and may be located using a search engine.</p><p>One thing that becomes clear as you read these articles and,
+blessing of the publisher, and may be located using a search engine.
+-->
+さらに厄介なのは、ハイパーパラメータの選び方のコツがあらゆるところに散らばっている点です。
+たくさんの研究論文やプログラムの中に散らばっていますし、個々の技術者の頭の中にしか無いコツも
+少なくありません。本当にたくさんの論文が様々な（そして時に互いに矛盾する）方法を勧めています。
+しかし、中には僅かながら特に役立つ論文があり、雑多な情報の中からエッセンスをまとめてくれています。
+Yoshua Bengioによる2012年の論文*<span class="marginnote">
+*<a href="http://arxiv.org/abs/1206.5533">Practical
+    recommendations for gradient-based training of deep
+    architectures</a>, by Yoshua Bengio (2012).</span>には、逆伝播法や勾配降下法を用いた
+（多層）ニューラルネットワークの学習について実践的なアドバイスが記されています。
+Benigoは、より系統的なハイパーパラメータの決め方など、多くの事項について
+この本よりもずっと詳細に議論しています。他におすすめしたい論文は、Yann LeCun, Léon Bottou, Genevieve Orr,
+そしてKlaus-Robert Müllerによる1998年の論文*<span class="marginnote">
+*<a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf">Efficient
+    BackProp</a>, by Yann LeCun, Léon Bottou,
+  Genevieve Orr and Klaus-Robert Müller (1998)</span>です。
+どちらの論文も、ニューラルネットワークで用いられる様々な技法を集めた、
+非常に有用な2012年の本*<span class="marginnote">
+*<a href="http://www.springer.com/computer/theoretical+computer+science/book/978-3-642-35288-1">Neural
+    Networks: Tricks of the Trade</a>, edited by
+  Grégoire Montavon, Geneviève Orr, and Klaus-Robert
+    Müller.</span>に収められています。
+この本は高価ですが、恐らく出版社のご厚意で、多くの論文は各著者のウェブサイトで公開されており、
+検索エンジンを使って探し出せます。
+</p><p>
+<!--
+    One thing that becomes clear as you read these articles and,
 especially, as you engage in your own experiments, is that
 hyper-parameter optimization is not a problem that is ever completely
 solved.  There's always another trick you can try to improve
@@ -4469,7 +5496,19 @@ one never really finishes optimizing, one only abandons the network to
 posterity.  So your goal should be to develop a workflow that enables
 you to quickly do a pretty good job on the optimization, while leaving
 you the flexibility to try more detailed optimizations, if that's
-important.</p><p>The challenge of setting hyper-parameters has led some people to
+important.
+-->
+これらの文献を読んで、自分自身でも実験を行ってみると、ハイパーパラメータの最適化は
+完全解決のない試みであることがはっきりしてくるでしょう。
+ある手法を試みれば、そのパフォーマンスを改善できる別の手法が常に見つかるものです。
+作家の間には、執筆は決して終わることは無く、ただ放り出してしまうだけなのだ、という格言があります。
+ニューラルネットワークの最適化についても同じことが言えます：ハイパーパラメータの空間は
+あまりに広いので最適化に終わりはなく、どこかで放り出してしまうしか無いのです。
+ですから、十分に良い最適化を手際よく行う作業工程を確立し、
+必要なときにだけより詳細な最適化を行う柔軟性を残すことを目指すべきです。
+</p><p>
+<!--
+    The challenge of setting hyper-parameters has led some people to
 complain that neural networks require a lot of work when compared with
 other machine learning techniques.  I've heard many variations on the
 following complaint: "Yes, a well-tuned neural network may get the
@@ -4483,7 +5522,21 @@ whether machine learning can help solve the problem at all.  On the
 other hand, if getting optimal performance is important, then you may
 need to try approaches that require more specialist knowledge.  While
 it would be nice if machine learning were always easy, there is no
-  <em>a priori</em> reason it should be trivially simple.</p><p>
+  <em>a priori</em> reason it should be trivially simple.
+-->
+ニューラルネットワークを他の機械学習手法と比較して、
+ハイパーパラメータを決めることの困難について文句を言う人も居ます。
+例えば、おおよそ次のような文句はたくさん聞きました：「確かに、良くチューニングされた
+ニューラルネットワークはこの問題に対して最高のパフォーマンスを発揮するかもしれない。
+一方で、ランダムフォレストを（あるいはSVMを、あるいは$\ldots$、何でも好きな手法を入れてください）
+試してみることもできる。そしてその手法でも上手く行くだろう。
+ニューラルネットワークに取り組んでいる時間なんて無いよ。」もちろん、実用上は
+簡単に利用できる技術があるのは良いことです。何か新しい問題に取り掛かる時、
+そして機械学習が役に立つかさえ明らかでは無いような状況では、特にそう言えます。
+一方で、最適なパフォーマンスを得ることが重要なら、より高度な知識を必要とするアプローチを
+試してみることも必要でしょう。機械学習がいつでも簡単に使えるなら嬉しい限りですが、
+そのように期待すべきア・プリオリな理由もないのです。
+</p><p>
 
 <!--  <h3><a name="other_techniques"></a><a href="#other_techniques">Other techniques</a></h3>-->
   <h3><a name="other_techniques"></a><a href="#other_techniques">その他の手法</a></h3>
@@ -4512,12 +5565,27 @@ in-depth than the earlier discussions, but should convey some feeling
 </p>
 
 
-<p><h4><a name="variations_on_stochastic_gradient_descent"></a><a href="#variations_on_stochastic_gradient_descent">Variations on stochastic gradient descent</a></h4></p><p>Stochastic gradient descent by backpropagation has served us well in
+<p>
+<!--
+<h4><a name="variations_on_stochastic_gradient_descent"></a><a href="#variations_on_stochastic_gradient_descent">Variations on stochastic gradient descent</a></h4>
+-->
+<h4><a name="variations_on_stochastic_gradient_descent"></a><a href="#variations_on_stochastic_gradient_descent">確率的勾配降下法のバリエーション</a></h4>
+</p><p>
+<!--
+    Stochastic gradient descent by backpropagation has served us well in
 attacking the MNIST digit classification problem.  However, there are
 many other approaches to optimizing the cost function, and sometimes
 those other approaches offer performance superior to mini-batch
 stochastic gradient descent.  In this section I sketch two such
-approaches, the Hessian and momentum techniques.</p><p><strong>Hessian technique:</strong> To begin our discussion it helps to put
+approaches, the Hessian and momentum techniques.
+-->
+逆伝播法による確率的勾配降下法はMNIST手書き数字分類問題に対して十分な働きをしてきました。
+しかし、コスト関数の最適化については他にも多くのアプローチがあり、
+時にはそれらの手法がミニバッチを使った確率的勾配降下法よりも優れた性能を発揮する場合もあります。
+この節ではヘッセ行列法とモメンタム法の2つを概観します。
+</p><p>
+<!--
+    <strong>Hessian technique:</strong> To begin our discussion it helps to put
 neural networks aside for a bit.  Instead, we're just going to
 consider the abstract problem of minimizing a cost function $C$ which
 is a function of many variables, $w = w_1, w_2, \ldots$, so $C =
@@ -4557,17 +5625,75 @@ Provided <span id="margin_341200104540_reveal" class="equation_link">(98)</span>
 cost function, then we'd expect that moving from the point $w$ to
 $w+\Delta w = w-H^{-1} \nabla C$ should significantly decrease the
 cost function.  That suggests a possible algorithm for minimizing the
-cost:</p><p><ul>
-<li> Choose a starting point, $w$.</p><p><li> Update $w$ to a new point $w' = w-H^{-1} \nabla C$, where the
-  Hessian $H$ and $\nabla C$ are computed at $w$.</p><p><li> Update $w'$ to a new point $w{'}{'} = w'-H'^{-1} \nabla' C$,
-  where the Hessian $H'$ and $\nabla' C$ are computed at $w'$.</p><p><li> $\ldots$
+cost:
+-->
+<strong>ヘッセ行列法：</strong> この手法について議論する上で、
+ひとまずニューラルネットワークのことは脇においておきましょう。その代わり、
+多変数 $w=w_1, w_2, \ldots$ のあるコスト関数 $C(w)$ を最小化するという抽象的な問題を考えましょう。
+テイラーの定理により、コスト関数は点 $w$ の周りで
+<a class="displaced_anchor" name="eqtn96"></a>\begin{eqnarray}
+C(w+\Delta w) & = & C(w) + \sum_j \frac{\partial C}{\partial w_j} \Delta w_j
+\nonumber \\ & & + \frac{1}{2} \sum_{jk} \Delta w_j \frac{\partial^2 C}{\partial w_j
+\partial w_k} \Delta w_k + \ldots
+\tag{96}\end{eqnarray}
+と近似できます。これをよりコンパクトに、
+<a class="displaced_anchor" name="eqtn97"></a>\begin{eqnarray}
+  C(w+\Delta w) = C(w) + \nabla C \cdot \Delta w +
+  \frac{1}{2} \Delta w^T H \Delta w + \ldots,
+\tag{97}\end{eqnarray}
+と書き換えることもできます。ここで、$\nabla C$ はコスト関数の勾配、
+$H$ は<em>ヘッセ行列</em>と呼ばれる行列で、その $j$ 行 $k$ 列の要素は
+$\partial^2 C/\partial w_j \partial w_k$ です。上で省略した高次の項を無視すると、
+次の近似式が得られます：<a class="displaced_anchor" name="eqtn98"></a>\begin{eqnarray}
+  C(w+\Delta w) \approx C(w) + \nabla C \cdot \Delta w +
+  \frac{1}{2} \Delta w^T H \Delta w.
+\tag{98}\end{eqnarray}
+簡単な計算により、この右辺を最小化するには*<span class="marginnote">
+*厳密に言うと、これが極小ではなく最小であるためには、ヘッセ行列が正定値である必要があります。
+直感的には、$C$ が局所的に山や鞍点ではなく谷になっていることを意味します。</span>
+<a class="displaced_anchor" name="eqtn99"></a>\begin{eqnarray}
+    \Delta w = -H^{-1} \nabla C.
+\tag{99}\end{eqnarray}
+と選べば良いことが分かります。
+式 <span id="margin_341200104540_reveal" class="equation_link">(98)</span><span id="margin_341200104540" class="marginequation" style="display: none;"><a href="chap3.html#eqtn98" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  C(w+\Delta w) \approx C(w) + \nabla C \cdot \Delta w +
+  \frac{1}{2} \Delta w^T H \Delta w \nonumber\end{eqnarray}</a></span><script>$('#margin_341200104540_reveal').click(function() {$('#margin_341200104540').toggle('slow', function() {});});</script> が
+良い近似であるとすると、点 $w$ から $w+\Delta w = w-H^{-1} \nabla C$ へ移動することで
+コスト関数を大きく減少させられると期待できます。このことから、
+次のようなコスト関数の最小化アルゴリズムが考えられます：
+</p><p><!--
+<ul>
+<li> Choose a starting point, $w$.</p><p>
+<li> Update $w$ to a new point $w' = w-H^{-1} \nabla C$, where the
+  Hessian $H$ and $\nabla C$ are computed at $w$.</p><p>
+<li> Update $w'$ to a new point $w{'}{'} = w'-H'^{-1} \nabla' C$,
+  where the Hessian $H'$ and $\nabla' C$ are computed at $w'$.</p><p>
+<li> $\ldots$
+</ul>-->
+<ul>
+<li> 出発点 $w$ を選びます。</p><p>
+<li> 点 $w$ を新しい点 $w' = w-H^{-1} \nabla C$ に更新します。ここで、$\nabla C$ と
+    ヘッセ行列 $H$ は点 $w$ で計算します。</p><p>
+<li> 点 $w'$ を新しい点 $w{'}{'} = w'-H'^{-1} \nabla' C$ に更新します。ここで、
+    ヘッセ行列 $H'$ と $\nabla' C$ は点 $w'$ で計算します。</p><p>
+<li> $\ldots$
 </ul>
+<!--
 In practice, <span id="margin_681684129137_reveal" class="equation_link">(98)</span><span id="margin_681684129137" class="marginequation" style="display: none;"><a href="chap3.html#eqtn98" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
   C(w+\Delta w) \approx C(w) + \nabla C \cdot \Delta w +
   \frac{1}{2} \Delta w^T H \Delta w \nonumber\end{eqnarray}</a></span><script>$('#margin_681684129137_reveal').click(function() {$('#margin_681684129137').toggle('slow', function() {});});</script> is only an approximation, and it's
 better to take smaller steps.  We do this by repeatedly changing $w$
 by an amount $\Delta w = -\eta H^{-1} \nabla C$, where $\eta$ is known
-as the <em>learning rate</em>.</p><p>This approach to minimizing a cost function is known as the
+as the <em>learning rate</em>.
+-->
+実際には、式  <span id="margin_681684129137_reveal" class="equation_link">(98)</span><span id="margin_681684129137" class="marginequation" style="display: none;"><a href="chap3.html#eqtn98" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  C(w+\Delta w) \approx C(w) + \nabla C \cdot \Delta w +
+  \frac{1}{2} \Delta w^T H \Delta w \nonumber\end{eqnarray}</a></span><script>$('#margin_681684129137_reveal').click(function() {$('#margin_681684129137').toggle('slow', function() {});});</script> はあくまで近似であり、
+更新はもっと小さい幅で行うべきです。そのためには、<em>学習率</em> $\eta$ を導入し、
+$w$ の変化量を $\Delta w = -\eta H^{-1} \nabla C$ にすれば良いです。
+</p><p>
+<!--
+    This approach to minimizing a cost function is known as the
 <em>Hessian technique</em> or <em>Hessian optimization</em>.  There are
 theoretical and empirical results showing that Hessian methods
 converge on a minimum in fewer steps than standard gradient descent.
@@ -4575,7 +5701,16 @@ In particular, by incorporating information about second-order changes
 in the cost function it's possible for the Hessian approach to avoid
 many pathologies that can occur in gradient descent.  Furthermore,
 there are versions of the backpropagation algorithm which can be used
-to compute the Hessian.</p><p>If Hessian optimization is so great, why aren't we using it in our
+to compute the Hessian.
+-->
+コスト関数を最小化するこのアプローチは <em>ヘッセ行列法</em> あるいは <em>ヘッセ行列最適化</em>
+と呼ばれます。ヘッセ行列法が標準的な勾配降下法と比べて少ないステップ数で収束することが
+理論的・経験的に知られています。特に、コスト関数の2次の変化を取り入れることで、
+勾配降下法について知られている多くの病的な振る舞いを避けられることが知られています。
+さらに、ヘッセ行列を計算するために拡張された逆伝播法も知られています。
+</p><p>
+<!--
+    If Hessian optimization is so great, why aren't we using it in our
 neural networks?  Unfortunately, while it has many desirable
 properties, it has one very undesirable property: the Hessian matrix
 is very big.  Suppose you have a neural network with $10^7$ weights
@@ -4587,7 +5722,23 @@ However, that doesn't mean that it's not useful to understand.  In
 fact, there are many variations on gradient descent which are inspired
 by Hessian optimization, but which avoid the problem with overly-large
 matrices.  Let's take a look at one such technique, momentum-based
-gradient descent.</p><p><a name="momentum"></a></p><p><strong>Momentum-based gradient descent:</strong> Intuitively, the advantage
+gradient descent.
+-->
+ヘッセ行列最適化がそんなに素晴らしいのなら、なぜこれまで見てきたニューラルネットワークで
+使っていないのでしょうか？確かにヘッセ行列法は多くの良い性質を持ってはいるものの、
+一つ重要な、非常に好ましくない性質も持っています：ヘッセ行列は非常に大きいのです。
+例えば、重みとバイアスを合わせて $10^7$ 個のパラメータを持つニューラルネットワークを
+訓練するとします。すると、そのヘッセ行列は $10^7\times10^7 = 10^{14}$ 個もの要素を持ちます。
+この大量にある要素を計算しなければならないのみならず、逆行列まで計算しなければならないのです！
+このため、ヘッセ行列法を実際に適用するのは難しいのです。
+しかし、この方法には理解しやすいというメリットもあります。実は、
+勾配降下法の亜種には、ヘッセ行列法に触発された、しかし巨大な行列の問題を伴わない手法が
+数多く有ります。次に、そのような手法の一つ、モメンタム勾配降下法を見てみましょう。
+</p><p><a name="momentum"></a></p><p>
+<!--
+    <strong>Momentum-based gradient descent:</strong>
+
+    Intuitively, the advantage
 Hessian optimization has is that it incorporates not just information
 about the gradient, but also information about how the gradient is
 changing.  Momentum-based gradient descent is based on a similar
@@ -4603,7 +5754,25 @@ of "velocity" for the parameters we're trying to optimize.  The
 gradient acts to change the velocity, not (directly) the "position",
 in much the same way as physical forces change the velocity, and only
 indirectly affect position.  Second, the momentum method introduces a
-kind of friction term, which tends to gradually reduce the velocity.</p><p>Let's give a more precise mathematical description.  We introduce
+kind of friction term, which tends to gradually reduce the velocity.
+-->
+<strong>モメンタム勾配降下法：</strong>
+直感的に、ヘッセ行列法の強みは勾配の情報に加えて勾配の変化に関する情報を
+取り入れられる点にあると言えます。モメンタム勾配降下法は同様の直感に基づいていますが、
+2階微分の巨大な行列を取り扱うことを巧妙に回避しています。
+モメンタム法を理解するために、以前に示した勾配降下法の
+<a href="chap1.html#gradient_descent">直感的な描像</a>に戻って、
+谷を転がり落ちるボールを考えてみましょう。勾配降下法はその名前の割に、
+実際にはそれほど谷底に落ちていくボールと似ていないことは既に指摘しました。
+モメンタム法では、2つの点で勾配加工法を修正し、より物理的な描像と近づけています。
+第一に、この手法では最適化するパラメータに「速度」の概念を導入します。
+勾配はこの速度を変化させますが、「位置」を（直接的には）変化させません。
+これは、物理的な「力」は速度を変化させますが、位置の変化は速度の変化を介して間接的にしか
+引き起こさないことと似ています。第2に、モメンタム法ではある種の摩擦項を導入し、
+自然と徐々に減速するように仕向けます。
+</p><p>
+<!--
+    Let's give a more precise mathematical description.  We introduce
 velocity variables $v = v_1, v_2, \ldots$, one for each corresponding
 $w_j$ variable*<span class="marginnote">
 *In a neural net the $w_j$ variables would, of
@@ -4624,17 +5793,38 @@ of change of $w$.  Intuitively, we build up the velocity by repeatedly
 adding gradient terms to it.  That means that if the gradient is in
 (roughly) the same direction through several rounds of learning, we
 can build up quite a bit of steam moving in that direction.  Think,
-for example, of what happens if we're moving straight down a slope:</p><p><center>
+for example, of what happens if we're moving straight down a slope:
+-->
+より精密で数学的な説明をしましょう。それぞれのパラメータ変数 $w_j$ に対して、
+速度変数 $v=v_1, v_2, \ldots$ を導入します*<span class="marginnote">
+*もちろん、ニューラルネットワークの$w_j$ 変数は全ての重みとバイアスを含みます。</span>。
+そして、勾配降下法におけるパラメータの更新規則を $w \rightarrow w'= w-\eta \nabla C$ から
+<a class="displaced_anchor" name="eqtn100"></a><a class="displaced_anchor" name="eqtn101"></a>\begin{eqnarray}
+  v & \rightarrow  & v' = \mu v - \eta \nabla C \tag{100}\\
+
+  w & \rightarrow & w' = w+v'
+\tag{101}\end{eqnarray}
+に置き換えます。ここで、$\mu$ は系の減衰、あるいは摩擦の大きさを決めるハイパーパラメータです。
+この方程式の意味を理解するには、まず摩擦が無い場合に相当する $\mu=1$ を考えてみるのが良いでしょう。
+その場合、$\nabla C$ が「力」として速度 $v$ を変化させること、
+そして速度が $w$ の変化率を与えていることが見て取れます。
+直感的には、勾配項を繰り返し足し上げることで速度が生じます。
+学習の数ステップに渡って勾配が（大まかに）同じ方向ならば、
+その方向にかなりの勢いがつきます。
+例えば、下り坂を真っ直ぐ下る時に何が起こるか考えてみてください：
+</p><p><center>
 <img src="images/tikz34.png"/>
-</center></p><p>With each step the velocity gets larger down the slope, so we move
+</center></p><p>
+<!--
+    With each step the velocity gets larger down the slope, so we move
 more and more quickly to the bottom of the valley.  This can enable
 the momentum technique to work much faster than standard gradient
 descent.  Of course, a problem is that once we reach the bottom of the
 valley we will overshoot.  Or, if the gradient should change rapidly,
 then we could find ourselves moving in the wrong direction.  That's
 the reason for the $\mu$ hyper-parameter in <span id="margin_821276191177_reveal" class="equation_link">(100)</span><span id="margin_821276191177" class="marginequation" style="display: none;"><a href="chap3.html#eqtn100" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
-  v & \rightarrow  & v' = \mu v - \eta \nabla C  \nonumber\end{eqnarray}</a></span><script>$('#margin_821276191177_reveal').click(function() {$('#margin_821276191177').toggle('slow', function() {});});</script>.  I
-said earlier that $\mu$ controls the amount of friction in the system;
+  v & \rightarrow  & v' = \mu v - \eta \nabla C  \nonumber\end{eqnarray}</a></span><script>$('#margin_821276191177_reveal').click(function() {$('#margin_821276191177').toggle('slow', function() {});});</script>.
+  I said earlier that $\mu$ controls the amount of friction in the system;
 to be a little more precise, you should think of $1-\mu$ as the amount
 of friction in the system.  When $\mu = 1$, as we've seen, there is no
 friction, and the velocity is completely driven by the gradient
@@ -4648,13 +5838,43 @@ value of $\mu$ interediate between $0$ and $1$ can give us much of the
 benefit of being able to build up speed, but without causing
 overshooting.  We can choose such a value for $\mu$ using the held-out
 validation data, in much the same way as we select $\eta$ and
-$\lambda$.</p><p></p><p></p><p>I've avoided naming the hyper-parameter $\mu$ up to now.  The reason
+$\lambda$.
+-->
+ステップ毎にスロープを下る速度が増していき、加速しながら谷底まで素早く移動していきます。
+これがモメンタム法が通常の勾配降下法よりも高速に学習する仕組みです。
+もちろん、このままでは谷底を通り過ぎてしまう問題が有ります。
+また、勾配が素早く変化する場合には、間違った方向に進んでしまうこともあるでしょう。
+この問題を解決するために、$\mu$ というハイパーパラメータを式 <span id="margin_821276191177_reveal" class="equation_link">(100)</span><span id="margin_821276191177" class="marginequation" style="display: none;"><a href="chap3.html#eqtn100" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+v & \rightarrow  & v' = \mu v - \eta \nabla C  \nonumber\end{eqnarray}</a></span><script>$('#margin_821276191177_reveal').click(function() {$('#margin_821276191177').toggle('slow', function() {});});</script> に導入したのです。
+既に、$\mu$ が摩擦を表すハイパーパラメータであるという説明をしました。より正確に言えば、
+$1-\mu$ が摩擦の大きさを表しています。既に見たように、$\mu=1$ の時には摩擦が無く、
+$\nabla C$ が加速度の役割をして速度を変化させます。反対に、$\mu=0$ の場合には、
+摩擦が大きて加速がつかず、式 <span id="margin_1375636495_reveal" class="equation_link">(100)</span><span id="margin_1375636495" class="marginequation" style="display: none;"><a href="chap3.html#eqtn100" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  v & \rightarrow  & v' = \mu v - \eta \nabla C  \nonumber\end{eqnarray}</a></span><script>$('#margin_1375636495_reveal').click(function() {$('#margin_1375636495').toggle('slow', function() {});});</script>
+と <span id="margin_834321992917_reveal" class="equation_link">(101)</span><span id="margin_834321992917" class="marginequation" style="display: none;"><a href="chap3.html#eqtn101" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  w & \rightarrow & w' = w+v' \nonumber\end{eqnarray}</a></span><script>$('#margin_834321992917_reveal').click(function() {$('#margin_834321992917').toggle('slow', function() {});});</script> は元の勾配下降法
+$w \rightarrow w'=w-\eta \nabla C$ に帰着します。実用的には、$\mu$ を0と1の間に取ることで、
+谷底を行き過ぎること無く、学習を加速することが可能になります。
+検証データを用いると、$\eta$ や $\lambda$ を決定したのと同じように $\mu$ の値を決定できます。
+</p><p></p><p></p><p>
+<!--
+    I've avoided naming the hyper-parameter $\mu$ up to now.  The reason
 is that the standard name for $\mu$ is badly chosen: it's called the
 <em>momentum co-efficient</em>.  This is potentially confusing, since
 $\mu$ is not at all the same as the notion of momentum from
 physics. Rather, it is much more closely related to friction.
 However, the term momentum co-efficient is widely used, so we will
-continue to use it.</p><p>A nice thing about the momentum technique is that it takes almost no
+continue to use it.
+-->
+ここまで、ハイパーパラメータ $\mu$ に名前を付けるのを避けてきました。
+その理由は、$\mu$ の標準的な名前があまりに酷いからです：<em>モメンタム係数</em>
+と呼ばれています。この名前は混乱の元になると思います。というのも、
+$\mu$ は物理におけるモメンタムの概念とは全く何の関係も無いからです。
+むしろ、摩擦と非常に関係があります。しかし、モメンタム係数という言葉は広く使われているので、
+今後はこの言葉を使うことにします。
+</p><p>
+<!--
+    A nice thing about the momentum technique is that it takes almost no
 work to modify an implementation of gradient descent to incorporate
 momentum.  We can still use backpropagation to compute the gradients,
 just as before, and use ideas such as sampling stochastically chosen
@@ -4662,14 +5882,35 @@ mini-batches.  In this way, we can get some of the advantages of the
 Hessian technique, using information about how the gradient is
 changing.  But it's done without the disadvantages, and with only
 minor modifications to our code.  In practice, the momentum technique
-is commonly used, and often speeds up learning.</p><p><h4><a name="exercise_603875"></a><a href="#exercise_603875">Exercise</a></h4><ul>
+is commonly used, and often speeds up learning.
+-->
+モメンタム法の優れた点は、元の勾配降下法の実装を修正してモメンタムの効果を取り入れるのが
+非常に容易であることです。以前と全く同じように逆伝播法を使って勾配を計算できますし、
+ミニバッチを使った確率的サンプリングの考えも同じように適用できます。
+このように、勾配の変化の情報を使うことでヘッセ行列法の利点を部分的に活用できます。
+しかも、ほとんどデメリットが無く、少しだけ実装を修正するだけで良いのです。
+実際の現場でもモメンタム法は広く利用され、学習の加速に貢献しています。
+</p><p>
+<!--
+    <h4><a name="exercise_603875"></a><a href="#exercise_603875">Exercise</a></h4><ul>
 <li> What would go wrong if we used $\mu > 1$ in the momentum
   technique?</p><p><li> What would go wrong if we used $\mu < 0$ in the momentum
   technique?
 </ul></p><p><h4><a name="problem_713937"></a><a href="#problem_713937">Problem</a></h4><ul>
 <li> Add momentum-based stochastic gradient descent to
   <tt>network2.py</tt>.
-</ul></p><p><strong>Other approaches to minimizing the cost function:</strong> Many other
+</ul>
+-->
+<h4><a name="exercise_603875"></a><a href="#exercise_603875">演習</a></h4><ul>
+<li> もしモメンタム法で $\mu>1$ とするとどのような問題が起こるでしょうか？</p><p>
+<li> もし $\mu < 0$ とするとどのような問題が起こるでしょうか？
+</ul></p><p>
+<h4><a name="problem_713937"></a><a href="#problem_713937">問題</a></h4><ul>
+<li> モメンタム法に基づいた確率的勾配降下法を <tt>network2.py</tt> に追加してください。
+</ul>
+</p><p>
+<!--
+<strong>Other approaches to minimizing the cost function:</strong> Many other
 approaches to minimizing the cost function have been developed, and
 there isn't universal agreeement on which is the best approach.  As
 you go deeper into neural networks it's worth digging into the other
@@ -4693,14 +5934,53 @@ results*<span class="marginnote">
 improves on the momentum technique.  However, for many problems, plain
 stochastic gradient descent works well, especially if momentum is
 used, and so we'll stick to stochastic gradient descent through the
-remainder of this book.</p><p><h4><a name="other_models_of_artificial_neuron"></a><a href="#other_models_of_artificial_neuron">Other models of artificial neuron</a></h4></p><p>Up to now we've built our neural networks using sigmoid neurons.  In
+remainder of this book.
+-->
+<strong>コスト関数を最小化するその他の手法：</strong>
+コスト関数を最小化する手法はこの他にも多数開発されてきましたが、どれが最適な手法か
+という問いに対しては一致した回答がありません。ニューラルネットワークを使い込んでいく中で、
+他の手法に取り組み、その挙動や利点・欠点を理解することは役に立つでしょう。
+前に示した論文*<span class="marginnote">
+*<a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf">Efficient
+    BackProp</a>, by Yann LeCun, Léon Bottou,
+  Genevieve Orr and Klaus-Robert Müller (1998).</span>では、
+共役勾配降下法やBFGS法（これと非常に関係の深い、
+<a href="http://en.wikipedia.org/wiki/Limited-memory_BFGS">L-BFGS</a>法と呼ばれる
+記憶制限BFGS法も重要です）を含め、幾つかの方法が紹介・比較されています。
+他に最近優れた結果*<span class="marginnote">
+*例えば、次の論文を参照してください。
+  <a href="http://www.cs.toronto.edu/&#126;hinton/absps/momentum.pdf">On the
+    importance of initialization and momentum in deep learning</a>, by
+  Ilya Sutskever, James Martens, George Dahl, and Geoffrey Hinton
+  (2012).</span>を出した手法としては、モメンタム法を修正したNesterovによる加速勾配法があります。
+しかし、多くの問題に対して、単純な確率的勾配降下法も、特にモメンタム法と組み合わせた時には
+良い性能を発揮します。ですから、この本の残りの部分では確率的勾配降下法を使うことにします。
+</p><p>
+<!--<h4><a name="other_models_of_artificial_neuron"></a>
+<a href="#other_models_of_artificial_neuron">Other models of artificial neuron</a></h4>-->
+<h4><a name="other_models_of_artificial_neuron"></a>
+<a href="#other_models_of_artificial_neuron">人工ニューロンのその他のモデル</a></h4>
+</p><p>
+<!--
+    Up to now we've built our neural networks using sigmoid neurons.  In
 principle, a network built from sigmoid neurons can compute any
 function.  In practice, however, networks built using other model
 neurons sometimes outperform sigmoid networks.  Depending on the
 application, networks based on such alternate models may learn faster,
 generalize better to test data, or perhaps do both.  Let me mention a
 couple of alternate model neurons, to give you the flavour of some
-variations in common use.</p><p>Perhaps the simplest variation is the tanh (pronounched "tanch")
+variations in common use.
+-->
+ここまでは、シグモイドニューロンを使ってニューラルネットワークを組み立ててきました。
+原理的には、シグモイドニューロンから成るニューラルネットワークは任意の関数を計算できます。
+しかし現実的には、他のニューロンモデルを使ったニューラルネットワークが
+シグモイドニューラルネットワークよりも高性能になる場合もあります。
+応用先によっては、そのような別のモデルに基づいたニューラルネットワークの方が
+速く学習したり試験データに対してより良い汎化性能を発揮したりします。
+ここでは、シグモイドニューロン以外のモデルを幾つか紹介します。
+</p><p>
+<!--
+    Perhaps the simplest variation is the tanh (pronounched "tanch")
 neuron, which replaces the sigmoid function by the hyperbolic tangent
 function.  The output of a tanh neuron with input $x$, weight vector
 $w$, and bias $b$ is given by
@@ -4719,7 +5999,25 @@ With a little algebra it can easily be verified that
 \tag{104}\end{eqnarray}
 that is, $\tanh$ is just a rescaled version of the sigmoid function.
 We can also see graphically that the $\tanh$ function has the same
-shape as the sigmoid function,</p><p>
+shape as the sigmoid function,
+-->
+恐らく最も単純なのは、tanhニューロンでしょう。これは、ニューロンのシグモイド関数を
+双曲線正接関数に置き換えたものです。入力 $x$、重み $w$、バイアス $b$ の時、tanhニューロンの出力は
+<a class="displaced_anchor" name="eqtn102"></a>\begin{eqnarray}
+ \tanh(w \cdot x+b)
+\tag{102}\end{eqnarray}
+で与えられます。ここで、$\tanh$ はもちろん双曲線正接関数です。
+実は、シグモイドニューロンとは非常に関係しています。$\tanh$ 関数の定義
+<a class="displaced_anchor" name="eqtn103"></a>\begin{eqnarray}
+  \tanh(z) \equiv \frac{e^z-e^{-z}}{e^z+e^{-z}}.
+\tag{103}\end{eqnarray}
+を思い出すと、簡単な計算で
+<a class="displaced_anchor" name="eqtn104"></a>\begin{eqnarray}
+  \sigma(z) = \frac{1+\tanh(z/2)}{2}
+\tag{104}\end{eqnarray}
+という関係が示せます。つまり、$\tanh$ はシグモイド関数をリスケールしただけなのです。
+グラフを描いてみても、$\tanh$ 関数のグラフがシグモイド関数と同じ形をしていることが分かります。
+</p><p>
 <div id="tanh"></div>
 <script>
 function s(x) {return (Math.exp(x)-Math.exp(-x))/(Math.exp(x)+Math.exp(-x));}
@@ -4776,12 +6074,22 @@ graph.append("text")
         .style("font-size", "16px")
         .text("tanh function");
 </script>
-</p><p>One difference between tanh neurons and sigmoid neurons is that the
+</p><p>
+<!--
+    One difference between tanh neurons and sigmoid neurons is that the
 output from tanh neurons ranges from -1 to 1, not 0 to 1.  This means
 that if you're going to build a network based on tanh neurons you may
 need to normalize your outputs (and, depending on the details of the
 application, possibly your inputs) a little differently than in
-sigmoid networks.</p><p>Similar to sigmoid neurons, a network of tanh neurons can, in
+sigmoid networks.
+-->
+tanhニューロンとシグモイドニューロンの違いの一つは、tanhニューロンの出力の値域が
+-1から1である点です。このため、tanhニューロンを使ってニューラルネットワークを構築する際には、
+シグモイドニューロンを使った時とは少し違った方法で出力を規格化する必要があります。
+この規格化の選択は、場合によっては解くべき問題の詳細や入力にも依存するでしょう。
+</p><p>
+<!--
+    Similar to sigmoid neurons, a network of tanh neurons can, in
 principle, compute any function*<span class="marginnote">
 *There are some technical
   caveats to this statement for both tanh and sigmoid neurons, as well
@@ -4790,10 +6098,30 @@ principle, compute any function*<span class="marginnote">
   able to approximate any function to arbitrary accuracy.</span> mapping
 inputs to the range -1 to 1.  Furthermore, ideas such as
 backpropagation and stochastic gradient descent are as easily applied
-to a network of tanh neurons as to a network of sigmoid neurons.</p><p><h4><a name="exercise_935719"></a><a href="#exercise_935719">Exercise</a></h4><ul>
+to a network of tanh neurons as to a network of sigmoid neurons.
+-->
+シグモイドニューロンの場合と同様に、tanhニューロンのネットワークも原理的には、
+入力を-1から1に写す任意の関数を計算できます*<span class="marginnote">
+*細かいことを言えば、どのような種類のニューロンを用いるにせよ、
+この主張を正しく理解するためには少々技術的な注意が必要です。
+しかし、大雑把に言えばニューラルネットワークが任意の関数を任意の精度で近似できる
+と考えて差し支えありません。</span>。さらに、逆伝播法や確率的勾配降下法を
+tanhニューロンのネットワークに移植することも容易に可能です。
+</p><p>
+<!--
+<h4><a name="exercise_935719"></a><a href="#exercise_935719">Exercise</a></h4><ul>
 <li> Prove the identity in Equation <span id="margin_620778500926_reveal" class="equation_link">(104)</span><span id="margin_620778500926" class="marginequation" style="display: none;"><a href="chap3.html#eqtn104" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
   \sigma(z) = \frac{1+\tanh(z/2)}{2} \nonumber\end{eqnarray}</a></span><script>$('#margin_620778500926_reveal').click(function() {$('#margin_620778500926').toggle('slow', function() {});});</script>.
-</ul></p><p>Which type of neuron should you use in your networks, the tanh or
+</ul>
+-->
+<h4><a name="exercise_935719"></a><a href="#exercise_935719">演習</a></h4><ul>
+<li> 式 <span id="margin_620778500926_reveal" class="equation_link">(104)</span><span id="margin_620778500926" class="marginequation" style="display: none;"><a href="chap3.html#eqtn104" style="padding-bottom: 5px;" onMouseOver="this.style.borderBottom='1px solid #2A6EA6';" onMouseOut="this.style.borderBottom='0px';">\begin{eqnarray}
+  \sigma(z) = \frac{1+\tanh(z/2)}{2} \nonumber\end{eqnarray}</a></span><script>$('#margin_620778500926_reveal').click(function() {$('#margin_620778500926').toggle('slow', function() {});});</script> の等号
+を示してください。
+</ul>
+</p><p>
+<!--
+Which type of neuron should you use in your networks, the tanh or
 sigmoid?  <em>A priori</em> the answer is not obvious, to put it mildly!
 However, there are theoretical arguments and some empirical evidence
 to suggest that the tanh sometimes performs better*<span class="marginnote">
@@ -4826,7 +6154,39 @@ Indeed, because $\tanh$ is symmetric about zero, $\tanh(-z) =
 -\tanh(z)$, we might even expect that, roughly speaking, the
 activations in hidden layers would be equally balanced between
 positive and negative.  That would help ensure that there is no
-systematic bias for the weight updates to be one way or the other.</p><p>How seriously should we take this argument?  While the argument is
+systematic bias for the weight updates to be one way or the other.
+-->
+tanhとシグモイド、どちらのニューロンを使うべきなのでしょうか？穏やかに言えば、
+<em>ア・プリオリ</em>には明らかな答えはありません。しかし、時としてtanhの方が
+高い性能を発揮できることを示唆する理論的な議論や経験的な証拠があります
+*<span class="marginnote">
+*参考文献としては、例えば、
+  <a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf">Efficient
+    BackProp</a>, by Yann LeCun, Léon Bottou,
+  Genevieve Orr and Klaus-Robert Müller (1998), そして
+  <a href="http://jmlr.org/proceedings/papers/v9/glorot10a/glorot10a.pdf">Understanding
+    the difficulty of training deep feedforward networks</a>, by Xavier
+  Glorot and Yoshua Bengio (2010) をご覧ください。</span>。
+理論的な議論とはどういうものか感じてもらうために、
+その内容を手短に紹介します。シグモイドニューロンを使っていて、
+ニューラルネットワーク中の全ての活性が正の値を取るとしましょう。そして、
+第$l+1$層の$j$番目のニューロンに入力する重み $w^{l+1}_{jk}$ を考えましょう。
+逆伝播法（<a href="chap2.html#eqtnBP4">こちら</a>）によると、
+この重みに関する勾配は $a^l_k \delta^{l+1}_j$ と書けます。活性は全て正なので、
+この勾配の符号は $\delta^{l+1}_j$ の符号と一致します。このことは、
+もし $\delta^{l+1}_j$ が正ならば、<em>全ての</em>重み $w^{l+1}_{jk}$ は
+勾配降下法で減少し、反対に $\delta^{l+1}_j$ が負ならば<em>全ての</em>
+$w^{l+1}_{jk}$ が減少することとなります。言い換えると、
+同じニューロンに入力する全ての重みは一緒に増加するか一緒に減少するかしか
+できないのです。重みの一部だけ増加して残りの重みが減少するといった変化も
+必要かもしれませんから、この性質は問題です。このことから、シグモイド関数を
+$\tanh$ のような正の値も負の値も取りうる活性関数で置き換えた方が良いように
+思われます。実際、$\tanh$ は奇関数ですから、大雑把に言って隠れ層の活性は
+正と負の両方にバランス良く分布するでしょう。それによって、
+重みの更新に系統的なバイアスが掛かるのが避けられるでしょう。
+</p><p>
+<!--
+How seriously should we take this argument?  While the argument is
 suggestive, it's a heuristic, not a rigorous proof that tanh neurons
 outperform sigmoid neurons.  Perhaps there are other properties of the
 sigmoid neuron which compensate for this problem?  Indeed, for many
@@ -4834,14 +6194,35 @@ tasks the tanh is found empirically to provide only a small or no
 improvement in performance over sigmoid neurons.  Unfortunately, we
 don't yet have hard-and-fast rules to know which neuron types will
 learn fastest, or give the best generalization performance, for any
-particular application.</p><p>Another variation on the sigmoid neuron is the <em>rectified linear
+particular application.
+-->
+この議論はどの程度真面目に考えるべきでしょうか？この議論は示唆的ですが
+ヒューリスティックですし、tanhニューロンがシグモイドニューロンより高性能である
+ことの厳密な証明にはなっていません。ここで説明した問題を補うような良い性質を、
+シグモイドニューロンが備えているのでしょうか。実際のところ多くの課題に対して、
+tanhニューロンはシグモイドニューロンと比べて良くても僅かな改善しかしないことが
+経験的に知られています。残念ながら、いかなる問題に対しても、
+学習を最速化する、あるいは汎化性能を最大化するニューロンの種類を決定する
+規則は存在しないのです。
+</p><p>
+<!--
+Another variation on the sigmoid neuron is the <em>rectified linear
   neuron</em> or <em>rectified linear unit</em>.  The output of a rectified
 linear unit with input $x$, weight vector $w$, and bias $b$ is given
 by
 <a class="displaced_anchor" name="eqtn105"></a>\begin{eqnarray}
   \max(0, w \cdot x+b).
 \tag{105}\end{eqnarray}
-Graphically, the rectifying function $\max(0, z)$ looks like this:</p><p>
+Graphically, the rectifying function $\max(0, z)$ looks like this:
+-->
+シグモイドニューロンのもう一つの変種は、<em>Rectified Linear Unit</em> あるいは
+<em>ReLU</em> と呼ばれるものです。入力 $x$, 重みベクトル $w$, そして
+バイアス $b$ が与えられた時、ReLUの出力は
+<a class="displaced_anchor" name="eqtn105"></a>\begin{eqnarray}
+  \max(0, w \cdot x+b).
+\tag{105}\end{eqnarray}
+と書けます。グラフにすると、次のようになります：
+</p><p>
 <div id="relu"></div>
 <script type="text/javascript">
 function s(x) {return Math.max(0, x);}
@@ -4897,10 +6278,21 @@ graph.append("text")
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
         .text("max(0, z)");
-</script></p><p>Obviously such neurons are quite different from both sigmoid and tanh
+</script>
+</p><p>
+<!--
+Obviously such neurons are quite different from both sigmoid and tanh
 neurons.  However, like the sigmoid and tanh neurons, rectified linear
 units can be used to compute any function, and they can be trained
-using ideas such as backpropagation and stochastic gradient descent.</p><p>When should you use rectified linear units instead of sigmoid or tanh
+using ideas such as backpropagation and stochastic gradient descent.
+-->
+明らかにシグモイドともtanhとも相当異なる形をしています。
+しかし、シグモイドやtanhと同様、ReLUを使ったニューラルネットワークは
+任意の関数を計算可能であることが知られており、逆伝播法や確率的勾配降下法を用いて
+訓練できます。
+</p><p>
+<!--
+When should you use rectified linear units instead of sigmoid or tanh
 neurons?  Some recent work on image recognition*<span class="marginnote">
 *See, for
   example,
@@ -4939,7 +6331,43 @@ corresponding learning slowdown.  On the other hand, when the weighted
 input to a rectified linear unit is negative, the gradient vanishes,
 and so the neuron stops learning entirely.  These are just two of the
 many issues that make it non-trivial to understand when and why
-rectified linear units perform better than sigmoid or tanh neurons.</p><p>I've painted a picture of uncertainty here, stressing that we do not
+rectified linear units perform better than sigmoid or tanh neurons.
+-->
+シグモイドやtanhニューロンよりもReLUが力を発揮できるのは
+どのような場面でしょうか？画像認識に関する最近の研究によると*<span class="marginnote">
+*関連する文献としては、
+Kevin Jarrett, Koray Kavukcuoglu, Marc'Aurelio Ranzato, Yann
+LeCunによる <a href="http://yann.lecun.com/exdb/publis/pdf/jarrett-iccv-09.pdf">What
+  is the Best Multi-Stage Architecture for Object Recognition?</a> (2009),
+  Xavier Glorot, Antoine Bordes, Yoshua Bengio による
+  <a href="http://eprints.pascal-network.org/archive/00008596/01/glorot11a.pdf">Deep
+    Sparse Rectiﬁer Neural Networks</a> (2011), そして、Alex
+  Krizhevsky, Ilya Sutskever, Geoffrey Hinton による
+  <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">ImageNet Classification with Deep Convolutional Neural Networks</a> (2012)
+等があります。これらの文献では、ReLUを用いたニューラルネットワークで
+出力層、コスト関数、正規化等をどう設計すべきかという重要な点について詳細な議論を
+行っています。ここで行う簡単な説明では、そのような詳細は省略します。
+また、これらの論文では、ReLUの長所も短所も詳細に議論しています。
+その他に有益な論文としては、Vinod Nair と Geoffrey Hinton による
+<a href="https://www.cs.toronto.edu/&#126;hinton/absps/reluICML.pdf">Rectified
+  Linear Units Improve Restricted Boltzmann Machines</a> (2010) があります。
+この論文では、ニューラルネットワークに対する少々違ったアプローチにおいて正規化線形
+ユニットを使うご利益を議論しています。</span>
+多くのニューラルネットワークでReLUの大きなご利益が得られるそうです。
+しかし、tanhニューロンの場合もそうでしたが、ReLUをいつ、そしてなぜ
+使うべきなのか、という問いに対しては、未だに深い理解は得られていません。
+幾つかの論点を概観しておきましょう。まず、シグモイドニューロンの学習が遅くなるのは、
+ニューロンが飽和している時、すなわち、ニューロンの出力が $0$ か $1$ に近いときです。
+この章で何度も見てきたように、$\sigma'$ という因子が勾配を小さくしてしまうことで
+学習が遅くなるのでした。tanhニューロンも飽和してしまうと同様の問題にぶつかります。
+反対に、ReLUは重み付き入力値を大きくしても飽和することがないでしょう。
+そのため、飽和に伴った学習速度の低下を起こさないのです。一方で、ReLUへの
+入力が負の値を取るときには、勾配がゼロになります。そのため、ニューロンは学習を
+完全にやめてしまうでしょう。この2つは、いつ、なぜ、ReLUが
+優れているのかという問題の理解を妨げているたくさんある要因の一部に過ぎません。
+</p><p>
+<!--
+I've painted a picture of uncertainty here, stressing that we do not
 yet have a solid theory of how activation functions should be chosen.
 Indeed, the problem is harder even than I have described, for there
 are infinitely many possible activation functions.  Which is the best
@@ -4955,18 +6383,70 @@ book I'll continue to use sigmoid neurons as our go-to neuron, since
 they're powerful and provide concrete illustrations of the core ideas
 about neural nets.  But keep in the back of your mind that these same
 ideas can be applied to other types of neuron, and that there are
-sometimes advantages in doing so.</p><p><h4><a name="on_stories_in_neural_networks"></a><a href="#on_stories_in_neural_networks">On stories in neural networks</a></h4> </p><p><blockquote><em><strong>Question:</strong> How do you
+sometimes advantages in doing so.
+-->
+ここまで私は、活性関数の選び方に関する確固とした理論が存在しないことを
+強調してきました。しかし現実は、ここまで説明してきたよりもさらに困難です。
+というのも、活性関数の選択肢は無限にあるのですから。
+与えられた問題に対する最良の選択はどれか？どれが最高の試験精度を達成するか？
+どれが学習を最速で行うか？これらの問いに対して、真に深く系統的な
+研究が行われていないことに私は驚いています。理想的には、活性関数の選び方を
+教えてくれる理論があってもおかしくないはずです。とはいえ、完全な理論が
+無いからといって、私たちが立ち止まる必要はありません！
+既に強力なツールはたくさんあるので、それらを使えば多くのことを成せる
+はずなのですから。この本の残りの部分では、シグモイドニューロンを使い続ける
+ことにします。シグモイドニューロンも十分に強力ですし、ニューラルネットワークの
+中核を成すアイデアを具体的に示すには良い道具だからです。
+しかし、同じアイデアはシグモイドニューロンに限らず他の種類のニューロンにも
+当てはまることは覚えておいてください。そして時には他のニューロンの方が
+高い性能を発揮する場合もあることを心に留めておいてください。
+</p><p>
+<!--
+<h4><a name="on_stories_in_neural_networks"></a>
+<a href="#on_stories_in_neural_networks">On stories in neural networks</a></h4>
+-->
+<h4><a name="on_stories_in_neural_networks"></a>
+<a href="#on_stories_in_neural_networks">ニューラルネットワークに関する「お話」について</a></h4>
+</p><p>
+<!--
+<blockquote><em><strong>Question:</strong> How do you
   approach utilizing and researching machine learning techniques that
   are supported almost entirely empirically, as opposed to
   mathematically? Also in what situations have you noticed some of
-  these techniques fail?</p><p>  <strong>Answer:</strong> You have to realize that our theoretical
+  these techniques fail?
+-->
+<blockquote><em><strong>質問：</strong>
+機械学習の手法は数学的にほとんど理解されておらず、
+それが上手くいくかどうかは経験的な裏付けしかありません。
+これらの手法を利用したり研究したりしたい場合、どうやって取り掛かれば良いのですか？
+また、これら機械学習の手法が破綻するのはどのような状況ですか？
+</p><p>
+<!--
+<strong>Answer:</strong> You have to realize that our theoretical
   tools are very weak. Sometimes, we have good mathematical intuitions
   for why a particular technique should work. Sometimes our intuition
   ends up being wrong [...] The questions become: how well does my
   method work on this particular problem, and how large is the set of
-  problems on which it works well.</p><p>  -
+  problems on which it works well.
+-->
+<strong>回答：</strong>
+まず、手元にある理論的な道具はとても貧弱であることを認める必要があります。
+時には、ある特定の手法が効果的に働くであろうという、
+数学的な直感に基づく予測が可能な場合もあります。
+また時には、私たちの直感が誤りだと後になって気づくこともあります。（中略）
+質問はこう言い換えるべきでしょう：
+この手法はこの特定の問題に対してどのくらい効果的ですか？
+そして、この手法が上手く働く問題はどのくらいたくさんありますか？
+</p><p>
+<!--  -
   <a href="http://www.reddit.com/r/MachineLearning/comments/25lnbt/ama_yann_lecun/chivdv7">Question
-    and answer</a> with neural networks researcher Yann LeCun</em></blockquote></p><p>Once, attending a conference on the foundations of quantum mechanics,
+    and answer</a> with neural networks researcher Yann LeCun</em></blockquote>
+-->
+- <a href="http://www.reddit.com/r/MachineLearning/comments/25lnbt/ama_yann_lecun/chivdv7">Question
+  and answer</a>, ニューラルネットワーク研究者 Yann LeCun</em></blockquote>
+</p><p>
+<!--
+    Once, attending a conference on the foundations of quantum mechanics,
 I noticed what seemed to me a most curious verbal habit: when talks
 finished, questions from the audience often began with "I'm very
 sympathetic to your point of view, but [...]".  Quantum foundations
@@ -4980,7 +6460,22 @@ realized that assessment was too harsh.  The speakers were wrestling
 with some of the hardest problems human minds have ever confronted.
 Of course progress was slow!  But there was still value in hearing
 updates on how people were thinking, even if they didn't always have
-unarguable new progress to report.</p><p>You may have noticed a verbal tic similar to "I'm very sympathetic
+unarguable new progress to report.
+-->
+かつて量子力学の基礎付けに関する会議に出席した時、発言者達が非常に興味深い習慣を
+持っていることに気づきました。発表が終わると、聴衆からの質問がしばしば
+「あなたの視点にはとても共感しました。しかし、...」から始まるのです。
+量子力学の基礎付けは、私が普段研究している分野ではありません。
+この質問のしかたに気づいたのは、この分野以外の研究会で発表者の視点に共感を表現する
+質問者を見かけることは皆無だからです。当時は、この種の質問が蔓延るのは、
+この分野がほとんど進展していなくて、皆が無駄な努力をしていることの現れだろうと
+考えていました。後になって、この評価は厳しすぎたことに気づきました。
+発表者は人類の頭脳が向き合った中で最も難しい問題の一つに取り組んでいたのです。
+進展が遅いのは当たり前です！そして、はっきりと新しい進展が無かったとしても、
+人々がどう考えているのかについて最新の話を聞くことには価値があったのです。
+</p><p>
+<!--
+You may have noticed a verbal tic similar to "I'm very sympathetic
 [...]" in the current book.  To explain what we're seeing I've often
 fallen back on saying "Heuristically, [...]", or "Roughly speaking,
 [...]", following up with a story to explain some phenomenon or
@@ -4988,7 +6483,19 @@ other.  These stories are plausible, but the empirical evidence I've
 presented has often been pretty thin.  If you look through the
 research literature you'll see that stories in a similar style appear
 in many research papers on neural nets, often with thin supporting
-evidence.  What should we think about such stories?</p><p>In many parts of science - especially those parts that deal with
+evidence.  What should we think about such stories?
+-->
+この本を読んでいて、読者の皆さんは「とても共感しました」と同種の決まり文句に
+気づいたかもしれません。何かを説明しようとする度に、「ヒューリスティックに」や
+「大雑把に言って」等と口にした後、何らかの現象等を説明するお話を続けました。
+これらのお話はもっともらしいですが、経験的な証拠としては非常に心許ないものです。
+ニューラルネットワークの研究に関する文献等を調べてみると、多くの論文に
+同様の体裁を取ったお話が見られることでしょう。
+それも、多くの場合証拠としてはとても弱いものです。
+この状況はどう理解するべきでしょうか？
+</p><p>
+<!--
+In many parts of science - especially those parts that deal with
 simple phenomena - it's possible to obtain very solid, very reliable
 evidence for quite general hypotheses.  But in neural networks there
 are large numbers of parameters and hyper-parameters, and extremely
@@ -4999,7 +6506,19 @@ a problem that, like quantum foundations, tests the limits of the
 human mind.  Instead, we often make do with evidence for or against a
 few specific instances of a general statement.  As a result those
 statements sometimes later need to be modified or abandoned, when new
-evidence comes to light.</p><p>One way of viewing this situation is that any heuristic story about
+evidence comes to light.
+-->
+科学の多くの分野、特に単純な現象を扱う分野で、非常に一般的な仮説に対する、
+非常に強固で非常に信頼度の高い証拠が得られます。しかし、ニューラルネットワークの場合、
+多数のパラメータやハイパーパラメータが存在し、それらが極度に複雑に絡み合っています。
+このように非常に複雑な系では、信頼できる一般的な議論を行うことは非常に困難です。
+ニューラルネットワークを完全に一般的に理解することは、量子力学の基礎付けのように、
+人類の頭脳の限界に挑戦する課題です。一般論を展開する代わりに、
+その具体例を幾つか取り上げて、一般的な主張がもっともらしいかどうかの議論を行うのです。
+そして時には、後の検証で修正されたり破棄されたりする結果となるのです。
+</p><p>
+<!--
+One way of viewing this situation is that any heuristic story about
 neural networks carries with it an implied challenge.  For example,
 consider the statement I <a href="#dropout_explanation">quoted
   earlier</a>, explaining why dropout works*<span class="marginnote">
@@ -5019,7 +6538,29 @@ are investigating dropout (and many variations), trying to understand
 how it works, and what its limits are.  And so it goes with many of
 the heuristics we've discussed.  Each heuristic is not just a
 (potential) explanation, it's also a challenge to investigate and
-understand in more detail.</p><p>Of course, there is not time for any single person to investigate all
+understand in more detail.
+-->
+ヒューリスティックに頼るという事実が問題の困難さを示していると見ることもできます。
+例えば、ドロップアウト法の説明で<a href="#dropout_explanation">引用</a>
+した文章を思い出してみましょう*<span class="marginnote">
+*出典は Alex Krizhevsky, Ilya Sutskever, Geoffrey Hinton による
+<a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">ImageNet
+  Classification with Deep Convolutional Neural Networks</a> (2012) です。</span>：
+「この手法はニューロン間の複雑な相互適合を軽減します。
+というのも、 訓練に際してニューロンは特定の他のニューロンを
+頼りにすることができないからです。 したがって、あるニューロンは、
+ランダムに選ばれた他のニューロンと一緒にされても役に立つような、
+データが持つより強固な特徴を学ぶように強制されるのです。」
+この主張は内容が豊富で刺激的です。この主張を一つ一つ検証していくこと、
+すなわち、この主張のどこが正しくどこが誤っていて、どのような変更や修正が必要なのか
+明らかにしていくことで、立派な研究ができるでしょう。
+実際、ドロップアウトやその変種について、それが上手くいくメカニズムや限界を調べている
+研究者の一団がいます。彼らは、この本でここまで議論してきたヒューリスティックに
+取り組んでいるのです。それぞれのヒューリスティックは（潜在的に）ある現象を
+説明してくれるだけでなく、それ自体がより詳しく調べて理解すべき課題となるのです。
+</p><p>
+<!--
+    Of course, there is not time for any single person to investigate all
 these heuristic explanations in depth.  It's going to take decades (or
 longer) for the community of neural networks researchers to develop a
 really powerful, evidence-based theory of how neural networks learn.
@@ -5038,7 +6579,25 @@ nets, while retaining a healthy awareness of the limitations of such
 stories, and carefully keeping track of just how strong the evidence
 is for any given line of reasoning.  Put another way, we need good
 stories to help motivate and inspire us, and rigorous in-depth
-investigation in order to uncover the real facts of the matter.</p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></div><div class="footer"> <span class="left_footer"> In academic work,
+investigation in order to uncover the real facts of the matter.
+-->
+もちろん、一人の人間がこれら全てのヒューリスティックな議論を詳しく調べるには、
+全く時間が足りません。ニューラルネットワークの学習についてエビデンスに基づいた強力な
+理論を構築するには、これから何十年も（あるいはもっと）時間が掛かるでしょう。
+では、私たちはヒューリスティックな説明を根拠に欠ける曖昧なものとして捨て去るべきだと
+いうのでしょうか？そんなことはありません！むしろ、そのようなヒューリスティックには、
+私たちの思考を刺激し導くという重要な役割があるのです。
+これは大航海時代のようなものです：初期の探検家たちは、時に完全な誤解に基づいて探検し、
+そして新しい発見をしてきたのです。それらの誤解は、後になって地理に関する知識が
+蓄積されるにつれ、修正されてきました。ニューラルネットワークに対する理解が今日非常に
+貧弱であるように、何かをほとんど理解できていない時こそ、一歩ずつ完全に正しい思考を
+進めるよりも、大胆に探検していくことが重要なのです。ですから、この本でしてきた
+ヒューリスティックな議論は、ニューラルネットワークについて考える際の便利なガイドである
+と考えるべきです。ただし、それらの話に限界があることも認識し、
+どの程度強く裏付けられているのかを意識しておく必要があります。
+言い換えると、ニューラルネットワークを使っていく上で発想の助けになるお話と、
+実際に起こっていることを明らかにする厳密で詳細な検討が必要なのです。
+</p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></div><div class="footer"> <span class="left_footer"> In academic work,
 please cite this book as: Michael A. Nielsen, "Neural Networks and
 Deep Learning", Determination Press, 2014
 
